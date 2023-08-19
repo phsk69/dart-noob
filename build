@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+dart build exe bin/dart_noob.dart -o dart_noob -target-os macos
