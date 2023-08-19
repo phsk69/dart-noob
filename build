@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-dart compile exe bin/dart_noob.dart -o dart_noob --target-os macos
-dart_noob
+dart compile exe bin/dart_noob.dart -o dart_noob --target-os macos 1> /dev/null && \
+./dart_noob
