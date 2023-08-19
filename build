@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 dart format . 1> /dev/null && \
+dart test 1> /dev/null && \
 dart compile exe bin/dart_noob.dart -o dart_noob --target-os macos 1> /dev/null && \
 ./dart_noob
