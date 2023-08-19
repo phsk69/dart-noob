@@ -1,4 +1,4 @@
-import 'package:dart_noob/dart_noob.dart' as dart_noob;
+import 'package:dart_noob/file_stuff.dart';
 
 void main(List<String> arguments) async {
   if (arguments.isEmpty) {
@@ -8,14 +8,13 @@ void main(List<String> arguments) async {
 
   String filePath = arguments[0];
 
-  try {
-    String content = await dart_noob.asyncFile(filePath);
-    if (content.isNotEmpty) {
-      print(content);
-    } else {
-      print('File is empty.');
-    }
-  } catch (e) {
-    print('Error printing file - $e');
-  }
+  FileReader reader = FileReader(filePath);
+
+  FileContent content = await reader.readFile();
+
+  // Print the entire content
+  print(content.characters.join());
+
+  // Print the length
+  print(content.length);
 }
