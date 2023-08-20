@@ -8,8 +8,9 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  args: ^2.4.2
+  benchmark_harness: ^2.2.2
   pocketbase: ^0.14.1
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^2.0.0

@@ -38,7 +38,7 @@ class FileReader {
 
       return dimensionsList;
     } catch (e) {
-      throw 'Error parsing file to list of ints: $e';
+      throw 'Error reading the parsing file to list of ints: $e';
     }
   }
 }

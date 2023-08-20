@@ -29,7 +29,6 @@ void main() {
 
       await tempFile.delete(); // Clean up
     });
-
     test('throws an error for an invalid file path when reading by line',
         () async {
       var reader = FileReader('non_existent_file.txt');
@@ -37,5 +36,21 @@ void main() {
       // Expect that calling readFileByLine on a non-existent file will throw an error
       expect(reader.readFileByLine(), throwsA(isA<String>()));
     });
+  });
+  test('parses content into a list of list of integers', () async {
+    // Create a temporary file with mock data for parsing
+    var tempFile =
+        await File('temp_test_dimensions.txt').writeAsString('2x3x4\n1x1x10');
+
+    var reader = FileReader(tempFile.path);
+    var parsedList = await reader.parseFileListInt();
+
+    // Check the parsed content
+    expect(parsedList, [
+      [2, 3, 4],
+      [1, 1, 10]
+    ]);
+
+    await tempFile.delete(); // Clean up
   });
 }

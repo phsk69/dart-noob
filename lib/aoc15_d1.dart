@@ -1,4 +1,4 @@
-import 'package:dart_noob/file_stuff.dart';
+import 'file_stuff.dart';
 
 solveAocD1P1(List<String> arguments) async {
   String filePath = arguments[0];
