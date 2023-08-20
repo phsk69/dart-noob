@@ -17,9 +17,15 @@ void main(List<String> arguments) async {
     }
   }
   if (arguments[1] == '2') {
-    var d2P1 = await solveAocD2P1(arguments);
+    var d2P1 = await solveAocD2P1CoPilot(arguments);
     if (d2P1 is int) {
-      print('Day 2 part 1: $d2P1');
+      print('Day 2 part 1 - copilot: $d2P1');
     }
+  }
+  if (arguments[1] == 'test') {
+    await solveAocD2P1HomeBrew(arguments);
+    //if (d2P1 is int) {
+    //  print('Day 2 part 1 homebrew: $d2P1');
+    //}
   }
 }

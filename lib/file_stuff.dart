@@ -8,8 +8,7 @@ class FileReader {
   Future<List<String>> readFile() async {
     try {
       String contents = await File(filepath).readAsString();
-      List<String> contentList =
-          contents.split('');
+      List<String> contentList = contents.split('');
       return contentList;
     } catch (e) {
       throw 'Error reading the file: $e';
@@ -22,6 +21,24 @@ class FileReader {
       return lines;
     } catch (e) {
       throw 'Error reading the file by line: $e';
+    }
+  }
+
+  Future<List<List<int>>> parseFileListInt() async {
+    List<List<int>> dimensionsList = [];
+    try {
+      List<String> lines = await File(filepath).readAsLines();
+
+      for (var line in lines) {
+        List<int> dimensions =
+            line.split('x').map((e) => int.parse(e)).toList();
+
+        dimensionsList.add(dimensions);
+      }
+
+      return dimensionsList;
+    } catch (e) {
+      throw 'Error parsing file to list of ints: $e';
     }
   }
 }
