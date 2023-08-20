@@ -11,7 +11,7 @@ void main() {
       var reader = FileReader(tempFile.path);
       var contentObj = await reader.readFile();
 
-      expect(contentObj.strings.join(), 'Test content');
+      expect(contentObj.join(), 'Test content');
       expect(contentObj.length, 12); // "Test content" has 12 characters
 
       await tempFile.delete(); // Clean up

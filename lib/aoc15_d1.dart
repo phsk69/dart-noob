@@ -5,11 +5,11 @@ solveAocD1P1(List<String> arguments) async {
 
   FileReader reader = FileReader(filePath);
 
-  FileContent content = await reader.readFile();
+  var content = await reader.readFile();
 
   var i = 0;
 
-  for (var element in content.strings) {
+  for (var element in content) {
     switch (element) {
       case '(':
         i++;
@@ -27,22 +27,17 @@ solveAocD1P2(List<String> arguments) async {
 
   FileReader reader = FileReader(filePath);
 
-  FileContent content = await reader.readFile();
+  var content = await reader.readFile();
 
   var floor = 0;
   const int basement = -1;
-
   var firstBasementPos = 0;
-  // Iterate over the map (index and character)
-  for (var idx = 0; idx < content.strings.length; idx++) {
-    var element = content.strings[idx];
+
+  for (var idx = 0; idx < content.length; idx++) {
+    var element = content[idx];
     switch (element) {
       case '(':
         floor++;
-        if (floor == basement) {
-          firstBasementPos = idx + 1;
-          return firstBasementPos;
-        }
         break;
       case ')':
         floor--;
