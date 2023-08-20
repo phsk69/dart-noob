@@ -9,7 +9,7 @@ solveAocD1P1(List<String> arguments) async {
 
   var i = 0;
 
-  for (var element in content.characters) {
+  for (var element in content.strings) {
     switch (element) {
       case '(':
         i++;
@@ -34,8 +34,8 @@ solveAocD1P2(List<String> arguments) async {
 
   var firstBasementPos = 0;
   // Iterate over the map (index and character)
-  for (var idx = 0; idx < content.characters.length; idx++) {
-    var element = content.characters[idx];
+  for (var idx = 0; idx < content.strings.length; idx++) {
+    var element = content.strings[idx];
     switch (element) {
       case '(':
         floor++;

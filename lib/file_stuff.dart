@@ -1,10 +1,10 @@
 import 'dart:io';
 
 class FileContent {
-  final List<String> characters;
+  final List<String> strings;
   final int length;
 
-  FileContent(this.characters, this.length);
+  FileContent(this.strings, this.length);
 }
 
 class FileReader {
@@ -22,6 +22,16 @@ class FileReader {
       return FileContent(contentList, contentList.length);
     } catch (e) {
       throw 'Error reading the file: $e';
+    }
+  }
+
+  // New method to read the file line by line
+  Future<List<String>> readFileByLine() async {
+    try {
+      List<String> lines = await File(filepath).readAsLines();
+      return lines;
+    } catch (e) {
+      throw 'Error reading the file by line: $e';
     }
   }
 }
