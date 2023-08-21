@@ -23,9 +23,24 @@ class HomeBrewBenchmark extends BenchmarkBase {
   }
 }
 
-benchRunner(String inputPath) async {
+class HomeBrewParallelBenchmark extends BenchmarkBase {
+  final List<List<int>> content;
+  final int workers;
+
+  HomeBrewParallelBenchmark(this.content, this.workers)
+      : super("HomeBrewParallel");
+
+  @override
+  void run() {
+    solveAocD2P1HomeBrewParallel(content, workers);
+  }
+}
+
+benchRunner(String inputPath, int workers) async {
   final homebrewContent = await getParsedList(inputPath);
   final copilotContent = await getInputByLine(inputPath);
   CoPilotBenchmark(copilotContent).report();
   HomeBrewBenchmark(homebrewContent).report();
+  //TODO: The benchmark thing does not exit the pool workers correctly
+  //HomeBrewParallelBenchmark(homebrewContent, workers).report();
 }

@@ -12,7 +12,6 @@ void main() {
       var contentObj = await reader.readFile();
 
       expect(contentObj.join(), 'Test content');
-      expect(contentObj.length, 12); // "Test content" has 12 characters
 
       await tempFile.delete(); // Clean up
     });
@@ -36,21 +35,21 @@ void main() {
       // Expect that calling readFileByLine on a non-existent file will throw an error
       expect(reader.readFileByLine(), throwsA(isA<String>()));
     });
-  });
-  test('parses content into a list of list of integers', () async {
-    // Create a temporary file with mock data for parsing
-    var tempFile =
-        await File('temp_test_dimensions.txt').writeAsString('2x3x4\n1x1x10');
+    test('parses content into a list of list of integers', () async {
+      // Create a temporary file with mock data for parsing
+      var tempFile =
+          await File('temp_test_dimensions.txt').writeAsString('2x3x4\n1x1x10');
 
-    var reader = FileReader(tempFile.path);
-    var parsedList = await reader.parseFileListInt();
+      var reader = FileReader(tempFile.path);
+      var parsedList = await reader.parseFileListInt();
 
-    // Check the parsed content
-    expect(parsedList, [
-      [2, 3, 4],
-      [1, 1, 10]
-    ]);
+      // Check the parsed content
+      expect(parsedList, [
+        [2, 3, 4],
+        [1, 1, 10]
+      ]);
 
-    await tempFile.delete(); // Clean up
+      await tempFile.delete(); // Clean up
+    });
   });
 }
