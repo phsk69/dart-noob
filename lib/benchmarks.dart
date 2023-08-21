@@ -1,10 +1,10 @@
-import 'aoc15_d2.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
+import 'package:dart_noob/aoc15_d2.dart';
 
 class CoPilotBenchmark extends BenchmarkBase {
   final List<String> content;
 
-  CoPilotBenchmark(this.content) : super("CoPilot");
+  CoPilotBenchmark(this.content) : super("String splitter - Copilot");
 
   @override
   void run() {
@@ -12,35 +12,61 @@ class CoPilotBenchmark extends BenchmarkBase {
   }
 }
 
-class HomeBrewBenchmark extends BenchmarkBase {
+class ListOfListsBenchmark extends BenchmarkBase {
   final List<List<int>> content;
 
-  HomeBrewBenchmark(this.content) : super("HomeBrew");
+  ListOfListsBenchmark(this.content) : super("ListOfListsBenchmark - Chatgpt");
 
   @override
   void run() {
-    solveAocD2P1HomeBrew(content);
+    solveAocD2P1ListOfLists(content);
   }
 }
 
-class HomeBrewParallelBenchmark extends BenchmarkBase {
+class ListOfListsFunctional extends BenchmarkBase {
   final List<List<int>> content;
-  final int workers;
 
-  HomeBrewParallelBenchmark(this.content, this.workers)
-      : super("HomeBrewParallel");
+  ListOfListsFunctional(this.content)
+      : super("ListOfListsFunctional - Chatgpt");
 
   @override
   void run() {
-    solveAocD2P1HomeBrewParallel(content, workers);
+    solveAocD2P1FunctionalListOfLists(content);
+  }
+}
+
+class ListOfStringsFunctional extends BenchmarkBase {
+  final List<String> content;
+
+  ListOfStringsFunctional(this.content)
+      : super("ListOfStringsFunctional - Chatgpt");
+
+  @override
+  void run() {
+    solveAocD2P1FunctionalFromStrings(content);
+  }
+}
+
+class ListOfListsParallel extends BenchmarkBase {
+  final List<List<int>> content;
+  final int workers;
+
+  ListOfListsParallel(this.content, this.workers)
+      : super("ListOfListsParallel - Chatgpt");
+
+  @override
+  void run() async {
+    await solveAocD2P1Parallel(content, workers);
   }
 }
 
 benchRunner(String inputPath, int workers) async {
-  final homebrewContent = await getParsedList(inputPath);
-  final copilotContent = await getInputByLine(inputPath);
-  CoPilotBenchmark(copilotContent).report();
-  HomeBrewBenchmark(homebrewContent).report();
-  //TODO: The benchmark thing does not exit the pool workers correctly
-  //HomeBrewParallelBenchmark(homebrewContent, workers).report();
+  final listOfListsContent = await getParsedList(inputPath);
+  final listOfStringsContent = await getInputByLine(inputPath);
+  CoPilotBenchmark(listOfStringsContent).report();
+  ListOfListsBenchmark(listOfListsContent).report();
+  ListOfListsFunctional(listOfListsContent).report();
+  ListOfStringsFunctional(listOfStringsContent).report();
+  // TODO: This still does not exit when completed.
+  // ListOfListsParallel(listOfListsContent, workers).report();
 }

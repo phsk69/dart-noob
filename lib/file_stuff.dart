@@ -11,7 +11,7 @@ class FileReader {
       List<String> contentList = contents.split('');
       return contentList;
     } catch (e) {
-      throw 'Error reading the file: $e';
+      throw 'readFile: $e';
     }
   }
 
@@ -20,7 +20,7 @@ class FileReader {
       List<String> lines = await File(filepath).readAsLines();
       return lines;
     } catch (e) {
-      throw 'Error reading the file by line: $e';
+      throw 'readFileByLine: $e';
     }
   }
 
@@ -38,7 +38,7 @@ class FileReader {
 
       return dimensionsList;
     } catch (e) {
-      throw 'Error reading the parsing file to list of ints: $e';
+      throw 'parseFileListInt: $e';
     }
   }
 }

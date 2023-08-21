@@ -1,15 +1,16 @@
 import 'dart:isolate';
-import 'file_stuff.dart';
+import 'package:dart_noob/file_stuff.dart';
 
-getInputByLine(String inputPath) async {
+Future<List<String>> getInputByLine(String inputPath) async {
   return await FileReader(inputPath).readFileByLine();
 }
 
-getParsedList(String inputPath) async {
+Future<List<List<int>>> getParsedList(String inputPath) async {
   return await FileReader(inputPath).parseFileListInt();
 }
 
-solveAocD2P1CoPilot(List<String> content) async {
+// The one Copilot made without asking
+solveAocD2P1CoPilot(List<String> content) {
   try {
     var totalPaper = 0;
 
@@ -38,11 +39,12 @@ solveAocD2P1CoPilot(List<String> content) async {
 
     return totalPaper;
   } catch (e) {
-    throw 'Error: calculating stuff';
+    throw 'solveAocD2P1CoPilot: $e';
   }
 }
 
-solveAocD2P1HomeBrew(List<List<int>> content) async {
+// List of list of integers thing
+int solveAocD2P1ListOfLists(List<List<int>> content) {
   try {
     var totalPaper = 0;
     for (var list in content) {
@@ -67,12 +69,63 @@ solveAocD2P1HomeBrew(List<List<int>> content) async {
       totalPaper += paper;
     }
 
-    return totalPaper; // Moved outside of the for loop
+    return totalPaper;
   } catch (e) {
-    throw 'Error: calculating stuff';
+    throw 'solveAocD2P1ListOfLists: $e';
   }
 }
 
+// Functional thing
+int computePaperForBox(int l, int w, int h) {
+  int area(int x, int y) => x * y;
+
+  List<int> areas = [area(l, w), area(w, h), area(h, l)];
+
+  return 2 * areas.reduce((acc, val) => acc + val) +
+      areas.reduce((a, b) => a < b ? a : b);
+}
+
+int computeTotalPaper(List<List<int>> boxes) {
+  return boxes
+      .map((box) => computePaperForBox(box[0], box[1], box[2]))
+      .reduce((acc, paper) => acc + paper);
+}
+
+int solveAocD2P1FunctionalListOfLists(List<List<int>> content) {
+  try {
+    return computeTotalPaper(content);
+  } catch (e) {
+    throw 'solveAocD2P1FunctionalListOfLists: $e';
+  }
+}
+
+int computePaperForLine(String line) {
+  int area(int x, int y) => x * y;
+
+  var dimensions = line.split('x').map((dim) => int.parse(dim)).toList();
+  int l = dimensions[0];
+  int w = dimensions[1];
+  int h = dimensions[2];
+
+  List<int> areas = [area(l, w), area(w, h), area(h, l)];
+
+  return 2 * areas.reduce((acc, val) => acc + val) +
+      areas.reduce((a, b) => a < b ? a : b);
+}
+
+int computeTotalPaperFromStrings(List<String> content) {
+  return content.map(computePaperForLine).reduce((acc, paper) => acc + paper);
+}
+
+int solveAocD2P1FunctionalFromStrings(List<String> content) {
+  try {
+    return computeTotalPaperFromStrings(content);
+  } catch (e) {
+    throw 'solveAocD2P1FunctionalFromStrings: $e';
+  }
+}
+
+// Parallel thing
 List<List<T>> chunkList<T>(List<T> list, int chunkSize) {
   var chunks = <List<T>>[];
   for (var i = 0; i < list.length; i += chunkSize) {
@@ -108,7 +161,7 @@ void workerFunction(SendPort sendPort) {
   });
 }
 
-Future<int> solveAocD2P1HomeBrewParallel(
+Future<int> solveAocD2P1Parallel(
     List<List<int>> content, int numWorkers) async {
   int totalPaper = 0;
 

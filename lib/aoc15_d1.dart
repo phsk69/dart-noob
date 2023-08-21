@@ -1,12 +1,10 @@
-import 'file_stuff.dart';
+import 'package:dart_noob/file_stuff.dart';
 
-solveAocD1P1(List<String> arguments) async {
-  String filePath = arguments[0];
+getInputString(String inputPath) async {
+  return await FileReader(inputPath).readFile();
+}
 
-  FileReader reader = FileReader(filePath);
-
-  var content = await reader.readFile();
-
+solveAocD1P1(List<String> content) {
   var i = 0;
 
   for (var element in content) {
@@ -22,13 +20,7 @@ solveAocD1P1(List<String> arguments) async {
   return i;
 }
 
-solveAocD1P2(List<String> arguments) async {
-  String filePath = arguments[0];
-
-  FileReader reader = FileReader(filePath);
-
-  var content = await reader.readFile();
-
+solveAocD1P2(List<String> content) {
   var floor = 0;
   const int basement = -1;
   var firstBasementPos = 0;
