@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/file_stuff.dart';
+import 'package:dart_noob/util/file_stuff.dart';
 import 'dart:io';
 
 void main() {

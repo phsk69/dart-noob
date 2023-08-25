@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/aoc15_d1.dart';
+import 'package:dart_noob/d1/aoc15_d1.dart';
 
 void main() {
   group('solveAocD1', () {

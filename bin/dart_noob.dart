@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dart_noob/aoc15_d1.dart';
-import 'package:dart_noob/aoc15_d2.dart';
-import 'package:dart_noob/benchmarks.dart';
+import 'package:dart_noob/d1/aoc15_d1.dart';
+import 'package:dart_noob/d2/aoc15_d2.dart';
+import 'package:dart_noob/util/benchmarks.dart';
 import 'package:args/args.dart';
 
 void main(List<String> arguments) async {

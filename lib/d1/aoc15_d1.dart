@@ -1,4 +1,4 @@
-import 'package:dart_noob/file_stuff.dart';
+import 'package:dart_noob/util/file_stuff.dart';
 
 getInputString(String inputPath) async {
   return await FileReader(inputPath).readFile();
