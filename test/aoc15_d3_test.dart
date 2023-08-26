@@ -11,7 +11,7 @@ void main() {
     });
 
     test('checks aoc d3 p2 for correctness', () async {
-      const int expected = 2502;
+      const int expected = 2631;
       var result = await solveAocD3P2('data/aoc2015_day3_input');
       expect(result, expected);
     });
