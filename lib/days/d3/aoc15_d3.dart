@@ -35,6 +35,7 @@ class SantaRouter {
 
   /// Splits moves into N amount of chunks
   /// This did not work, as i forgot to group the moves correctly
+  /*
   List<List<String>> _splitMoves(List<String> moves, int chunkCount) {
     List<List<String>> chunks = [];
     int chunkSize = moves.length ~/ chunkCount; // Integer division
@@ -44,6 +45,7 @@ class SantaRouter {
     }
     return chunks;
   }
+  */
 
   /// This is the correct way of splitting and grouping where each
   /// actor takes turns making moves ie. altenating by actors
