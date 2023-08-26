@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dart_noob/d1/aoc15_d1.dart';
-import 'package:dart_noob/d2/aoc15_d2_p1.dart';
-import 'package:dart_noob/d2/aoc15_d2_p2.dart';
+import 'package:dart_noob/days/d1/aoc15_d1.dart';
+import 'package:dart_noob/days/d2/aoc15_d2_p1.dart';
+import 'package:dart_noob/days/d2/aoc15_d2_p2.dart';
 import 'package:dart_noob/benchmark/benchmarks.dart';
 import 'package:dart_noob/util/file_stuff.dart';
 import 'package:args/args.dart';
