@@ -1,11 +1,13 @@
 import 'dart:io';
-
+import 'package:dart_noob/util/file_stuff.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p2.dart';
+import 'package:dart_noob/days/d3/aoc15_d3_p1.dart';
 import 'package:dart_noob/benchmark/benchmarks.dart';
-import 'package:dart_noob/util/file_stuff.dart';
 import 'package:args/args.dart';
+
+// https://adventofcode.com/2015
 
 void main(List<String> arguments) async {
   try {
@@ -17,8 +19,8 @@ void main(List<String> arguments) async {
 
     var args = parser.parse(arguments);
 
-    String? day = args['day'] as String? ?? '2';
-    String? input = args['input'] as String? ?? 'data/aoc2015_day2_input';
+    String? day = args['day'] as String? ?? '3';
+    String? input = args['input'] as String? ?? 'data/aoc2015_day3_input';
     int workers = int.tryParse(args['workers'] as String? ?? '') ?? 4;
     if (args['bench'] as bool) {
       await benchRunner(input, workers);
@@ -83,15 +85,23 @@ void main(List<String> arguments) async {
       print('D2P1 - ListOfLists & parallel - Chatgpt result: $d2P1Parallel '
           '(Time: ${stopwatch.elapsedMicroseconds} us, workers: $workers)');
       stopwatch.reset();
-    
+
       stopwatch.start();
-      var d2P2ListOfLists =
-          await solveAocD2P2ListOfLists(input);
+      var d2P2ListOfLists = await solveAocD2P2ListOfLists(input);
       stopwatch.stop();
       print('D2P2 - ListOfLists - Homemade result: $d2P2ListOfLists '
           '(Time: ${stopwatch.elapsedMicroseconds} us)');
-
     }
+
+    if (day == '3') {
+      var stopwatch = Stopwatch()..start();
+      var d3P1 = await solveAocD3P1(input);
+      stopwatch.stop();
+      print(
+          'D3P3: $d3P1 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
+      stopwatch.reset();
+    }
+
     exit(0);
   } catch (e) {
     print('Main: $e');

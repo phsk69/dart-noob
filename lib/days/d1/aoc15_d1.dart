@@ -1,10 +1,4 @@
-import 'package:dart_noob/util/file_stuff.dart';
-
 // https://adventofcode.com/2015
-
-getInputString(String inputPath) async {
-  return await FileReader(inputPath).readFile();
-}
 
 solveAocD1P1(List<String> content) {
   var i = 0;

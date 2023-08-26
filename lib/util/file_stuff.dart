@@ -1,11 +1,16 @@
 import 'dart:io';
 
+// helpers
 Future<List<String>> getInputByLine(String inputPath) async {
   return await FileReader(inputPath).readFileByLine();
 }
 
 Future<List<List<int>>> getParsedList(String inputPath) async {
   return await FileReader(inputPath).parseFileListInt();
+}
+
+Future<List<String>> getInputString(String inputPath) async {
+  return await FileReader(inputPath).readFile();
 }
 
 class FileReader {
