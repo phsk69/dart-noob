@@ -2,7 +2,9 @@
 
 ## Doing
 
+- Performance test the d2p2 and forth approaches vs the 2 other approaches made in d2.
 - Move the each solution into its own file for better readability
+  - Unless its a class with minimal helpers
 
 
 ### Ideas

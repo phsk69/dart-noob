@@ -12,6 +12,7 @@ dependencies:
   benchmark_harness: ^2.2.2
   pocketbase: ^0.14.1
   dartz: ^0.10.1
+  crypto: ^3.0.3
 
 dev_dependencies:
   lints: ^2.0.0

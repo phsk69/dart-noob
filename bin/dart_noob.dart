@@ -4,6 +4,7 @@ import 'package:dart_noob/days/d1/aoc15_d1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p2.dart';
 import 'package:dart_noob/days/d3/aoc15_d3.dart';
+import 'package:dart_noob/days/d4/aoc15_d4.dart';
 import 'package:dart_noob/benchmark/benchmarks.dart';
 import 'package:args/args.dart';
 
@@ -19,8 +20,8 @@ void main(List<String> arguments) async {
 
     var args = parser.parse(arguments);
 
-    String? day = args['day'] as String? ?? '3';
-    String? input = args['input'] as String? ?? 'data/aoc2015_day3_input';
+    String? day = args['day'] as String? ?? '4';
+    String? input = args['input'] as String? ?? 'data/aoc2015_day4_input';
     int workers = int.tryParse(args['workers'] as String? ?? '') ?? 4;
     if (args['bench'] as bool) {
       await benchRunner(input, workers);
@@ -114,6 +115,27 @@ void main(List<String> arguments) async {
       stopwatch.reset();
     }
 
+    if (day == '4') {
+      var stopwatch = Stopwatch()..start();
+      var d4P1 = await solveAocD4P1(input);
+
+      stopwatch.stop();
+
+      print(
+          'D4P1: $d4P1 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
+
+      stopwatch.reset();
+    /*
+      stopwatch.start();
+      var d4P2 = await solveAocD4P2(input);
+
+      stopwatch.stop();
+
+      print(
+          'D4P2: $d4P2 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
+      stopwatch.reset();
+    */
+    }
     exit(0);
   } catch (e) {
     print('Main: $e');

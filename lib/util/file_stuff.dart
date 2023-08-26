@@ -10,7 +10,11 @@ Future<List<List<int>>> getParsedList(String inputPath) async {
 }
 
 Future<List<String>> getInputString(String inputPath) async {
-  return await FileReader(inputPath).readFile();
+  return await FileReader(inputPath).splitFileStringToList();
+}
+
+Future<String> getFileAsString(String inputPath) async {
+  return await FileReader(inputPath).readStringFromFile();
 }
 
 class FileReader {
@@ -18,11 +22,20 @@ class FileReader {
 
   FileReader(this.filepath);
 
-  Future<List<String>> readFile() async {
+  Future<List<String>> splitFileStringToList() async {
     try {
       String contents = await File(filepath).readAsString();
       List<String> contentList = contents.split('');
       return contentList;
+    } catch (e) {
+      throw 'readFile: $e';
+    }
+  }
+
+  Future<String> readStringFromFile() async {
+    try {
+      String contents = await File(filepath).readAsString();
+      return contents;
     } catch (e) {
       throw 'readFile: $e';
     }

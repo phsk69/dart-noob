@@ -5,8 +5,8 @@ import 'package:dart_noob/util/file_stuff.dart';
 /// Fetches the moves from the given [inputPath] and computes the result.
 Future<int> solveAocD3P1(String inputPath) async {
   try {
-    var santaMoves = await getInputString(inputPath);
-    return SantaRouter(santaMoves).computeVisitedPositions();
+    var input = await getInputString(inputPath);
+    return SantaRouter(input).computeVisitedPositions();
   } catch (e) {
     throw 'solveAocD3P1: $e';
   }
@@ -14,8 +14,8 @@ Future<int> solveAocD3P1(String inputPath) async {
 
 Future<int> solveAocD3P2(String inputPath) async {
   try {
-    var santaMoves = await getInputString(inputPath);
-    return SantaRouter(santaMoves).computeVisitedPositionsSplit(2);
+    var input = await getInputString(inputPath);
+    return SantaRouter(input).computeVisitedPositionsSplit(2);
   } catch (e) {
     throw 'solveAocD3P1: $e';
   }
@@ -48,7 +48,7 @@ class SantaRouter {
   */
 
   /// This is the correct way of splitting and grouping where each
-  /// actor takes turns making moves ie. altenating by actors
+  /// actor takes turns making moves ie. alternating by actors
   List<List<String>> splitAlternatingMoves(List<String> moves, int actors) {
     List<List<String>> result = List.generate(actors, (index) => <String>[]);
 

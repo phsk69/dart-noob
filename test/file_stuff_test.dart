@@ -9,7 +9,7 @@ void main() {
       var tempFile = await File('temp_test.txt').writeAsString('Test content');
 
       var reader = FileReader(tempFile.path);
-      var contentObj = await reader.readFile();
+      var contentObj = await reader.splitFileStringToList();
 
       expect(contentObj.join(), 'Test content');
 
