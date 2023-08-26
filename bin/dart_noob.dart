@@ -3,7 +3,7 @@ import 'package:dart_noob/util/file_stuff.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p1.dart';
 import 'package:dart_noob/days/d2/aoc15_d2_p2.dart';
-import 'package:dart_noob/days/d3/aoc15_d3_p1.dart';
+import 'package:dart_noob/days/d3/aoc15_d3.dart';
 import 'package:dart_noob/benchmark/benchmarks.dart';
 import 'package:args/args.dart';
 
@@ -96,9 +96,21 @@ void main(List<String> arguments) async {
     if (day == '3') {
       var stopwatch = Stopwatch()..start();
       var d3P1 = await solveAocD3P1(input);
+
       stopwatch.stop();
+
       print(
-          'D3P3: $d3P1 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
+          'D3P1: $d3P1 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
+
+      stopwatch.reset();
+
+      stopwatch.start();
+      var d3P2 = await solveAocD3P2(input);
+
+      stopwatch.stop();
+
+      print(
+          'D3P2: $d3P2 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
       stopwatch.reset();
     }
 

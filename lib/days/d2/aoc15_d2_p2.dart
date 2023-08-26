@@ -11,7 +11,7 @@ solveAocD2P2ListOfLists(String inputPath) async {
 
       var ribbonSum = 2 * (box[0] + box[1]);
       var bowSum = box[0] * box[1] * box[2];
-      
+
       totalRibbon += ribbonSum + bowSum;
     }
     return totalRibbon;
@@ -19,5 +19,3 @@ solveAocD2P2ListOfLists(String inputPath) async {
     throw 'solveAocD2P2ListOfLists: $e';
   }
 }
-
-

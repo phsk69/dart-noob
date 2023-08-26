@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:dart_noob/util/file_stuff.dart';
-import 'package:dart_noob/days/d3/aoc15_d3_p1.dart';
+import 'package:dart_noob/days/d3/aoc15_d3.dart';
 
 void main() {
   group('solveAocD3', () {
