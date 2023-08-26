@@ -27,3 +27,21 @@ solveAocD4P1(String input) async {
     index = index + BigInt.one; // Increment the index.
   }
 }
+
+solveAocD4P2(String input) async {
+  var baseInput = await getFileAsString(input);
+  BigInt index = BigInt.zero; // Start from zero
+  String targetPrefix =
+      "000000"; // This is the prefix we're looking for in the hash.
+
+  while (true) {
+    String currentInput = baseInput + index.toString();
+    String currentHex = md5ToHex(currentInput);
+
+    if (currentHex.startsWith(targetPrefix)) {
+      return index;
+    }
+
+    index = index + BigInt.one; // Increment the index.
+  }
+}

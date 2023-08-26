@@ -9,5 +9,11 @@ void main() {
       var result = await solveAocD4P1(input);
       expect(result, expected);
     });
+
+    test('checks aoc d4 p2 for correctness', () async {
+      BigInt expected = BigInt.from(1038736);
+      var result = await solveAocD4P2(input);
+      expect(result, expected);
+    });
   });
 }
