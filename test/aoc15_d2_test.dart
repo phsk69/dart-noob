@@ -1,8 +1,10 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/d2/aoc15_d2.dart';
+import 'package:dart_noob/util/file_stuff.dart';
+import 'package:dart_noob/d2/aoc15_d2_p1.dart';
+import 'package:dart_noob/d2/aoc15_d2_p2.dart';
 
 void main() {
-  group('aoc15_d2', () {
+  group('aoc15_d2_p1', () {
     const String inputPath = 'data/aoc2015_day2_input';
     const int expected = 1606483;
     test('checks aoc d2 p1 copilot for correctness', () async {
@@ -32,6 +34,14 @@ void main() {
     test('checks aoc d2 p1 parallel for correctness', () async {
       var listOfListsContent = await getParsedList(inputPath);
       var result = await solveAocD2P1Parallel(listOfListsContent, 2);
+      expect(result, expected);
+    });
+  });
+  group('aoc15_d2_p2', () {
+    const String inputPath = 'data/aoc2015_day2_input';
+    const int expected = 3842356;
+    test('checks aoc d2 p2 ListOfLists for correctness', () async {
+      var result = await solveAocD2P2ListOfLists(inputPath);
       expect(result, expected);
     });
   });

@@ -1,13 +1,5 @@
 import 'dart:isolate';
-import 'package:dart_noob/util/file_stuff.dart';
-
-Future<List<String>> getInputByLine(String inputPath) async {
-  return await FileReader(inputPath).readFileByLine();
-}
-
-Future<List<List<int>>> getParsedList(String inputPath) async {
-  return await FileReader(inputPath).parseFileListInt();
-}
+// https://adventofcode.com/2015
 
 // The one Copilot made without asking
 solveAocD2P1CoPilot(List<String> content) {

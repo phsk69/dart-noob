@@ -1,5 +1,6 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:dart_noob/d2/aoc15_d2.dart';
+import 'package:dart_noob/d2/aoc15_d2_p1.dart';
+import 'package:dart_noob/util/file_stuff.dart';
 
 class CoPilotBenchmark extends BenchmarkBase {
   final List<String> content;

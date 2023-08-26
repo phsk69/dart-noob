@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:dart_noob/d1/aoc15_d1.dart';
-import 'package:dart_noob/d2/aoc15_d2.dart';
-import 'package:dart_noob/util/benchmarks.dart';
+import 'package:dart_noob/d2/aoc15_d2_p1.dart';
+import 'package:dart_noob/d2/aoc15_d2_p2.dart';
+import 'package:dart_noob/benchmark/benchmarks.dart';
+import 'package:dart_noob/util/file_stuff.dart';
 import 'package:args/args.dart';
 
 void main(List<String> arguments) async {
@@ -80,6 +82,15 @@ void main(List<String> arguments) async {
       stopwatch.stop();
       print('D2P1 - ListOfLists & parallel - Chatgpt result: $d2P1Parallel '
           '(Time: ${stopwatch.elapsedMicroseconds} us, workers: $workers)');
+      stopwatch.reset();
+    
+      stopwatch.start();
+      var d2P2ListOfLists =
+          await solveAocD2P2ListOfLists(input);
+      stopwatch.stop();
+      print('D2P2 - ListOfLists - Homemade result: $d2P2ListOfLists '
+          '(Time: ${stopwatch.elapsedMicroseconds} us)');
+
     }
     exit(0);
   } catch (e) {
