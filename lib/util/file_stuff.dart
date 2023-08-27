@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 // helpers
 Future<List<String>> getInputByLine(String inputPath) async {
@@ -15,6 +16,14 @@ Future<List<String>> getInputString(String inputPath) async {
 
 Future<String> getFileAsString(String inputPath) async {
   return await FileReader(inputPath).readStringFromFile();
+}
+
+Stream<String> streamLinesFromFile(String inputPath) async* {
+  final file = File(inputPath);
+  await for (var line
+      in file.openRead().transform(utf8.decoder).transform(LineSplitter())) {
+    yield line;
+  }
 }
 
 class FileReader {
