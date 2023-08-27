@@ -125,7 +125,7 @@ void main(List<String> arguments) async {
           'D4P1: $d4P1 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
 
       stopwatch.reset();
-    /*
+
       stopwatch.start();
       var d4P2 = await solveAocD4P2(input);
 
@@ -134,7 +134,6 @@ void main(List<String> arguments) async {
       print(
           'D4P2: $d4P2 - Homebrew (Time: ${stopwatch.elapsedMicroseconds} us)');
       stopwatch.reset();
-    */
     }
     exit(0);
   } catch (e) {
