@@ -23,6 +23,7 @@ final List<StringDayTask> stringTasks = [
   StringDayTask('solveAoc15D4P1', '15day4', solveAoc15D4P1),
   StringDayTask('solveAoc15D4P2', '15day4', solveAoc15D4P2),
   StringDayTask('solveAoc15D5P1', '15day5', solveAoc15D5P1),
+  StringDayTask('solveAoc15D5P2', '15day5', solveAoc15D5P2),
 ];
 
 final List<StringAndIntDayTask> stringAndIntTasks = [
