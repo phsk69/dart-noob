@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/util/file_stuff.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
 void main() {
