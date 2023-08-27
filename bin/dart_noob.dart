@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:dart_noob/models/day_task.dart';
-import 'package:dart_noob/config/input_map.dart';
 import 'package:dart_noob/config/task_list.dart';
+import 'package:dart_noob/config/input_map.dart';
 import 'package:dart_noob/util/benchmarks.dart';
 import 'package:args/args.dart';
-
-// https://adventofcode.com/2015
 
 void main(List<String> arguments) async {
   final parser = ArgParser()
@@ -18,21 +16,15 @@ void main(List<String> arguments) async {
   if (args['bench'] as bool) {
     await benchRunner(inputMap, workers);
   } else {
-    // Get unique keys from both task lists
+    // Get unique keys from tasks list
     var uniqueKeys = {
-      ...stringTasks.map((t) => t.inputKey),
-      ...stringAndIntTasks.map((t) => t.inputKey)
+      ...dayTaskList.map((t) => t.inputKey),
     };
 
     for (var key in uniqueKeys) {
-      // Execute string tasks for the current key
-      for (var task in stringTasks.where((t) => t.inputKey == key)) {
-        await _executeStringTask(task, inputMap);
-      }
-
-      // Execute string and int tasks for the current key
-      for (var task in stringAndIntTasks.where((t) => t.inputKey == key)) {
-        await _executeStringAndIntTask(task, inputMap, workers);
+      // Execute tasks for the current key
+      for (var task in dayTaskList.where((t) => t.inputKey == key)) {
+        await _executeTask(task, inputMap, workers);
       }
     }
   }
@@ -40,29 +32,22 @@ void main(List<String> arguments) async {
   exit(0);
 }
 
-Future<void> _executeStringTask(
-  StringDayTask task,
-  Map<String, String> inputMap,
-) async {
+Future<void> _executeTask(
+    DayTask task, Map<String, String> inputMap, int workerCount) async {
   try {
     var stopwatch = Stopwatch()..start();
     var inputPath = inputMap[task.inputKey] ?? '';
-    var result = await task.taskFunction(inputPath);
-    stopwatch.stop();
-    print('${task.name}: $result (Time: ${stopwatch.elapsed})');
-  } catch (e) {
-    print('Error executing ${task.name}: $e');
-  }
-}
 
-Future<void> _executeStringAndIntTask(StringAndIntDayTask task,
-    Map<String, String> inputMap, int workerCount) async {
-  try {
-    var stopwatch = Stopwatch()..start();
-    var inputPath = inputMap[task.inputKey] ?? '';
-    var result = await task.taskFunction(inputPath, workerCount);
-    stopwatch.stop();
-    print('${task.name}: $result (Time: ${stopwatch.elapsed})');
+    // Use is keyword to check the type of task and then execute accordingly
+    if (task is StringDayTask) {
+      var result = await task.taskFunction(inputPath);
+      stopwatch.stop();
+      print('${task.name}: $result (Time: ${stopwatch.elapsed})');
+    } else if (task is StringAndIntDayTask) {
+      var result = await task.taskFunction(inputPath, workerCount);
+      stopwatch.stop();
+      print('${task.name}: $result (Time: ${stopwatch.elapsed})');
+    }
   } catch (e) {
     print('Error executing ${task.name}: $e');
   }

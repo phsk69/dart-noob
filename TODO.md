@@ -2,7 +2,7 @@
 
 ## Doing
 
-- When complete identify meaningful performance test, or demo relevant diffrences in appproaches.
+- When complete identify meaningful performance test, or demo relevant differences in approaches.
 - Move the each solution into its own file for better readability
   - Unless its a class with minimal helpers
 

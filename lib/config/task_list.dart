@@ -6,9 +6,9 @@ import 'package:dart_noob/days/d3/aoc15_d3.dart';
 import 'package:dart_noob/days/d4/aoc15_d4.dart';
 import 'package:dart_noob/days/d5/aoc15_d5.dart';
 
-final List<StringDayTask> stringTasks = [
-  StringDayTask('D1P1', '15day1', solveAoc15D1P1),
-  StringDayTask('D1P2', '15day1', solveAoc15D1P2),
+final List<DayTask> dayTaskList = [
+  StringDayTask('solveAoc15D1P1', '15day1', solveAoc15D1P1),
+  StringDayTask('solveAoc15D1P2', '15day1', solveAoc15D1P2),
   StringDayTask('solveAoc15D2P1CoPilot', '15day2', solveAoc15D2P1CoPilot),
   StringDayTask(
       'solveAoc15D2P1ListOfLists', '15day2', solveAoc15D2P1ListOfLists),
@@ -24,9 +24,6 @@ final List<StringDayTask> stringTasks = [
   StringDayTask('solveAoc15D4P2', '15day4', solveAoc15D4P2),
   StringDayTask('solveAoc15D5P1', '15day5', solveAoc15D5P1),
   StringDayTask('solveAoc15D5P2', '15day5', solveAoc15D5P2),
-];
-
-final List<StringAndIntDayTask> stringAndIntTasks = [
   StringAndIntDayTask(
       'solveAoc15D2P1Parallel', '15day2', solveAoc15D2P1Parallel),
 ];

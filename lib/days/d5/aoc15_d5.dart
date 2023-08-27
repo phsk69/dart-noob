@@ -21,7 +21,7 @@ class NaughtyFilter {
     return line.split('').where((char) => 'aeiou'.contains(char)).length >= 3;
   }
 
-  // TODO: Dont continue until you understand this logic
+  // TODO: Don't continue until you understand this logic
   void _findRepeatedPairsWithoutOverlap(String line) {
     for (int i = 0; i < line.length - 1; i++) {
       String currentPair =
@@ -60,6 +60,6 @@ class NaughtyFilter {
     await for (var line in streamLinesFromFile(inputPath)) {
       _findRepeatedPairsWithoutOverlap(line);
     }
-    return true; // Returning true after processing all lines
+    return true;
   }
 }
