@@ -1,6 +1,6 @@
 import 'package:dart_noob/util/file_stuff.dart';
 
-Future<int> solveAocD5P1(String inputPath) async {
+Future<int> solveAoc15D5P1(String inputPath) async {
   return await NaughtyFilter(inputPath).filterStreamed();
 }
 

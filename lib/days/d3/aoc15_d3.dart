@@ -3,21 +3,21 @@ import 'package:dart_noob/util/file_stuff.dart';
 /// Computes the number of unique positions visited based on Santa's moves.
 ///
 /// Fetches the moves from the given [inputPath] and computes the result.
-Future<int> solveAocD3P1(String inputPath) async {
+Future<int> solveAoc15D3P1(String inputPath) async {
   try {
     var input = await getInputString(inputPath);
     return SantaRouter(input).computeVisitedPositions();
   } catch (e) {
-    throw 'solveAocD3P1: $e';
+    throw 'solveAoc15D3P1: $e';
   }
 }
 
-Future<int> solveAocD3P2(String inputPath) async {
+Future<int> solveAoc15D3P2(String inputPath) async {
   try {
     var input = await getInputString(inputPath);
     return SantaRouter(input).computeVisitedPositionsSplit(2);
   } catch (e) {
-    throw 'solveAocD3P1: $e';
+    throw 'solveAoc15D3P1: $e';
   }
 }
 

@@ -10,7 +10,7 @@ String md5ToHex(String input) {
   return md5Bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 }
 
-solveAocD4P1(String input) async {
+Future<BigInt> solveAoc15D4P1(String input) async {
   var baseInput = await getFileAsString(input);
   BigInt index = BigInt.zero; // Start from zero
   String targetPrefix =
@@ -28,7 +28,7 @@ solveAocD4P1(String input) async {
   }
 }
 
-solveAocD4P2(String input) async {
+Future<BigInt> solveAoc15D4P2(String input) async {
   var baseInput = await getFileAsString(input);
   BigInt index = BigInt.zero; // Start from zero
   String targetPrefix =

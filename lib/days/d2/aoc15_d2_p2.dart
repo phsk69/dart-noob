@@ -2,7 +2,7 @@ import 'package:dart_noob/util/file_stuff.dart';
 
 // https://adventofcode.com/2015
 
-solveAocD2P2ListOfLists(String inputPath) async {
+Future<int> solveAoc15D2P2ListOfLists(String inputPath) async {
   try {
     var listOfListsContent = await getParsedList(inputPath);
     var totalRibbon = 0;
@@ -16,6 +16,6 @@ solveAocD2P2ListOfLists(String inputPath) async {
     }
     return totalRibbon;
   } catch (e) {
-    throw 'solveAocD2P2ListOfLists: $e';
+    throw 'solveAoc15D2P2ListOfLists: $e';
   }
 }

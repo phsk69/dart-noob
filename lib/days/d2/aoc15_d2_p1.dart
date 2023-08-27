@@ -1,10 +1,12 @@
+import 'package:dart_noob/util/file_stuff.dart';
 import 'dart:isolate';
 // https://adventofcode.com/2015
 
 // The one Copilot made without asking
-solveAocD2P1CoPilot(List<String> content) {
+Future<int> solveAoc15D2P1CoPilot(String input) async {
   try {
     var totalPaper = 0;
+    var content = await getInputByLine(input);
 
     for (var line in content) {
       var dimensions = line.split('x');
@@ -31,14 +33,16 @@ solveAocD2P1CoPilot(List<String> content) {
 
     return totalPaper;
   } catch (e) {
-    throw 'solveAocD2P1CoPilot: $e';
+    throw 'solveAoc15D2P1CoPilot: $e';
   }
 }
 
 // List of list of integers thing
-int solveAocD2P1ListOfLists(List<List<int>> content) {
+Future<int> solveAoc15D2P1ListOfLists(String input) async {
   try {
     var totalPaper = 0;
+    var content = await getParsedList(input);
+
     for (var list in content) {
       var l = list[0];
       var w = list[1];
@@ -63,7 +67,7 @@ int solveAocD2P1ListOfLists(List<List<int>> content) {
 
     return totalPaper;
   } catch (e) {
-    throw 'solveAocD2P1ListOfLists: $e';
+    throw 'solveAoc15D2P1ListOfLists: $e';
   }
 }
 
@@ -83,11 +87,12 @@ int computeTotalPaper(List<List<int>> boxes) {
       .reduce((acc, paper) => acc + paper);
 }
 
-int solveAocD2P1FunctionalListOfLists(List<List<int>> content) {
+Future<int> solveAoc15D2P1FunctionalListOfLists(String input) async {
   try {
+    var content = await getParsedList(input);
     return computeTotalPaper(content);
   } catch (e) {
-    throw 'solveAocD2P1FunctionalListOfLists: $e';
+    throw 'solveAoc15D2P1FunctionalListOfLists: $e';
   }
 }
 
@@ -109,11 +114,12 @@ int computeTotalPaperFromStrings(List<String> content) {
   return content.map(computePaperForLine).reduce((acc, paper) => acc + paper);
 }
 
-int solveAocD2P1FunctionalFromStrings(List<String> content) {
+Future<int> solveAoc15D2P1FunctionalFromStrings(String input) async {
   try {
+    var content = await getInputByLine(input);
     return computeTotalPaperFromStrings(content);
   } catch (e) {
-    throw 'solveAocD2P1FunctionalFromStrings: $e';
+    throw 'solveAoc15D2P1FunctionalFromStrings: $e';
   }
 }
 
@@ -153,10 +159,9 @@ void workerFunction(SendPort sendPort) {
   });
 }
 
-Future<int> solveAocD2P1Parallel(
-    List<List<int>> content, int numWorkers) async {
+Future<int> solveAoc15D2P1Parallel(String input, int numWorkers) async {
   int totalPaper = 0;
-
+  var content = await getParsedList(input);
   // Chunk the content
   var chunks = chunkList(content, (content.length / numWorkers).ceil());
 

@@ -1,8 +1,10 @@
+import 'package:dart_noob/util/file_stuff.dart';
+
 // https://adventofcode.com/2015
 
-solveAocD1P1(List<String> content) {
+Future<int> solveAoc15D1P1(String input) async {
+  var content = await getInputString(input);
   var i = 0;
-
   for (var element in content) {
     switch (element) {
       case '(':
@@ -16,11 +18,11 @@ solveAocD1P1(List<String> content) {
   return i;
 }
 
-solveAocD1P2(List<String> content) {
+Future<int> solveAoc15D1P2(String input) async {
   var floor = 0;
   const int basement = -1;
   var firstBasementPos = 0;
-
+  var content = await getInputString(input);
   for (var idx = 0; idx < content.length; idx++) {
     var element = content[idx];
     switch (element) {
@@ -36,4 +38,5 @@ solveAocD1P2(List<String> content) {
         break;
     }
   }
+  throw Exception("Never reached the basement");
 }
