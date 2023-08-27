@@ -1,6 +1,7 @@
 import 'package:dart_noob/util/file_stuff.dart';
 import 'dart:isolate';
-// https://adventofcode.com/2015
+
+// https://adventofcode.com/2015/day/2
 
 // The one Copilot made without asking
 Future<int> solveAoc15D2P1CoPilot(String input) async {

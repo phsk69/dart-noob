@@ -2,6 +2,8 @@ import 'package:dart_noob/util/file_stuff.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
+// https://adventofcode.com/2015/day/3
+
 String md5ToHex(String input) {
   // Compute the MD5 hash
   List<int> md5Bytes = md5.convert(utf8.encode(input)).bytes;
@@ -12,9 +14,8 @@ String md5ToHex(String input) {
 
 Future<BigInt> solveAoc15D4P1(String input) async {
   var baseInput = await getFileAsString(input);
-  BigInt index = BigInt.zero; // Start from zero
-  String targetPrefix =
-      "00000"; // This is the prefix we're looking for in the hash.
+  BigInt index = BigInt.zero;
+  String targetPrefix = "00000";
 
   while (true) {
     String currentInput = baseInput + index.toString();
@@ -24,15 +25,14 @@ Future<BigInt> solveAoc15D4P1(String input) async {
       return index;
     }
 
-    index = index + BigInt.one; // Increment the index.
+    index = index + BigInt.one;
   }
 }
 
 Future<BigInt> solveAoc15D4P2(String input) async {
   var baseInput = await getFileAsString(input);
-  BigInt index = BigInt.zero; // Start from zero
-  String targetPrefix =
-      "000000"; // This is the prefix we're looking for in the hash.
+  BigInt index = BigInt.zero;
+  String targetPrefix = "000000";
 
   while (true) {
     String currentInput = baseInput + index.toString();
@@ -42,6 +42,6 @@ Future<BigInt> solveAoc15D4P2(String input) async {
       return index;
     }
 
-    index = index + BigInt.one; // Increment the index.
+    index = index + BigInt.one;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dart_noob/util/file_stuff.dart';
 
-// https://adventofcode.com/2015
+// https://adventofcode.com/2015/day/1
 
 Future<int> solveAoc15D1P1(String input) async {
   var content = await getInputString(input);
