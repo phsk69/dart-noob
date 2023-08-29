@@ -15,7 +15,7 @@ void main(List<String> args) async {
     ..addOption('loglevel',
         abbr: 'v',
         help: 'Specify the logging level (default is WARNING)',
-        allowed: ['ALL', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT']);
+        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT']);
 
   final parsedArgs = parser.parse(args);
 

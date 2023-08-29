@@ -8,6 +8,7 @@
     - Models for each type of function, both on input and output types
     - Make it work with the dartz pattern where we return errors as values
 - All void all log? ask Charlie
+- Unit testing the entry? ask charlie
 
 ### The cli way (as prime intended)
 
