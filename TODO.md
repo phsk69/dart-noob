@@ -5,4 +5,3 @@
 - [ ] Converting to the cli way
 
 ## Ideas
-
