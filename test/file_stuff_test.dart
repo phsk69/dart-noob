@@ -52,4 +52,27 @@ void main() {
       await tempFile.delete(); // Clean up
     });
   });
+  group('streamLinesFromFile', () {
+    test('reads lines from a valid file', () async {
+      var tempFile = await File('temp_test_stream.txt')
+          .writeAsString('Line 1\nLine 2\nLine 3');
+
+      var lines = [];
+
+      await for (var line in streamLinesFromFile(tempFile.path)) {
+        lines.add(line);
+      }
+
+      expect(lines, ['Line 1', 'Line 2', 'Line 3']);
+
+      await tempFile.delete(); // Clean up
+    });
+
+    test('throws an error for an invalid file path', () async {
+      var stream = streamLinesFromFile('non_existent_file.txt');
+
+      // Since the function uses streams, the error will be thrown when you listen to the stream
+      expect(stream.toList(), throwsA(isA<FileSystemException>()));
+    });
+  });
 }

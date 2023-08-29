@@ -6,12 +6,10 @@ Future<int> solveAoc15D5P1(String inputPath) async {
   return await NaughtyFilter(inputPath).filterStreamedP1();
 }
 
-Future<bool> solveAoc15D5P2(String inputPath) async {
+Future<int> solveAoc15D5P2(String inputPath) async {
   return await NaughtyFilter(inputPath).filterStreamedP2();
 }
 
-/// Takes an inputPath and does weird stuff to filter the input strings
-/// Using stream to get the file info instead of loading it all into mem.
 class NaughtyFilter {
   final String inputPath;
 
@@ -21,24 +19,36 @@ class NaughtyFilter {
     return line.split('').where((char) => 'aeiou'.contains(char)).length >= 3;
   }
 
-  // TODO: Don't continue until you understand this logic
-  void _findRepeatedPairsWithoutOverlap(String line) {
-    for (int i = 0; i < line.length - 1; i++) {
-      String currentPair =
-          line.substring(i, i + 2); // Get current pair of characters
+  bool _hasTwoLettersRepeatedWithoutOverlap(String line) {
+    for (int pairStartIdx = 0; pairStartIdx < line.length - 1; pairStartIdx++) {
+      String currentPair = line.substring(pairStartIdx, pairStartIdx + 2);
 
-      // Check the rest of the string for this pair without overlap
-      // We start the inner loop from i+2 to ensure there's no overlap
-      for (int j = i + 2; j < line.length - 1; j++) {
-        String nextPair = line.substring(j, j + 2);
+      for (int comparisonIdx = pairStartIdx + 2;
+          comparisonIdx < line.length - 1;
+          comparisonIdx++) {
+        String comparisonPair =
+            line.substring(comparisonIdx, comparisonIdx + 2);
 
-        if (currentPair == nextPair) {
-          print('Line: $line');
-          print('Current Pair: $currentPair');
-          print('Found another pair at position: $j which is: $nextPair');
+        if (currentPair == comparisonPair) {
+          return true;
         }
       }
     }
+    return false;
+  }
+
+  bool _hasOneLetterGapRepeat(String line) {
+    for (int charIdx = 0; charIdx < line.length - 2; charIdx++) {
+      if (line[charIdx] == line[charIdx + 2]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _meetsBothConditions(String line) {
+    return _hasTwoLettersRepeatedWithoutOverlap(line) &&
+        _hasOneLetterGapRepeat(line);
   }
 
   Future<int> filterStreamedP1() async {
@@ -56,10 +66,14 @@ class NaughtyFilter {
     return goodLines;
   }
 
-  Future<bool> filterStreamedP2() async {
+  Future<int> filterStreamedP2() async {
+    int goodLines = 0;
+
     await for (var line in streamLinesFromFile(inputPath)) {
-      _findRepeatedPairsWithoutOverlap(line);
+      if (_meetsBothConditions(line)) {
+        goodLines++;
+      }
     }
-    return true;
+    return goodLines;
   }
 }

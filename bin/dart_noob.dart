@@ -18,12 +18,12 @@ void main(List<String> arguments) async {
   } else {
     // Get unique keys from tasks list
     var uniqueKeys = {
-      ...dayTaskList.map((t) => t.inputKey),
+      ...defaultDayTaskList.map((t) => t.inputKey),
     };
 
     for (var key in uniqueKeys) {
       // Execute tasks for the current key
-      for (var task in dayTaskList.where((t) => t.inputKey == key)) {
+      for (var task in defaultDayTaskList.where((t) => t.inputKey == key)) {
         await _executeTask(task, inputMap, workers);
       }
     }

@@ -11,12 +11,11 @@ void main() {
       var result = await solveAoc15D5P1(input);
       expect(result, expected);
     });
-    /*
+
     test('checks aoc 15 d5 p2 for correctness', () async {
-      BigInt expected = BigInt.from(1038736);
-      var result = await solveAoc15D4P2(input);
+      int expected = 69;
+      var result = await solveAoc15D5P2(input);
       expect(result, expected);
     });
-  */
   });
 }

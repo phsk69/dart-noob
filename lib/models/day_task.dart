@@ -1,6 +1,6 @@
 // TODO: Make this lib type safe, might need additional extensions
 
-/// Base class for tasks from aoc
+/// Base model for tasks from aoc
 /// Takes a name, and inputKey at this level
 abstract class DayTask {
   final String name;
