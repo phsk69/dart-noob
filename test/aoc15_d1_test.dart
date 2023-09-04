@@ -6,10 +6,10 @@ import 'dart:convert';
 import 'dart:async';
 
 void main() {
-  group('solveAoc15D1', () {
+  group('Solve AOC 2015 D1', () {
     const String inputPath = 'data/aoc2015_day1_input';
 
-    test('checks aoc 15 d1 p1 for correctness', () async {
+    test('Test solveAoc15D1P1 with input path', () async {
       const int expected = 280;
 
       // Get the result as an Either
@@ -23,7 +23,7 @@ void main() {
               r, expected) // Expect the value if everything is fine (Right)
           );
     });
-    test('Test solveAoc15D1P1 with simulated stdin', () async {
+    test('Test solveAoc15D1P1 with mock stream', () async {
       final String inputPath = 'data/aoc2015_day1_input';
 
       final inputData = await getFileAsString(inputPath);
@@ -50,7 +50,7 @@ void main() {
       );
     });
     // Test with inputPath
-    test('checks aoc 15 d1 p2 for correctness with inputPath', () async {
+    test('Test solveAoc15D1P2 with inputPath', () async {
       const int expected = 1797;
       final d1P2 = await solveAoc15D1P2(inputPath, null);
       expect(
@@ -63,7 +63,7 @@ void main() {
     });
 
 // Test with mock stream
-    test('checks aoc 15 d1 p2 for correctness with mock stream', () async {
+    test('Test solveAoc15D1P2 with mock stream', () async {
       const int expected = 1797;
 
       // Read the actual file content

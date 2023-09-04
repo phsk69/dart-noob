@@ -24,6 +24,8 @@ void main(List<String> args) async {
         allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
     ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
+  log.fine('Parsing command line arguments');
+
   final parsedArgs = parser.parse(args);
 
   var logLevel = Level.INFO;
@@ -52,8 +54,6 @@ void main(List<String> args) async {
     ProcessSignal.sigterm.watch().listen((_) => sink.close());
     ProcessSignal.sigint.watch().listen((_) => sink.close());
   }
-
-  log.fine('Parsing command line arguments');
 
   var inputSource = parsedArgs['inputfile'] as String? ??
       (stdin.hasTerminal ? null : 'stdin');

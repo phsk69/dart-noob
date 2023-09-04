@@ -27,3 +27,9 @@ final List<DayTask> defaultDayTaskList = [
   StringDayTask('solveAoc15D5P1', '15day5', solveAoc15D5P1),
   StringDayTask('solveAoc15D5P2', '15day5', solveAoc15D5P2),
 ];
+
+
+final List<DayTask> defaultTaskList = [
+
+];
+
