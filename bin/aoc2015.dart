@@ -20,7 +20,7 @@ void main(List<String> args) async {
     ..addOption('logfile', abbr: 'l', help: 'Specify the file to log messages')
     ..addOption('loglevel',
         abbr: 'v',
-        help: 'Specify the logging level (default is WARNING)',
+        help: 'Specify the logging level (default is INFO)',
         allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
     ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
