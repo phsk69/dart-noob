@@ -59,12 +59,14 @@ void main(List<String> args) async {
       (stdin.hasTerminal ? null : 'stdin');
 
   if (parsedArgs['mode'] == 'd1') {
+    const String funcName = 'solveAoc15D1P1';
+
     if (inputSource == 'stdin') {
       var eitherResult = await solveAoc15D1P1(null, stdin);
-      handleEitherResult(eitherResult);
+      handleEitherResult(eitherResult, funcName);
     } else {
       var eitherResult = await solveAoc15D1P1(inputSource, null);
-      handleEitherResult(eitherResult);
+      handleEitherResult(eitherResult, funcName);
     }
   } else {
     log.info('Mode not defined, running default');
@@ -72,9 +74,9 @@ void main(List<String> args) async {
   }
 }
 
-void handleEitherResult(Either<String, int> eitherResult) {
+void handleEitherResult(Either<String, int> eitherResult, String funcName) {
   eitherResult.fold(
-    (left) => log.severe('Error: $left'),
-    (right) => log.info('Success: $right'),
+    (left) => log.severe('$funcName - $left'),
+    (right) => log.info('$funcName - $right'),
   );
 }
