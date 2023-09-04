@@ -24,8 +24,6 @@ void main(List<String> args) async {
         allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
     ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
-  log.fine('Parsing command line arguments');
-
   final parsedArgs = parser.parse(args);
 
   var logLevel = Level.INFO;
@@ -42,6 +40,8 @@ void main(List<String> args) async {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
 
+  log.fine('Parsed command line arguments, and started logger');
+
   // Setup optional logging to file.
   final logFile = parsedArgs['logfile'];
   if (logFile != null) {
@@ -55,8 +55,16 @@ void main(List<String> args) async {
     ProcessSignal.sigint.watch().listen((_) => sink.close());
   }
 
-  var inputSource = parsedArgs['inputfile'] as String? ??
-      (stdin.hasTerminal ? null : 'stdin');
+  var inputFileIsDefined = parsedArgs['inputfile'] != null;
+  var stdinIsDefined = !stdin.hasTerminal;
+  var inputSource = inputFileIsDefined != stdinIsDefined
+      ? (inputFileIsDefined ? parsedArgs['inputfile'] as String : 'stdin')
+      : null; // TODO: Maybe make charlie make this more readable
+  if (inputSource == null) {
+    log.severe(
+        'Either both or neither of file input and stdin are defined. Exiting.');
+    return;
+  }
 
   if (parsedArgs['mode'] == 'd1') {
     const String funcName = 'solveAoc15D1P1';
