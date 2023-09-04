@@ -19,6 +19,11 @@ Future<String> getFileAsString(String inputPath) async {
   return await FileReader(inputPath).readStringFromFile();
 }
 
+Future<StringBuffer> getStringBuffer(String inputPath) async {
+  return await FileReader(inputPath).readFileToStringBuffer();
+}
+
+
 Stream<String> streamLinesFromFile(String inputPath) async* {
   final file = File(inputPath);
   await for (var line
@@ -108,5 +113,31 @@ class FileReader {
     } catch (e) {
       throw 'parseFileListInt: $e';
     }
+  }
+
+  Future<StringBuffer> readFileToStringBuffer() async {
+    StringBuffer buffer = StringBuffer();
+    final file = File(filepath);
+
+    // Check if the file exists before proceeding.
+    if (await file.exists()) {
+      Stream<List<int>> inputStream = file.openRead();
+
+      // Decode the stream of bytes to a stream of lines
+      final lines =
+          inputStream.transform(Utf8Decoder()).transform(LineSplitter());
+
+      try {
+        await for (var line in lines) {
+          buffer.writeln(line);
+        }
+      } catch (e) {
+        throw 'An error occurred while reading from the file: $e';
+      }
+    } else {
+      throw 'The file at path $filepath does not exist.';
+    }
+
+    return buffer;
   }
 }

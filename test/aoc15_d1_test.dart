@@ -17,12 +17,8 @@ void main() {
           await solveAoc15D1P1(inputPath, null, null);
 
       // Assert that the result is a Right, and extract the actual value
-      resultEither.fold(
-          (l) => fail(
-              "Expected a Right but got a Left: $l"), // Fail the test if there's an error (Left)
-          (r) => expect(
-              r, expected) // Expect the value if everything is fine (Right)
-          );
+      resultEither.fold((l) => fail("Expected a Right but got a Left: $l"),
+          (r) => expect(r, expected));
     });
     test('Test solveAoc15D1P1 with mock stream', () async {
       final String inputPath = 'data/aoc2015_day1_input';
@@ -32,16 +28,29 @@ void main() {
 
       final controller = StreamController<List<int>>();
 
-      // Add your inputData to the stream
       controller.add(utf8.encode(inputData));
 
-      // Close the StreamController to simulate end of stream
       controller.close();
 
-      // Pass the stream from the StreamController as inputStream to your function
       final result = await solveAoc15D1P1(null, controller.stream, null);
 
-      // Validate your result
+      expect(
+        result.fold(
+          (l) => l,
+          (r) => r,
+        ),
+        expectedOutput,
+      );
+    });
+    // Test with StringBuffer
+    test('Test solveAoc15D1P1 with StringBuffer', () async {
+      final String inputPath = 'data/aoc2015_day1_input';
+
+      final inputData = await getStringBuffer(inputPath);
+      final expectedOutput = 280;
+
+      final result = await solveAoc15D1P1(null, null, inputData);
+
       expect(
         result.fold(
           (l) => l,
@@ -53,7 +62,7 @@ void main() {
     // Test with inputPath
     test('Test solveAoc15D1P2 with inputPath', () async {
       const int expected = 1797;
-      final d1P2 = await solveAoc15D1P2(inputPath, null);
+      final d1P2 = await solveAoc15D1P2(inputPath, null, null);
       expect(
         d1P2.fold(
           (l) => l,
@@ -92,6 +101,23 @@ void main() {
           (r) => r,
         ),
         expected,
+      );
+    });
+    // Test with StringBuffer
+    test('Test solveAoc15D1P2 with StringBuffer', () async {
+      final String inputPath = 'data/aoc2015_day1_input';
+
+      final inputData = await getStringBuffer(inputPath);
+      final expectedOutput = 1797;
+
+      final result = await solveAoc15D1P2(null, null, inputData);
+
+      expect(
+        result.fold(
+          (l) => l,
+          (r) => r,
+        ),
+        expectedOutput,
       );
     });
   });

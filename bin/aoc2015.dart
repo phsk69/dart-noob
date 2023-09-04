@@ -164,7 +164,8 @@ Future<Either<String, void>> runSolver(
 Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
   for (var task in tasks) {
     try {
-      final eitherResult = await task.execute(null, null, StringBuffer());
+      final eitherResult = await task.execute(null, null,
+          StringBuffer()); // TODO: Why do we need to pass an empty object? Do we actually handle that?
       handleEitherResult(eitherResult, task.functionName);
     } catch (e) {
       log.severe('${task.functionName} - Failed to execute task: $e');
