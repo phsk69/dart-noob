@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-import 'dart:convert';
 import 'package:args/args.dart';
 import 'package:dartz/dartz.dart';
 import 'package:logging/logging.dart';
@@ -21,36 +21,60 @@ void main(List<String> args) async {
     ..addOption('loglevel',
         abbr: 'v',
         help: 'Specify the logging level (default is WARNING)',
-        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT']);
+        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
+    ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
   final parsedArgs = parser.parse(args);
 
-  var logLevel = Level.WARNING;
+  var logLevel = Level.INFO;
   if (parsedArgs['loglevel'] != null) {
     logLevel = Level.LEVELS.firstWhere(
       (l) => l.name == parsedArgs['loglevel'].toUpperCase(),
-      orElse: () => Level.WARNING,
+      orElse: () => Level.INFO,
     );
   }
   Logger.root.level = logLevel;
+
+  // Setup logging to stdout.
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  // Setup optional logging to file.
+  final logFile = parsedArgs['logfile'];
+  if (logFile != null) {
+    final file = File(logFile);
+    final sink = file.openWrite();
+    Logger.root.onRecord.listen((record) {
+      sink.write('${record.level.name}: ${record.time}: ${record.message}\n');
+    });
+    // Close the IOSink when the program is terminated.
+    ProcessSignal.sigterm.watch().listen((_) => sink.close());
+    ProcessSignal.sigint.watch().listen((_) => sink.close());
+  }
 
   log.fine('Parsing command line arguments');
 
   var inputSource = parsedArgs['inputfile'] as String? ??
       (stdin.hasTerminal ? null : 'stdin');
 
-  if (inputSource == 'stdin') {
-    var eitherResult = await solveAoc15D1P1(null, stdin);
-    handleEitherResult(eitherResult);
+  if (parsedArgs['mode'] == 'd1') {
+    if (inputSource == 'stdin') {
+      var eitherResult = await solveAoc15D1P1(null, stdin);
+      handleEitherResult(eitherResult);
+    } else {
+      var eitherResult = await solveAoc15D1P1(inputSource, null);
+      handleEitherResult(eitherResult);
+    }
   } else {
-    var eitherResult = await solveAoc15D1P1(inputSource, null);
-    handleEitherResult(eitherResult);
+    log.info('Mode not defined, running default');
+    log.info('Default mode activated');
   }
 }
 
 void handleEitherResult(Either<String, int> eitherResult) {
   eitherResult.fold(
-    (left) => print('Error: $left'),
-    (right) => print('Success: $right'),
+    (left) => log.severe('Error: $left'),
+    (right) => log.info('Success: $right'),
   );
 }
