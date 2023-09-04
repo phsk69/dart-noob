@@ -27,19 +27,22 @@ Stream<String> streamLinesFromFile(String inputPath) async* {
   }
 }
 
-// Function to get input content as a String
-Future<Either<String, String>> getInputContent(
-    String? input, Stream<List<int>>? inputStream) async {
-  if (input == null && inputStream == null) {
-    return Left("Both input and inputStream cannot be null.");
+/// Function to get input content as a String
+Future<Either<String, String>> getInputContent(String? input,
+    Stream<List<int>>? inputStream, StringBuffer? inputBuffer) async {
+  if (input == null && inputStream == null && inputBuffer == null) {
+    return Left("All input sources cannot be null.");
   }
 
-  if (input != null && inputStream != null) {
+  if ((input != null && inputStream != null) ||
+      (inputBuffer != null && inputStream != null) ||
+      (input != null && inputBuffer != null)) {
     return Left("Only one source of input is allowed.");
   }
 
   if (input != null) {
-    var content = await getFileAsString(input);
+    var content = await getFileAsString(
+        input); // Your existing function to get the file as a string
     return Right(content);
   } else if (inputStream != null) {
     var content = StringBuffer();
@@ -49,6 +52,8 @@ Future<Either<String, String>> getInputContent(
       content.writeln(line);
     }
     return Right(content.toString());
+  } else if (inputBuffer != null) {
+    return Right(inputBuffer.toString());
   }
 
   return Left("No valid input provided.");

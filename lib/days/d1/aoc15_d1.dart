@@ -1,11 +1,11 @@
-import 'package:dart_noob/util/file_stuff.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dart_noob/util/file_stuff.dart'; // Assuming this is where getInputContent is defined
 
 // Function for the first problem
-Future<Either<String, int>> solveAoc15D1P1(
-    String? input, Stream<List<int>>? inputStream) async {
+Future<Either<String, int>> solveAoc15D1P1(String? input,
+    Stream<List<int>>? inputStream, StringBuffer? inputBuffer) async {
   try {
-    final result = await getInputContent(input, inputStream);
+    final result = await getInputContent(input, inputStream, inputBuffer);
 
     return result.fold((l) => Left(l), (content) {
       var i = 0;
@@ -27,10 +27,10 @@ Future<Either<String, int>> solveAoc15D1P1(
 }
 
 // Function for the second problem
-Future<Either<String, int>> solveAoc15D1P2(
-    String? input, Stream<List<int>>? inputStream) async {
+Future<Either<String, int>> solveAoc15D1P2(String? input,
+    Stream<List<int>>? inputStream, StringBuffer? inputBuffer) async {
   try {
-    final result = await getInputContent(input, inputStream);
+    final result = await getInputContent(input, inputStream, inputBuffer);
 
     return result.fold((l) => Left(l), (content) {
       var floor = 0;

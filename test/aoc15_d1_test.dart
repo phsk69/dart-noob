@@ -13,7 +13,8 @@ void main() {
       const int expected = 280;
 
       // Get the result as an Either
-      Either<String, int> resultEither = await solveAoc15D1P1(inputPath, null);
+      Either<String, int> resultEither =
+          await solveAoc15D1P1(inputPath, null, null);
 
       // Assert that the result is a Right, and extract the actual value
       resultEither.fold(
@@ -38,7 +39,7 @@ void main() {
       controller.close();
 
       // Pass the stream from the StreamController as inputStream to your function
-      final result = await solveAoc15D1P1(null, controller.stream);
+      final result = await solveAoc15D1P1(null, controller.stream, null);
 
       // Validate your result
       expect(
@@ -82,7 +83,7 @@ void main() {
       controller.close();
 
       // Call your function and capture the output
-      final d1P2 = await solveAoc15D1P2(null, mockStdinStream);
+      final d1P2 = await solveAoc15D1P2(null, mockStdinStream, null);
 
       // Validate your result
       expect(
