@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
@@ -6,6 +7,8 @@ import 'package:dartz/dartz.dart';
 import 'package:logging/logging.dart';
 import 'package:dart_noob/models/day_task.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
+
+// TODO: The default mode now doesnt close properly
 
 enum InputState {
   fileInput,
@@ -70,6 +73,7 @@ void main(List<String> args) async {
     final logFile = parsedArgs['logfile'];
     final file = File(logFile);
     logSink = file.openWrite();
+    log.info('Using $logFile as log file');
   }
 
   if (parsedArgs['output'] != null) {
@@ -78,14 +82,13 @@ void main(List<String> args) async {
 
     try {
       if (await file.exists()) {
-        print("Output file path: $outputFile");
         final stat = await file.stat();
         if (stat.type == FileSystemEntityType.directory) {
           log.severe('Cannot write to a directory: $outputFile');
           return;
         }
       }
-
+      log.info('Using $outputFile as output file');
       outputSink = file.openWrite();
     } catch (e) {
       log.severe('Failed to open output file: $e');
@@ -102,20 +105,28 @@ void main(List<String> args) async {
 
   if (inputState == InputState.invalid) {
     log.severe('Both stdin and file input are defined. Choose one.');
-    return;
+    exit(1);
   }
 
   if (parsedArgs['mode'] == null) {
     log.info('No mode specified, running all default tasks.');
     await runAllSolverTasks(defaultTaskList);
-    return;
+
+    // Close resources here too
+    await closeResources();
+
+    log.info('Running all default tasks completed.');
+
+    exit(0); // Explicitly exit the program
   }
 
-  if (inputState == InputState.stdinInput) {
-    await for (var line
-        in stdin.transform(utf8.decoder).transform(LineSplitter())) {
-      stdinBuffer.write("$line\n");
-    }
+  // With this new block to read from stdin in the background:
+  if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
+    readStdin(stdinBuffer); // Start reading stdin in the background
+  }
+
+  if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
+    await stdinCompleter.future;
   }
 
   var solvers = <Future<Either<String, int>> Function(
@@ -131,7 +142,7 @@ void main(List<String> args) async {
       break;
     default:
       log.severe('Invalid mode');
-      return;
+      break;
   }
 
   String? fileInput =
@@ -140,7 +151,9 @@ void main(List<String> args) async {
       inputState == InputState.stdinInput ? stdinBuffer : null;
 
   for (var i = 0; i < solvers.length; i++) {
+    log.info('${funcNames[i]} starting');
     await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
+    log.info('${funcNames[i]} completed');
   }
 
   // Explicitly cancel the signal subscriptions
@@ -148,11 +161,7 @@ void main(List<String> args) async {
   await sigIntSubscription.cancel();
 
   // Flush and close logSink and outputSink before exiting
-  await logSink?.flush();
-  await logSink?.close();
-  await outputSink?.flush();
-  await outputSink?.close();
-
+  await closeResources();
   exit(0);
 }
 
@@ -170,22 +179,28 @@ InputState determineInputState(String? fileInput, bool isStdinDefined) {
 }
 
 Future<void> handleExit(ProcessSignal signal) async {
-  await outputSink?.flush();
-  await outputSink?.close();
-  await logSink?.flush();
-  await logSink?.close();
+  if (outputSink != null) {
+    await outputSink!.flush();
+    await outputSink!.close();
+  }
+
+  if (logSink != null) {
+    await logSink!.flush();
+    await logSink!.close();
+  }
+
   exit(0);
 }
 
 void handleEitherResult(Either<String, int> eitherResult, String funcName) {
   eitherResult.fold(
     (left) {
-      log.severe('$funcName - $left');
+      log.severe('$funcName: $left');
       outputSink?.writeln('$funcName - $left');
     },
     (right) {
-      log.info('$funcName - $right');
-      outputSink?.writeln('$funcName - $right');
+      log.info('$funcName result: $right');
+      outputSink?.writeln('$funcName result: $right');
     },
   );
 }
@@ -224,4 +239,21 @@ Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
       log.severe('${task.functionName} - Failed to execute task: $e');
     }
   }
+}
+
+final Completer<void> stdinCompleter = Completer<void>();
+
+Future<void> readStdin(StringBuffer buffer) async {
+  await for (var line
+      in stdin.transform(utf8.decoder).transform(LineSplitter())) {
+    buffer.write("$line\n");
+  }
+  stdinCompleter.complete(); // notify that stdin reading is done
+}
+
+Future<void> closeResources() async {
+  await logSink?.flush();
+  await logSink?.close();
+  await outputSink?.flush();
+  await outputSink?.close();
 }
