@@ -23,7 +23,6 @@ Future<StringBuffer> getStringBuffer(String inputPath) async {
   return await FileReader(inputPath).readFileToStringBuffer();
 }
 
-
 Stream<String> streamLinesFromFile(String inputPath) async* {
   final file = File(inputPath);
   await for (var line

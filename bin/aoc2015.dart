@@ -16,14 +16,22 @@ enum InputState {
 
 final log = Logger('CLI');
 
-void main(List<String> args) async {
-  // Initialize logging at the very beginning
-  final log = Logger('CLI');
+IOSink? outputSink;
+IOSink? logSink;
 
-  Logger.root.level =
-      Level.ALL; // By default, set it to ALL, you can adjust this
+void main(List<String> args) async {
+  // Unified log listening setup
   Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
+    final logMessage =
+        '${record.level.name}: ${record.time}: ${record.message}';
+
+    // Write log messages to stdout
+    stdout.writeln(logMessage);
+
+    // Write log messages to a file if specified
+    if (logSink != null) {
+      logSink?.writeln(logMessage);
+    }
   });
 
   final parser = ArgParser()
@@ -47,6 +55,9 @@ void main(List<String> args) async {
     return;
   }
 
+  var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
+  var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
+
   if (parsedArgs['loglevel'] != null) {
     final logLevel = Level.LEVELS.firstWhere(
       (l) => l.name == parsedArgs['loglevel'].toUpperCase(),
@@ -58,12 +69,28 @@ void main(List<String> args) async {
   if (parsedArgs['logfile'] != null) {
     final logFile = parsedArgs['logfile'];
     final file = File(logFile);
-    final sink = file.openWrite();
-    Logger.root.onRecord.listen((record) {
-      sink.write('${record.level.name}: ${record.time}: ${record.message}\n');
-    });
-    ProcessSignal.sigterm.watch().listen((_) => sink.close());
-    ProcessSignal.sigint.watch().listen((_) => sink.close());
+    logSink = file.openWrite();
+  }
+
+  if (parsedArgs['output'] != null) {
+    final outputFile = parsedArgs['output'];
+    final file = File(outputFile);
+
+    try {
+      if (await file.exists()) {
+        print("Output file path: $outputFile");
+        final stat = await file.stat();
+        if (stat.type == FileSystemEntityType.directory) {
+          log.severe('Cannot write to a directory: $outputFile');
+          return;
+        }
+      }
+
+      outputSink = file.openWrite();
+    } catch (e) {
+      log.severe('Failed to open output file: $e');
+      return;
+    }
   }
 
   final stdinBuffer = StringBuffer();
@@ -115,6 +142,18 @@ void main(List<String> args) async {
   for (var i = 0; i < solvers.length; i++) {
     await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
   }
+
+  // Explicitly cancel the signal subscriptions
+  await sigTermSubscription.cancel();
+  await sigIntSubscription.cancel();
+
+  // Flush and close logSink and outputSink before exiting
+  await logSink?.flush();
+  await logSink?.close();
+  await outputSink?.flush();
+  await outputSink?.close();
+
+  exit(0);
 }
 
 InputState determineInputState(String? fileInput, bool isStdinDefined) {
@@ -130,10 +169,24 @@ InputState determineInputState(String? fileInput, bool isStdinDefined) {
   return InputState.invalid;
 }
 
+Future<void> handleExit(ProcessSignal signal) async {
+  await outputSink?.flush();
+  await outputSink?.close();
+  await logSink?.flush();
+  await logSink?.close();
+  exit(0);
+}
+
 void handleEitherResult(Either<String, int> eitherResult, String funcName) {
   eitherResult.fold(
-    (left) => log.severe('$funcName - $left'),
-    (right) => log.info('$funcName - $right'),
+    (left) {
+      log.severe('$funcName - $left');
+      outputSink?.writeln('$funcName - $left');
+    },
+    (right) {
+      log.info('$funcName - $right');
+      outputSink?.writeln('$funcName - $right');
+    },
   );
 }
 
