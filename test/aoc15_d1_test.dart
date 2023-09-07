@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:dartz/dartz.dart'; // Make sure to import dartz for the Either type
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
-import 'package:dart_noob/util/file_stuff.dart';
+import 'package:dart_noob/util/string_stuff.dart';
 import 'dart:convert';
 import 'dart:async';
 

@@ -1,4 +1,4 @@
-import 'package:dart_noob/util/file_stuff.dart';
+import 'package:dart_noob/util/string_stuff.dart';
 
 // https://adventofcode.com/2015/day/5
 

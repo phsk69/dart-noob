@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:dart_noob/util/file_stuff.dart'; // Assuming this is where getInputContent is defined
+import 'package:dart_noob/util/string_stuff.dart'; // Assuming this is where getInputContent is defined
 
 // Function for the first problem
 Future<Either<String, int>> solveAoc15D1P1(String? input,

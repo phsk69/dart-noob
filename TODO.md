@@ -2,7 +2,7 @@
 
 ## Doing
 
-- [ ] Unit test the string buffer input on d1 library
+- [ ] Re introduce writing errors to stderror always, and optionally to an error file
 - [ ] Converting to the cli way
 
 ## Ideas
