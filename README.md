@@ -1,5 +1,9 @@
 # dart_noob
 
+## vscode stuff
+
+- Dart vscode launch config: <https://dartcode.org/docs/launch-configuration/>
+
 ## Useful examples
 
 ### CLI app with the works

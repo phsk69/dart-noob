@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:dart_noob/models/day_task.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
-// TODO: The default mode now doesnt close properly
+// TODO: test all modes and inputs again, and then commit before refactoring.
 
 enum InputState {
   fileInput,
@@ -23,146 +23,165 @@ IOSink? outputSink;
 IOSink? logSink;
 
 void main(List<String> args) async {
-  // Unified log listening setup
-  Logger.root.onRecord.listen((record) {
-    final logMessage =
-        '${record.level.name}: ${record.time}: ${record.message}';
-
-    // Write log messages to stdout
-    stdout.writeln(logMessage);
-
-    // Write log messages to a file if specified
-    if (logSink != null) {
-      logSink?.writeln(logMessage);
-    }
-  });
-
-  final parser = ArgParser()
-    ..addOption('inputfile',
-        abbr: 'i', help: 'Specify the path of the input file')
-    ..addOption('errorlog', abbr: 'e', help: 'Specify the file to write errors')
-    ..addOption('output', abbr: 'o', help: 'Specify the file to write output')
-    ..addOption('logfile', abbr: 'l', help: 'Specify the file to log messages')
-    ..addOption('loglevel',
-        abbr: 'v',
-        help: 'Specify the logging level (default is INFO)',
-        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
-    ..addOption('mode', abbr: 'm', help: 'Mode of operation');
-
-  ArgResults parsedArgs;
-
   try {
-    parsedArgs = parser.parse(args);
-  } catch (e) {
-    log.severe('Argument parsing failed: $e');
-    return;
-  }
+    // Unified log listening setup
+    Logger.root.onRecord.listen((record) {
+      final logMessage =
+          '${record.time.toIso8601String()} - ${record.level.name} - ${record.message}';
 
-  var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
-  var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
+      // Write log messages to stdout
+      stdout.writeln(logMessage);
 
-  if (parsedArgs['loglevel'] != null) {
-    final logLevel = Level.LEVELS.firstWhere(
-      (l) => l.name == parsedArgs['loglevel'].toUpperCase(),
-      orElse: () => Level.INFO,
-    );
-    Logger.root.level = logLevel;
-  }
+      // Write log messages to a file if specified
+      if (logSink != null) {
+        logSink?.writeln(logMessage);
+      }
+    });
 
-  if (parsedArgs['logfile'] != null) {
-    final logFile = parsedArgs['logfile'];
-    final file = File(logFile);
-    logSink = file.openWrite();
-    log.info('Using $logFile as log file');
-  }
+    final parser = ArgParser()
+      ..addOption('inputfile',
+          abbr: 'i', help: 'Specify the path of the input file')
+      ..addOption('output', abbr: 'o', help: 'Specify the file to write output')
+      ..addOption('logfile',
+          abbr: 'l', help: 'Specify the file to log messages')
+      ..addOption('loglevel',
+          abbr: 'v',
+          help: 'Specify the logging level (default is INFO)',
+          allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
+      ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
-  if (parsedArgs['output'] != null) {
-    final outputFile = parsedArgs['output'];
-    final file = File(outputFile);
+    ArgResults parsedArgs;
 
     try {
-      if (await file.exists()) {
-        final stat = await file.stat();
-        if (stat.type == FileSystemEntityType.directory) {
-          log.severe('Cannot write to a directory: $outputFile');
-          return;
-        }
-      }
-      log.info('Using $outputFile as output file');
-      outputSink = file.openWrite();
+      parsedArgs = parser.parse(args);
     } catch (e) {
-      log.severe('Failed to open output file: $e');
+      String errorMsg = 'Argument parsing failed: $e';
+      log.severe(errorMsg);
+
       return;
     }
-  }
 
-  final stdinBuffer = StringBuffer();
+    var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
+    var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
 
-  var inputState = determineInputState(
-    parsedArgs['inputfile'] as String?,
-    !stdin.hasTerminal,
-  );
+    if (parsedArgs['loglevel'] != null) {
+      final logLevel = Level.LEVELS.firstWhere(
+        (l) => l.name == parsedArgs['loglevel'].toUpperCase(),
+        orElse: () => Level.INFO,
+      );
+      Logger.root.level = logLevel;
+    }
 
-  if (inputState == InputState.invalid) {
-    log.severe('Both stdin and file input are defined. Choose one.');
-    exit(1);
-  }
+    if (parsedArgs['logfile'] != null) {
+      final logFile = parsedArgs['logfile'];
+      final file = File(logFile);
+      logSink = file.openWrite();
+      log.info('Using $logFile as log file');
+    }
 
-  if (parsedArgs['mode'] == null) {
-    log.info('No mode specified, running all default tasks.');
-    await runAllSolverTasks(defaultTaskList);
+    if (parsedArgs['output'] != null) {
+      final outputFile = parsedArgs['output'];
+      final file = File(outputFile);
 
-    // Close resources here too
+      try {
+        if (await file.exists()) {
+          final stat = await file.stat();
+          if (stat.type == FileSystemEntityType.directory) {
+            String errorMsg = 'Cannot write to a directory: $outputFile';
+            log.severe(errorMsg);
+
+            return;
+          }
+        }
+        log.info('Using $outputFile as output file');
+        outputSink = file.openWrite();
+      } catch (e) {
+        String errorMsg = 'Failed to open output file: $e';
+        log.severe(errorMsg);
+
+        return;
+      }
+    }
+
+    final stdinBuffer = StringBuffer();
+
+    var inputState = determineInputState(
+      parsedArgs['inputfile'] as String?,
+      !stdin.hasTerminal,
+    );
+
+    if (inputState == InputState.invalid) {
+      String errorMsg = 'Both stdin and file input are defined. Choose one.';
+      log.severe(errorMsg);
+
+      await closeResources();
+
+      exit(1);
+    }
+
+    if (parsedArgs['mode'] == null) {
+      log.info('No mode specified, running all default tasks.');
+      await runAllSolverTasks(defaultTaskList);
+
+      await closeResources();
+
+      log.fine('Running all default tasks completed.');
+
+      exit(0);
+    }
+
+    // This was a way of loading in the stdin without waiting or blocking
+    if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
+      readStdin(stdinBuffer);
+    }
+
+    if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
+      await stdinCompleter.future;
+    }
+
+    var solvers = <Future<Either<String, int>> Function(
+        String?, Stream<List<int>>?, StringBuffer?)>[];
+    var funcNames = <String>[];
+
+    switch (parsedArgs['mode']) {
+      case 'd1':
+        solvers.add(solveAoc15D1P1);
+        funcNames.add('solveAoc15D1P1');
+        solvers.add(solveAoc15D1P2);
+        funcNames.add('solveAoc15D1P2');
+        break;
+      default:
+        log.severe('Invalid mode');
+        break;
+    }
+
+    String? fileInput =
+        inputState == InputState.fileInput ? parsedArgs['inputfile'] : null;
+    StringBuffer? stdinInputBuffer =
+        inputState == InputState.stdinInput ? stdinBuffer : null;
+
+    for (var i = 0; i < solvers.length; i++) {
+      log.info('${funcNames[i]} starting');
+
+      await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
+
+      log.fine('${funcNames[i]} completed');
+    }
+
+    // Explicitly cancel the signal subscriptions
+    await sigTermSubscription.cancel();
+    await sigIntSubscription.cancel();
+
     await closeResources();
 
-    log.info('Running all default tasks completed.');
+    exit(0);
+  } catch (error, stackTrace) {
+    await closeResources();
+    log.severe('Fatal error encountered: $error', error, stackTrace);
+    await closeResources();
 
-    exit(0); // Explicitly exit the program
+    exit(1);
   }
-
-  // With this new block to read from stdin in the background:
-  if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
-    readStdin(stdinBuffer); // Start reading stdin in the background
-  }
-
-  if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
-    await stdinCompleter.future;
-  }
-
-  var solvers = <Future<Either<String, int>> Function(
-      String?, Stream<List<int>>?, StringBuffer?)>[];
-  var funcNames = <String>[];
-
-  switch (parsedArgs['mode']) {
-    case 'd1':
-      solvers.add(solveAoc15D1P1);
-      funcNames.add('solveAoc15D1P1');
-      solvers.add(solveAoc15D1P2);
-      funcNames.add('solveAoc15D1P2');
-      break;
-    default:
-      log.severe('Invalid mode');
-      break;
-  }
-
-  String? fileInput =
-      inputState == InputState.fileInput ? parsedArgs['inputfile'] : null;
-  StringBuffer? stdinInputBuffer =
-      inputState == InputState.stdinInput ? stdinBuffer : null;
-
-  for (var i = 0; i < solvers.length; i++) {
-    log.info('${funcNames[i]} starting');
-    await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
-    log.info('${funcNames[i]} completed');
-  }
-
-  // Explicitly cancel the signal subscriptions
-  await sigTermSubscription.cancel();
-  await sigIntSubscription.cancel();
-
-  // Flush and close logSink and outputSink before exiting
-  await closeResources();
-  exit(0);
 }
 
 InputState determineInputState(String? fileInput, bool isStdinDefined) {
@@ -179,16 +198,7 @@ InputState determineInputState(String? fileInput, bool isStdinDefined) {
 }
 
 Future<void> handleExit(ProcessSignal signal) async {
-  if (outputSink != null) {
-    await outputSink!.flush();
-    await outputSink!.close();
-  }
-
-  if (logSink != null) {
-    await logSink!.flush();
-    await logSink!.close();
-  }
-
+  await closeResources();
   exit(0);
 }
 
@@ -196,11 +206,10 @@ void handleEitherResult(Either<String, int> eitherResult, String funcName) {
   eitherResult.fold(
     (left) {
       log.severe('$funcName: $left');
-      outputSink?.writeln('$funcName - $left');
     },
     (right) {
-      log.info('$funcName result: $right');
-      outputSink?.writeln('$funcName result: $right');
+      log.info('$funcName: $right');
+      outputSink?.writeln('$funcName: $right');
     },
   );
 }
@@ -232,11 +241,16 @@ Future<Either<String, void>> runSolver(
 Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
   for (var task in tasks) {
     try {
-      final eitherResult = await task.execute(null, null,
-          StringBuffer()); // TODO: Why do we need to pass an empty object? Do we actually handle that?
+      // TODO: Why do we need to pass an empty object? Do we actually handle that?
+      final eitherResult = await task.execute(null, null, StringBuffer());
       handleEitherResult(eitherResult, task.functionName);
     } catch (e) {
-      log.severe('${task.functionName} - Failed to execute task: $e');
+      String errorMsg = '${task.functionName} - Failed to execute task: $e';
+      log.severe(errorMsg);
+
+      await closeResources();
+
+      exit(1);
     }
   }
 }
@@ -248,7 +262,7 @@ Future<void> readStdin(StringBuffer buffer) async {
       in stdin.transform(utf8.decoder).transform(LineSplitter())) {
     buffer.write("$line\n");
   }
-  stdinCompleter.complete(); // notify that stdin reading is done
+  stdinCompleter.complete();
 }
 
 Future<void> closeResources() async {
