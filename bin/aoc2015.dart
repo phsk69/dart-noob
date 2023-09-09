@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:collection';
 import 'package:args/args.dart';
 import 'package:dart_noob/config/default_tasks.dart';
 import 'package:dartz/dartz.dart';
 import 'package:logging/logging.dart';
 import 'package:dart_noob/models/day_task.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
-
-// TODO: test all modes and inputs again, and then commit before refactoring.
 
 enum InputState {
   fileInput,
@@ -21,66 +20,23 @@ final log = Logger('CLI');
 
 IOSink? outputSink;
 IOSink? logSink;
+IOSink? errorSink;
 
 void main(List<String> args) async {
   try {
-    // Unified log listening setup
-    Logger.root.onRecord.listen((record) {
-      final logMessage =
-          '${record.time.toIso8601String()} - ${record.level.name} - ${record.message}';
+    final cliArgsManager = CliArgsManager(args);
 
-      // Write log messages to stdout
-      stdout.writeln(logMessage);
-
-      // Write log messages to a file if specified
-      if (logSink != null) {
-        logSink?.writeln(logMessage);
-      }
-    });
-
-    final parser = ArgParser()
-      ..addOption('inputfile',
-          abbr: 'i', help: 'Specify the path of the input file')
-      ..addOption('output', abbr: 'o', help: 'Specify the file to write output')
-      ..addOption('logfile',
-          abbr: 'l', help: 'Specify the file to log messages')
-      ..addOption('loglevel',
-          abbr: 'v',
-          help: 'Specify the logging level (default is INFO)',
-          allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
-      ..addOption('mode', abbr: 'm', help: 'Mode of operation');
-
-    ArgResults parsedArgs;
-
-    try {
-      parsedArgs = parser.parse(args);
-    } catch (e) {
-      String errorMsg = 'Argument parsing failed: $e';
-      log.severe(errorMsg);
-
-      return;
-    }
+    LoggerManager(
+      logLevel: cliArgsManager.logLevel,
+      logFile: cliArgsManager.logFile,
+      errorFile: cliArgsManager.errorFile,
+    );
 
     var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
     var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
 
-    if (parsedArgs['loglevel'] != null) {
-      final logLevel = Level.LEVELS.firstWhere(
-        (l) => l.name == parsedArgs['loglevel'].toUpperCase(),
-        orElse: () => Level.INFO,
-      );
-      Logger.root.level = logLevel;
-    }
-
-    if (parsedArgs['logfile'] != null) {
-      final logFile = parsedArgs['logfile'];
-      final file = File(logFile);
-      logSink = file.openWrite();
-      log.info('Using $logFile as log file');
-    }
-
-    if (parsedArgs['output'] != null) {
-      final outputFile = parsedArgs['output'];
+    if (cliArgsManager.outputFile != null) {
+      final outputFile = cliArgsManager.outputFile!;
       final file = File(outputFile);
 
       try {
@@ -89,7 +45,6 @@ void main(List<String> args) async {
           if (stat.type == FileSystemEntityType.directory) {
             String errorMsg = 'Cannot write to a directory: $outputFile';
             log.severe(errorMsg);
-
             return;
           }
         }
@@ -98,7 +53,6 @@ void main(List<String> args) async {
       } catch (e) {
         String errorMsg = 'Failed to open output file: $e';
         log.severe(errorMsg);
-
         return;
       }
     }
@@ -106,27 +60,19 @@ void main(List<String> args) async {
     final stdinBuffer = StringBuffer();
 
     var inputState = determineInputState(
-      parsedArgs['inputfile'] as String?,
+      cliArgsManager.inputFile,
       !stdin.hasTerminal,
     );
 
     if (inputState == InputState.invalid) {
-      String errorMsg = 'Both stdin and file input are defined. Choose one.';
-      log.severe(errorMsg);
-
-      await closeResources();
-
-      exit(1);
+      handleExitWithError('Both stdin and file input are defined. Choose one.');
     }
 
-    if (parsedArgs['mode'] == null) {
+    if (cliArgsManager.mode == null && inputState != InputState.invalid) {
       log.info('No mode specified, running all default tasks.');
       await runAllSolverTasks(defaultTaskList);
-
       await closeResources();
-
       log.fine('Running all default tasks completed.');
-
       exit(0);
     }
 
@@ -142,45 +88,37 @@ void main(List<String> args) async {
     var solvers = <Future<Either<String, int>> Function(
         String?, Stream<List<int>>?, StringBuffer?)>[];
     var funcNames = <String>[];
+    if (inputState != InputState.invalid) {
+      switch (cliArgsManager.mode) {
+        case 'd1':
+          solvers.add(solveAoc15D1P1);
+          funcNames.add('solveAoc15D1P1');
+          solvers.add(solveAoc15D1P2);
+          funcNames.add('solveAoc15D1P2');
+          break;
+        default:
+          log.severe('Invalid mode');
+          break;
+      }
 
-    switch (parsedArgs['mode']) {
-      case 'd1':
-        solvers.add(solveAoc15D1P1);
-        funcNames.add('solveAoc15D1P1');
-        solvers.add(solveAoc15D1P2);
-        funcNames.add('solveAoc15D1P2');
-        break;
-      default:
-        log.severe('Invalid mode');
-        break;
+      String? fileInput =
+          inputState == InputState.fileInput ? cliArgsManager.inputFile : null;
+      StringBuffer? stdinInputBuffer =
+          inputState == InputState.stdinInput ? stdinBuffer : null;
+
+      for (var i = 0; i < solvers.length; i++) {
+        log.info('${funcNames[i]} starting');
+        await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
+        log.fine('${funcNames[i]} completed');
+      }
     }
-
-    String? fileInput =
-        inputState == InputState.fileInput ? parsedArgs['inputfile'] : null;
-    StringBuffer? stdinInputBuffer =
-        inputState == InputState.stdinInput ? stdinBuffer : null;
-
-    for (var i = 0; i < solvers.length; i++) {
-      log.info('${funcNames[i]} starting');
-
-      await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
-
-      log.fine('${funcNames[i]} completed');
-    }
-
     // Explicitly cancel the signal subscriptions
     await sigTermSubscription.cancel();
     await sigIntSubscription.cancel();
-
     await closeResources();
-
     exit(0);
-  } catch (error, stackTrace) {
-    await closeResources();
-    log.severe('Fatal error encountered: $error', error, stackTrace);
-    await closeResources();
-
-    exit(1);
+  } catch (e) {
+    handleExitWithError('Fatal error encountered: $e');
   }
 }
 
@@ -206,10 +144,19 @@ void handleEitherResult(Either<String, int> eitherResult, String funcName) {
   eitherResult.fold(
     (left) {
       log.severe('$funcName: $left');
+      if (errorSink != null) {
+        errorSink?.writeln('$funcName: $left');
+      }
+      if (Logger.root.level == Level.OFF) {
+        stderr.writeln('$funcName: $left');
+      }
     },
     (right) {
       log.info('$funcName: $right');
       outputSink?.writeln('$funcName: $right');
+      if (Logger.root.level == Level.OFF) {
+        stdout.writeln('$funcName: $right');
+      }
     },
   );
 }
@@ -245,12 +192,7 @@ Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
       final eitherResult = await task.execute(null, null, StringBuffer());
       handleEitherResult(eitherResult, task.functionName);
     } catch (e) {
-      String errorMsg = '${task.functionName} - Failed to execute task: $e';
-      log.severe(errorMsg);
-
-      await closeResources();
-
-      exit(1);
+      handleExitWithError('${task.functionName} - Failed to execute task: $e');
     }
   }
 }
@@ -266,8 +208,154 @@ Future<void> readStdin(StringBuffer buffer) async {
 }
 
 Future<void> closeResources() async {
+  await Future.wait(
+      LoggerManager()._writeQueue); // wait for all log writes to complete
   await logSink?.flush();
   await logSink?.close();
   await outputSink?.flush();
   await outputSink?.close();
+}
+
+void handleExitWithError(String errorMsg) {
+  log.severe(errorMsg);
+
+  closeResources().then((_) {
+    exit(1);
+  }).catchError((err) {
+    stderr.writeln('Failed to close resources properly: $err');
+    exit(1);
+  });
+}
+
+// Refactoring
+
+class CliArgsManager {
+  final List<String> args;
+
+  late ArgResults _parsedArgs;
+
+  CliArgsManager(this.args) {
+    _initializeParser();
+  }
+
+  void _initializeParser() {
+    final parser = ArgParser()
+      ..addOption('inputFile',
+          abbr: 'i', help: 'Specify the path of the input file')
+      ..addOption('outputFile',
+          abbr: 'o', help: 'Specify the file to write output')
+      ..addOption('errorFile',
+          abbr: 'e', help: 'Specify the file to write error messages')
+      ..addOption('logFile',
+          abbr: 'l', help: 'Specify the file to log messages')
+      ..addOption('logLevel',
+          abbr: 'v',
+          help: 'Specify the logging level (default is INFO)',
+          allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
+      ..addOption('mode', abbr: 'm', help: 'Mode of operation');
+
+    try {
+      _parsedArgs = parser.parse(args);
+    } catch (e) {
+      handleExitWithError('Argument parsing failed: $e');
+    }
+  }
+
+  String? get inputFile => _parsedArgs['inputFile'] as String?;
+  String? get outputFile => _parsedArgs['outputFile'] as String?;
+  String? get errorFile => _parsedArgs['errorFile'] as String?;
+  String? get logFile => _parsedArgs['logFile'] as String?;
+  String? get logLevel => _parsedArgs['logLevel'] as String?;
+  String? get mode => _parsedArgs['mode'] as String?;
+}
+
+class LoggerManager {
+  final String? logLevel;
+  final String? logFile;
+  final String? errorFile;
+
+  LoggerManager({this.logLevel, this.logFile, this.errorFile}) {
+    _setupLogger();
+  }
+
+  final _writeQueue = Queue<Future<void>>();
+
+  void _trackWrite(IOSink sink, String message) {
+    final completer = Completer<void>();
+
+    try {
+      sink.writeln(message);
+      // If you want to ensure it's immediately written, you can flush
+      sink.flush().then((_) {
+        completer.complete();
+      });
+    } catch (e) {
+      completer.completeError(e);
+    }
+
+    _writeQueue.addLast(completer.future);
+  }
+
+  void _handleLogRecord(LogRecord record) {
+    final logMessage =
+        '${record.time.toUtc().toIso8601String()} - ${record.level.name} - ${record.message}';
+
+    // Log level is OFF
+    if (Logger.root.level == Level.OFF) {
+      if (record.level == Level.SEVERE) {
+        stderr.writeln(logMessage);
+      } else {
+        stdout.writeln(logMessage);
+      }
+    } else {
+      // For all other log levels, print to stdout
+      stdout.writeln(logMessage);
+    }
+
+    // Always write logs to the log file if defined
+    if (logSink != null) {
+      _trackWrite(logSink!, logMessage);
+    }
+
+    // Always write SEVERE errors to the error file if defined
+    if (record.level == Level.SEVERE && errorSink != null) {
+      _trackWrite(errorSink!, logMessage);
+    }
+  }
+
+  void _setLogLevel() {
+    final level = Level.LEVELS.firstWhere(
+      (l) => l.name == logLevel!.toUpperCase(),
+      orElse: () => Level.INFO,
+    );
+    Logger.root.level = level;
+  }
+
+  void _setupLogFile() {
+    final file = File(logFile!);
+    logSink = file.openWrite();
+    log.info('Using $logFile as log file');
+  }
+
+  void _setupErrorFile() {
+    final file = File(errorFile!);
+    errorSink = file.openWrite();
+    log.info('Using $errorFile as error log file');
+  }
+
+  void _setupLogger() {
+    Logger.root.onRecord.listen(_handleLogRecord);
+
+    if (logLevel != null) {
+      _setLogLevel();
+    }
+
+    if (logFile != null) {
+      _setupLogFile();
+    }
+
+    if (errorFile != null) {
+      _setupErrorFile();
+    }
+  }
 }
