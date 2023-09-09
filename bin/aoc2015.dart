@@ -23,15 +23,17 @@ IOSink? logSink;
 
 void main(List<String> args) async {
   try {
+    StringBuffer stdinBuffer = StringBuffer();
+    await readStdinIfAvailable(stdinBuffer);
     final cliArgsManager = CliArgsManager(args);
+
+    var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
+    var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
 
     LoggerManager(
       logLevel: cliArgsManager.logLevel,
       logFile: cliArgsManager.logFile,
     );
-
-    var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
-    var sigIntSubscription = ProcessSignal.sigint.watch().listen(handleExit);
 
     if (cliArgsManager.outputFile != null) {
       final outputFile = cliArgsManager.outputFile!;
@@ -58,29 +60,32 @@ void main(List<String> args) async {
         return;
       }
     }
-
-    final stdinBuffer = StringBuffer();
-
-    var inputState = determineInputState(
-      cliArgsManager.inputFile,
-      !stdin.hasTerminal,
-    );
+    var inputState = determineInputState(cliArgsManager.inputFile, stdinBuffer);
 
     if (inputState == InputState.invalid) {
-      handleExitWithError('Both stdin and file input are defined. Choose one.');
+      await sigTermSubscription.cancel();
+      await sigIntSubscription.cancel();
+      await closeResources();
+      exit(1);
     }
-
     if (cliArgsManager.mode == null && inputState != InputState.invalid) {
-      log.info('No mode specified, running all default tasks.');
+      if (inputState == InputState.fileInput) {
+        String errorMsg = 'Mode not specified with an input file provided.';
+        outputManager.writeError(errorMsg);
+        log.severe(errorMsg);
+        await sigTermSubscription.cancel();
+        await sigIntSubscription.cancel();
+        return;
+      }
+
+      String infoMsg = 'No mode specified, running all default tasks';
+      outputManager.writeOutput(infoMsg);
+      log.info(infoMsg);
+
       await runAllSolverTasks(defaultTaskList);
       await closeResources();
       log.fine('Running all default tasks completed.');
       exit(0);
-    }
-
-    // This was a way of loading in the stdin without waiting or blocking
-    if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
-      readStdin(stdinBuffer);
     }
 
     if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
@@ -100,7 +105,9 @@ void main(List<String> args) async {
           funcNames.add('solveAoc15D1P2');
           break;
         default:
-          log.severe('Invalid mode');
+          String errorMsg = 'Invalid mode';
+          outputManager.writeOutput(errorMsg);
+          log.severe(errorMsg);
           break;
       }
 
@@ -125,32 +132,40 @@ void main(List<String> args) async {
   }
 }
 
-InputState determineInputState(String? fileInput, bool isStdinDefined) {
-  if (fileInput != null && !isStdinDefined) {
+InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {
+  if (fileInput != null && stdinBuffer.isEmpty) {
     String infoMsg = 'Input: $fileInput';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.fileInput;
   }
-  if (isStdinDefined && fileInput == null) {
+  if (stdinBuffer.isNotEmpty && fileInput == null) {
     String infoMsg = 'Input: stdin';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.stdinInput;
   }
-  if (fileInput == null && !isStdinDefined) {
+  if (fileInput == null && stdinBuffer.isEmpty) {
     String infoMsg = 'Input: default';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.noInput;
   }
-  String errorMsg = 'Input: invalid';
+  if (fileInput != null && stdinBuffer.isNotEmpty) {
+    String errorMsg =
+        'Both stdin and input file provided. Please provide only one form of input.';
+    outputManager.writeError(errorMsg);
+    log.severe(errorMsg);
+    return InputState.invalid;
+  }
+  String errorMsg = 'Input: Invalid input state';
   outputManager.writeError(errorMsg);
   log.severe(errorMsg);
   return InputState.invalid;
 }
 
 Future<void> handleExit(ProcessSignal signal) async {
+  log.info('Received ${signal.toString()} signal. Exiting...');
   await closeResources();
   exit(0);
 }
@@ -207,6 +222,14 @@ Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
   }
 }
 
+Future<void> readStdinIfAvailable(StringBuffer buffer) async {
+  if (!stdin.hasTerminal) {
+    await for (var data in stdin) {
+      buffer.write(utf8.decode(data));
+    }
+  }
+}
+
 final Completer<void> stdinCompleter = Completer<void>();
 
 Future<void> readStdin(StringBuffer buffer) async {
@@ -218,25 +241,25 @@ Future<void> readStdin(StringBuffer buffer) async {
 }
 
 Future<void> closeResources() async {
-  await logSink?.flush();
-  await logSink?.close();
-  await outputSink?.flush();
-  await outputSink?.close();
+  if (logSink != null) {
+    await logSink?.flush();
+    await logSink?.close();
+  }
+
+  if (outputSink != null) {
+    await outputSink?.flush();
+    await outputSink?.close();
+  }
 }
 
-void handleExitWithError(String errorMsg) {
-  OutputManager outputManager = OutputManager();
+Future<void> handleExitWithError(String errorMsg) async {
   outputManager.writeError(errorMsg);
 
-  closeResources().then((_) {
-    exit(1);
-  }).catchError((err) {
-    outputManager.writeError('Failed to close resources properly: $err');
-    exit(1);
-  });
-}
+  await closeResources();
 
-// Refactoring
+  log.severe(errorMsg);
+  exit(1);
+}
 
 class CliArgsManager {
   final List<String> args;
