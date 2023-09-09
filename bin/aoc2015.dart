@@ -24,7 +24,16 @@ IOSink? logSink;
 void main(List<String> args) async {
   try {
     StringBuffer stdinBuffer = StringBuffer();
-    await readStdinIfAvailable(stdinBuffer);
+    if (args.isEmpty) {
+      await runAllSolverTasks(defaultTaskList);
+      await closeResources();
+      exit(0);
+    }
+
+    if (stdinReady()) {
+      await readStdinIfAvailable(stdinBuffer);
+    }
+
     final cliArgsManager = CliArgsManager(args);
 
     var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
@@ -52,7 +61,7 @@ void main(List<String> args) async {
         String infoMsg = 'Using $outputFile as output file';
         outputManager.writeError(infoMsg);
         log.info(infoMsg);
-        outputSink = await file.openWrite();
+        outputSink = file.openWrite();
       } catch (e) {
         String errorMsg = 'Failed to open output file: $e';
         outputManager.writeError(errorMsg);
@@ -126,6 +135,11 @@ void main(List<String> args) async {
   } catch (e) {
     handleExitWithError('Fatal error encountered: $e');
   }
+}
+
+// Check if stdin has data without blocking
+bool stdinReady() {
+  return stdin.hasTerminal && stdin.echoMode && !stdin.lineMode;
 }
 
 InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {

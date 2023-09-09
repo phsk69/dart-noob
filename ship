@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/env sh
 dart format . && \
 dart test && \
 dart compile exe bin/aoc2015.dart -o aoc2015 --target-os macos && \
