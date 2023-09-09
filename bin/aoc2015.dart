@@ -88,10 +88,6 @@ void main(List<String> args) async {
       exit(0);
     }
 
-    if (inputState == InputState.stdinInput && !stdin.hasTerminal) {
-      await stdinCompleter.future;
-    }
-
     var solvers = <Future<Either<String, int>> Function(
         String?, Stream<List<int>>?, StringBuffer?)>[];
     var funcNames = <String>[];
@@ -223,10 +219,8 @@ Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
 }
 
 Future<void> readStdinIfAvailable(StringBuffer buffer) async {
-  if (!stdin.hasTerminal) {
-    await for (var data in stdin) {
-      buffer.write(utf8.decode(data));
-    }
+  await for (var data in stdin) {
+    buffer.write(utf8.decode(data));
   }
 }
 
