@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:collection';
 import 'package:args/args.dart';
 import 'package:dart_noob/config/default_tasks.dart';
 import 'package:dartz/dartz.dart';
@@ -17,10 +16,10 @@ enum InputState {
 }
 
 final log = Logger('CLI');
+final outputManager = OutputManager();
 
 IOSink? outputSink;
 IOSink? logSink;
-IOSink? errorSink;
 
 void main(List<String> args) async {
   try {
@@ -29,7 +28,6 @@ void main(List<String> args) async {
     LoggerManager(
       logLevel: cliArgsManager.logLevel,
       logFile: cliArgsManager.logFile,
-      errorFile: cliArgsManager.errorFile,
     );
 
     var sigTermSubscription = ProcessSignal.sigterm.watch().listen(handleExit);
@@ -44,14 +42,18 @@ void main(List<String> args) async {
           final stat = await file.stat();
           if (stat.type == FileSystemEntityType.directory) {
             String errorMsg = 'Cannot write to a directory: $outputFile';
+            outputManager.writeError(errorMsg);
             log.severe(errorMsg);
             return;
           }
         }
-        log.info('Using $outputFile as output file');
-        outputSink = file.openWrite();
+        String infoMsg = 'Using $outputFile as output file';
+        outputManager.writeError(infoMsg);
+        log.info(infoMsg);
+        outputSink = await file.openWrite();
       } catch (e) {
         String errorMsg = 'Failed to open output file: $e';
+        outputManager.writeError(errorMsg);
         log.severe(errorMsg);
         return;
       }
@@ -141,22 +143,17 @@ Future<void> handleExit(ProcessSignal signal) async {
 }
 
 void handleEitherResult(Either<String, int> eitherResult, String funcName) {
+  OutputManager outputManager = OutputManager();
   eitherResult.fold(
     (left) {
-      log.severe('$funcName: $left');
-      if (errorSink != null) {
-        errorSink?.writeln('$funcName: $left');
-      }
-      if (Logger.root.level == Level.OFF) {
-        stderr.writeln('$funcName: $left');
-      }
+      String leftMsg = '$funcName: $left';
+      outputManager.writeError(leftMsg);
+      log.severe(leftMsg);
     },
     (right) {
-      log.info('$funcName: $right');
-      outputSink?.writeln('$funcName: $right');
-      if (Logger.root.level == Level.OFF) {
-        stdout.writeln('$funcName: $right');
-      }
+      String rightMsg = '$funcName: $right';
+      outputManager.writeOutput('$funcName: $right');
+      log.info(rightMsg);
     },
   );
 }
@@ -208,8 +205,6 @@ Future<void> readStdin(StringBuffer buffer) async {
 }
 
 Future<void> closeResources() async {
-  await Future.wait(
-      LoggerManager()._writeQueue); // wait for all log writes to complete
   await logSink?.flush();
   await logSink?.close();
   await outputSink?.flush();
@@ -217,12 +212,13 @@ Future<void> closeResources() async {
 }
 
 void handleExitWithError(String errorMsg) {
-  log.severe(errorMsg);
+  OutputManager outputManager = OutputManager();
+  outputManager.writeError(errorMsg);
 
   closeResources().then((_) {
     exit(1);
   }).catchError((err) {
-    stderr.writeln('Failed to close resources properly: $err');
+    outputManager.writeError('Failed to close resources properly: $err');
     exit(1);
   });
 }
@@ -244,8 +240,6 @@ class CliArgsManager {
           abbr: 'i', help: 'Specify the path of the input file')
       ..addOption('outputFile',
           abbr: 'o', help: 'Specify the file to write output')
-      ..addOption('errorFile',
-          abbr: 'e', help: 'Specify the file to write error messages')
       ..addOption('logFile',
           abbr: 'l', help: 'Specify the file to log messages')
       ..addOption('logLevel',
@@ -263,63 +257,44 @@ class CliArgsManager {
 
   String? get inputFile => _parsedArgs['inputFile'] as String?;
   String? get outputFile => _parsedArgs['outputFile'] as String?;
-  String? get errorFile => _parsedArgs['errorFile'] as String?;
   String? get logFile => _parsedArgs['logFile'] as String?;
   String? get logLevel => _parsedArgs['logLevel'] as String?;
   String? get mode => _parsedArgs['mode'] as String?;
 }
 
+class OutputManager {
+  void writeOutput(String message) {
+    if (outputSink != null) {
+      outputSink!.writeln(message);
+      stdout.writeln(message);
+    } else {
+      stdout.writeln(message);
+    }
+  }
+
+  void writeError(String message) {
+    if (outputSink != null) {
+      outputSink!.writeln(message);
+      stderr.writeln(message);
+    } else {
+      stderr.writeln(message);
+    }
+  }
+}
+
 class LoggerManager {
   final String? logLevel;
   final String? logFile;
-  final String? errorFile;
 
-  LoggerManager({this.logLevel, this.logFile, this.errorFile}) {
+  LoggerManager({this.logLevel, this.logFile}) {
     _setupLogger();
-  }
-
-  final _writeQueue = Queue<Future<void>>();
-
-  void _trackWrite(IOSink sink, String message) {
-    final completer = Completer<void>();
-
-    try {
-      sink.writeln(message);
-      // If you want to ensure it's immediately written, you can flush
-      sink.flush().then((_) {
-        completer.complete();
-      });
-    } catch (e) {
-      completer.completeError(e);
-    }
-
-    _writeQueue.addLast(completer.future);
   }
 
   void _handleLogRecord(LogRecord record) {
     final logMessage =
         '${record.time.toUtc().toIso8601String()} - ${record.level.name} - ${record.message}';
-
-    // Log level is OFF
-    if (Logger.root.level == Level.OFF) {
-      if (record.level == Level.SEVERE) {
-        stderr.writeln(logMessage);
-      } else {
-        stdout.writeln(logMessage);
-      }
-    } else {
-      // For all other log levels, print to stdout
-      stdout.writeln(logMessage);
-    }
-
-    // Always write logs to the log file if defined
     if (logSink != null) {
-      _trackWrite(logSink!, logMessage);
-    }
-
-    // Always write SEVERE errors to the error file if defined
-    if (record.level == Level.SEVERE && errorSink != null) {
-      _trackWrite(errorSink!, logMessage);
+      logSink?.writeln(logMessage);
     }
   }
 
@@ -334,13 +309,9 @@ class LoggerManager {
   void _setupLogFile() {
     final file = File(logFile!);
     logSink = file.openWrite();
-    log.info('Using $logFile as log file');
-  }
-
-  void _setupErrorFile() {
-    final file = File(errorFile!);
-    errorSink = file.openWrite();
-    log.info('Using $errorFile as error log file');
+    String infoMsg = 'Using $logFile as log file';
+    outputManager.writeOutput(infoMsg);
+    log.info(infoMsg);
   }
 
   void _setupLogger() {
@@ -352,10 +323,6 @@ class LoggerManager {
 
     if (logFile != null) {
       _setupLogFile();
-    }
-
-    if (errorFile != null) {
-      _setupErrorFile();
     }
   }
 }
