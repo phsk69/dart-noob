@@ -93,6 +93,7 @@ void main(List<String> args) async {
     if (inputState != InputState.invalid) {
       switch (cliArgsManager.mode) {
         case 'd1':
+          outputManager.writeOutput('Mode: Day 1');
           solvers.add(solveAoc15D1P1);
           funcNames.add('solveAoc15D1P1');
           solvers.add(solveAoc15D1P2);
@@ -126,14 +127,26 @@ void main(List<String> args) async {
 
 InputState determineInputState(String? fileInput, bool isStdinDefined) {
   if (fileInput != null && !isStdinDefined) {
+    String infoMsg = 'Input: $fileInput';
+    outputManager.writeOutput(infoMsg);
+    log.info(infoMsg);
     return InputState.fileInput;
   }
   if (isStdinDefined && fileInput == null) {
+    String infoMsg = 'Input: stdin';
+    outputManager.writeOutput(infoMsg);
+    log.info(infoMsg);
     return InputState.stdinInput;
   }
   if (fileInput == null && !isStdinDefined) {
+    String infoMsg = 'Input: default';
+    outputManager.writeOutput(infoMsg);
+    log.info(infoMsg);
     return InputState.noInput;
   }
+  String errorMsg = 'Input: invalid';
+  outputManager.writeError(errorMsg);
+  log.severe(errorMsg);
   return InputState.invalid;
 }
 
@@ -309,7 +322,7 @@ class LoggerManager {
   void _setupLogFile() {
     final file = File(logFile!);
     logSink = file.openWrite();
-    String infoMsg = 'Using $logFile as log file';
+    String infoMsg = 'Log: $logFile';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
   }
