@@ -8,6 +8,9 @@ import 'package:logging/logging.dart';
 import 'package:dart_noob/models/day_task.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
+//TODO:  dart run bin/aoc2015.dart -i data/aoc2015_day1_input -m d1  hangs
+//TODO:  dart run bin/aoc2015.dart hangs (help mode?)
+
 enum InputState {
   fileInput,
   stdinInput,
@@ -100,6 +103,7 @@ void main(List<String> args) async {
     var solvers = <Future<Either<String, int>> Function(
         String?, Stream<List<int>>?, StringBuffer?)>[];
     var funcNames = <String>[];
+
     if (inputState != InputState.invalid) {
       switch (cliArgsManager.mode) {
         case 'd1':
