@@ -65,8 +65,9 @@ void main(List<String> args) async {
         return;
       }
     }
-    
-    readStdinIfAvailable(stdinBuffer);
+    //TODO: THIS IS NOW A FUCKING XOR STDIN WORKS IF AWAIT, BUT -i BREAKS
+    //TODO: AND THE OPPOSITE IS TRUE AS WELL.
+    await readStdinIfAvailable(stdinBuffer);
 
     var inputState = determineInputState(cliArgsManager.inputFile, stdinBuffer);
 

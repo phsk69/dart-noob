@@ -2,7 +2,12 @@
 
 ## Doing
 
-- [ ] cat data/aoc2015_day1_input | ./aoc2015 -m d1 hits the default mode case on posix pipeline
+- Hangs
+  - dart run bin/aoc2015.dart -l output/log.log -o output/out.txt -i data/aoc2015_day1_input 
+  - 
+- [x] cat data/aoc2015_day1_input | ./aoc2015 -m d1 hits the default mode case on posix pipeline
+  - [ ] Needs linux test
+- [ ] Remove the internal checks on whether output/logfile is a directory as the builtin-wnatever-the-fuck it seems to catch that before we even start the program.
 - [ ] Figure out a way to handle the outer execptions when files and folders etc do not exist.
 - [ ] Converting to the cli way
 
