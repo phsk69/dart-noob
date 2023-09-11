@@ -1,6 +1,8 @@
 # dart_noob
 
 ## Doing
+
+- [ ] cat data/aoc2015_day1_input | ./aoc2015 -m d1 hits the default mode case on linux
 - [ ] Figure out a way to handle the outer execptions when files and folders etc do not exist.
 - [ ] Converting to the cli way
 
