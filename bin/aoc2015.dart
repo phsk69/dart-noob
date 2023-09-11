@@ -8,9 +8,6 @@ import 'package:logging/logging.dart';
 import 'package:dart_noob/models/day_task.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
-//TODO:  dart run bin/aoc2015.dart -i data/aoc2015_day1_input -m d1  hangs
-//TODO:  dart run bin/aoc2015.dart hangs (help mode?)
-
 enum InputState {
   fileInput,
   stdinInput,
@@ -31,10 +28,6 @@ void main(List<String> args) async {
       await runAllSolverTasks(defaultTaskList);
       await closeResources();
       exit(0);
-    }
-
-    if (stdinReady()) {
-      await readStdinIfAvailable(stdinBuffer);
     }
 
     final cliArgsManager = CliArgsManager(args);
@@ -72,6 +65,9 @@ void main(List<String> args) async {
         return;
       }
     }
+    
+    readStdinIfAvailable(stdinBuffer);
+
     var inputState = determineInputState(cliArgsManager.inputFile, stdinBuffer);
 
     if (inputState == InputState.invalid) {
@@ -141,11 +137,6 @@ void main(List<String> args) async {
   }
 }
 
-// Check if stdin has data without blocking
-bool stdinReady() {
-  return stdin.hasTerminal && stdin.echoMode && !stdin.lineMode;
-}
-
 InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {
   if (fileInput != null && stdinBuffer.isEmpty) {
     String infoMsg = 'Input: $fileInput';
@@ -153,18 +144,21 @@ InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {
     log.info(infoMsg);
     return InputState.fileInput;
   }
+
   if (stdinBuffer.isNotEmpty && fileInput == null) {
     String infoMsg = 'Input: stdin';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.stdinInput;
   }
+
   if (fileInput == null && stdinBuffer.isEmpty) {
     String infoMsg = 'Input: default';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.noInput;
   }
+
   if (fileInput != null && stdinBuffer.isNotEmpty) {
     String errorMsg =
         'Both stdin and input file provided. Please provide only one form of input.';
@@ -172,6 +166,7 @@ InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {
     log.severe(errorMsg);
     return InputState.invalid;
   }
+
   String errorMsg = 'Input: Invalid input state';
   outputManager.writeError(errorMsg);
   log.severe(errorMsg);
@@ -243,14 +238,6 @@ Future<void> readStdinIfAvailable(StringBuffer buffer) async {
 }
 
 final Completer<void> stdinCompleter = Completer<void>();
-
-Future<void> readStdin(StringBuffer buffer) async {
-  await for (var line
-      in stdin.transform(utf8.decoder).transform(LineSplitter())) {
-    buffer.write("$line\n");
-  }
-  stdinCompleter.complete();
-}
 
 Future<void> closeResources() async {
   if (logSink != null) {
