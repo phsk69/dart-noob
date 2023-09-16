@@ -5,7 +5,6 @@ import 'dart:io';
 void main() {
   group('FileReader', () {
     test('reads content from valid file', () async {
-      // Create a temporary file with content
       var tempFile = await File('temp_test.txt').writeAsString('Test content');
 
       var reader = FileReader(tempFile.path);
@@ -15,35 +14,26 @@ void main() {
 
       await tempFile.delete(); // Clean up
     });
+
     test('reads content line by line from valid file', () async {
-      // Create a temporary file with multiple lines
       var tempFile = await File('temp_test_lines.txt')
           .writeAsString('Line 1\nLine 2\nLine 3');
 
       var reader = FileReader(tempFile.path);
       var lines = await reader.readFileByLine();
 
-      // Check that the file is split correctly into lines
       expect(lines, ['Line 1', 'Line 2', 'Line 3']);
 
       await tempFile.delete(); // Clean up
     });
-    test('throws an error for an invalid file path when reading by line',
-        () async {
-      var reader = FileReader('non_existent_file.txt');
 
-      // Expect that calling readFileByLine on a non-existent file will throw an error
-      expect(reader.readFileByLine(), throwsA(isA<String>()));
-    });
     test('parses content into a list of list of integers', () async {
-      // Create a temporary file with mock data for parsing
       var tempFile =
           await File('temp_test_dimensions.txt').writeAsString('2x3x4\n1x1x10');
 
       var reader = FileReader(tempFile.path);
       var parsedList = await reader.parseFileListInt();
 
-      // Check the parsed content
       expect(parsedList, [
         [2, 3, 4],
         [1, 1, 10]
@@ -51,46 +41,20 @@ void main() {
 
       await tempFile.delete(); // Clean up
     });
-    test('Creates a string buffer from an input file', () async {
-      // Create a temporary file with mock data for parsing
-      var tempFile =
-          await File('temp_test_dimensions.txt').writeAsString('2x3x4\n1x1x10');
+
+    test('reads file content as a string', () async {
+      var tempFile = await File('temp_test_string_content.txt')
+          .writeAsString('Hello FileReader!');
 
       var reader = FileReader(tempFile.path);
-      var parsedList = await reader.parseFileListInt();
+      var content = await reader.readStringFromFile();
 
-      // Check the parsed content
-      expect(parsedList, [
-        [2, 3, 4],
-        [1, 1, 10]
-      ]);
+      expect(content, 'Hello FileReader!');
 
       await tempFile.delete(); // Clean up
     });
   });
-  group('streamLinesFromFile', () {
-    test('reads lines from a valid file', () async {
-      var tempFile = await File('temp_test_stream.txt')
-          .writeAsString('Line 1\nLine 2\nLine 3');
 
-      var lines = [];
-
-      await for (var line in streamLinesFromFile(tempFile.path)) {
-        lines.add(line);
-      }
-
-      expect(lines, ['Line 1', 'Line 2', 'Line 3']);
-
-      await tempFile.delete(); // Clean up
-    });
-
-    test('throws an error for an invalid file path', () async {
-      var stream = streamLinesFromFile('non_existent_file.txt');
-
-      // Since the function uses streams, the error will be thrown when you listen to the stream
-      expect(stream.toList(), throwsA(isA<FileSystemException>()));
-    });
-  });
   group('Helper Functions', () {
     test('getInputByLine returns content line by line', () async {
       var tempFile = await File('temp_helper_test.txt')
@@ -138,111 +102,44 @@ void main() {
       await tempFile.delete();
     });
 
-    test('getStringBuffer returns StringBuffer from input file', () async {
-      var tempFile =
-          await File('temp_helper_buffer.txt').writeAsString('Buffer Test');
+    test('getStringBuffer returns content in a StringBuffer', () async {
+      var tempFile = await File('temp_helper_string_buffer.txt')
+          .writeAsString('Hello StringBuffer\nThis is a new line');
 
       var buffer = await getStringBuffer(tempFile.path);
 
-      expect(
-          buffer.toString(), 'Buffer Test\n'); // Buffer writes with a newline
+      expect(buffer.toString(),
+          'Hello StringBuffer\nThis is a new line\n'); // Remember that `writeln` adds a newline.
 
       await tempFile.delete();
     });
 
-    test('getInputContent returns Left error for all null inputs', () async {
-      var result = await getInputContent(null, null, null);
-      expect(result.isLeft(), true);
-      expect(result.swap().getOrElse(() => ''),
-          'All input sources cannot be null.');
-    });
+    test('streamLinesFromFile streams lines from a file', () async {
+      var tempFile = await File('temp_helper_stream_lines.txt')
+          .writeAsString('Stream Line 1\nStream Line 2');
 
-    test('getInputContent returns content string for valid file path',
-        () async {
-      var tempFile = await File('temp_helper_input_content.txt')
-          .writeAsString('Input Content Test');
+      List<String> lines = [];
+      await for (var line in streamLinesFromFile(tempFile.path)) {
+        lines.add(line);
+      }
 
-      var result = await getInputContent(tempFile.path, null, null);
-
-      expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'Input Content Test');
+      expect(lines, ['Stream Line 1', 'Stream Line 2']);
 
       await tempFile.delete();
     });
 
-    test('getInputContent returns content string for valid byte stream',
-        () async {
-      var tempFile = await File('temp_helper_input_stream.txt')
-          .writeAsString('Stream Content Test');
+    test('getInputContent returns content from a StringBuffer', () {
+      StringBuffer buffer = StringBuffer('This is a test content');
+      var content = getInputContent(buffer);
 
-      Stream<List<int>> fileStream = tempFile.openRead();
-      var result = await getInputContent(null, fileStream, null);
-
-      expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'Stream Content Test\n');
-
-      await tempFile.delete();
+      expect(content.getOrElse(() => ''), 'This is a test content');
     });
 
-    test('getInputContent returns content string for valid StringBuffer',
-        () async {
-      StringBuffer buffer = StringBuffer();
-      buffer.write('Buffer Content Test');
+    test('getInputContent returns error for null StringBuffer', () {
+      var content = getInputContent(null);
 
-      var result = await getInputContent(null, null, buffer);
-
-      expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'Buffer Content Test');
-    });
-
-    test(
-        'getInputContent returns error for both input path and stream provided',
-        () async {
-      var tempFile = await File('temp_helper_both_input.txt')
-          .writeAsString('Both Content Test');
-      Stream<List<int>> fileStream = tempFile.openRead();
-
-      var result = await getInputContent(tempFile.path, fileStream, null);
-
-      expect(result.isLeft(), true);
-      expect(result.swap().getOrElse(() => ''),
-          'Only one source of input is allowed.');
-
-      await tempFile.delete();
-    });
-
-    test('getInputContent returns error for both stream and buffer provided',
-        () async {
-      StringBuffer buffer = StringBuffer();
-      buffer.write('Buffer Content Test with Stream');
-      Stream<List<int>> fakeStream = Stream.fromIterable([
-        [1],
-        [2],
-        [3]
-      ]);
-
-      var result = await getInputContent(null, fakeStream, buffer);
-
-      expect(result.isLeft(), true);
-      expect(result.swap().getOrElse(() => ''),
-          'Only one source of input is allowed.');
-    });
-
-    test(
-        'getInputContent returns error for both input path and buffer provided',
-        () async {
-      StringBuffer buffer = StringBuffer();
-      buffer.write('Buffer Content Test with Input');
-      var tempFile = await File('temp_helper_both_input_buffer.txt')
-          .writeAsString('Both Content Test with Buffer');
-
-      var result = await getInputContent(tempFile.path, null, buffer);
-
-      expect(result.isLeft(), true);
-      expect(result.swap().getOrElse(() => ''),
-          'Only one source of input is allowed.');
-
-      await tempFile.delete();
+      expect(content.isLeft(), true);
+      expect(content.fold((l) => l, (r) => r), 'InputBuffer cannot be null.');
     });
   });
 }

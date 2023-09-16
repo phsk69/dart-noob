@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-typedef SolveFunction = Future<Either<String, int>> Function(
+typedef SolveFunction = Either<String, String> Function(
     String? input, StringBuffer? inputBuffer);
 
 class SolverTask {
-  final String inputKey;
+  final String inputKey;a
   final SolveFunction solveFunction;
   final String functionName;
 
