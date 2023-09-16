@@ -12,6 +12,9 @@ import 'package:dart_noob/factories/solver_factory.dart';
 
 Future<void> main(List<String> args) async {
   final cliArgsManager = CliArgsManager(args);
+  // This is done to make the CliArgsManager testable
+  cliArgsManager.handleHelpFlag();
+
   final inputFile = cliArgsManager.inputFile;
   final outputFile = cliArgsManager.outputFile;
   final logFile = cliArgsManager.logFile;

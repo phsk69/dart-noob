@@ -9,11 +9,6 @@ class CliArgsManager {
   CliArgsManager(this.args) {
     try {
       _initializeParser();
-      // Check if the help flag is set. If true, print usage and exit.
-      if (_parsedArgs!['help'] as bool) {
-        printUsage();
-        exit(0);
-      }
     } catch (e) {
       stderr.writeln('Error initializing parser: ${e.toString()}');
       exit(1);
@@ -39,11 +34,19 @@ class CliArgsManager {
     _parsedArgs = _parser.parse(args); // ArgResults? is nullable now
   }
 
+  void handleHelpFlag() {
+    if (_parsedArgs!['help'] as bool) {
+      printUsage();
+      exit(0);
+    }
+  }
+
   void printUsage() {
     print('Usage: aoc2015 [options]');
     print(_parser.usage); // This will print the detailed help information.
   }
 
+  bool get isHelpFlagSet => _parsedArgs?['help'] as bool? ?? false;
   String? get inputFile => _parsedArgs?['inputFile'] as String?;
   String? get outputFile => _parsedArgs?['outputFile'] as String?;
   String? get logFile => _parsedArgs?['logFile'] as String?;
