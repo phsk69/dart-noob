@@ -24,29 +24,32 @@ Future<void> handleCloseResources(IOSink? logSink, IOSink outputSink) async {
 }
 
 void handleEitherResult(Either<String, int> eitherResult, String funcName,
-    SinkManager sinkManager, Logger logger, OutputManager outputManager) {
-
+    SinkManager sinkManager, Logger? logger, OutputManager outputManager) {
   eitherResult.fold(
     (left) {
       String leftMsg = '$funcName: $left';
       outputManager.writeError(leftMsg);
-      logger.severe(leftMsg);
+      logger?.severe(leftMsg);
     },
     (right) {
       String rightMsg = '$funcName: $right';
       outputManager.writeOutput('$funcName: $right');
-      logger.info(rightMsg);
+      logger?.info(rightMsg);
     },
   );
 }
 
 class SignalHandler {
   final SinkManager sinkManager;
+  final OutputManager outputManager;
   final Logger? logger;
   late StreamSubscription<ProcessSignal> sigTermSubscription;
   late StreamSubscription<ProcessSignal> sigIntSubscription;
 
-  SignalHandler({required this.sinkManager, required this.logger}) {
+  SignalHandler(
+      {required this.sinkManager,
+      required this.outputManager,
+      required this.logger}) {
     sigTermSubscription =
         ProcessSignal.sigterm.watch().listen((signal) => handleExit(signal));
     sigIntSubscription =
@@ -54,7 +57,9 @@ class SignalHandler {
   }
 
   Future<void> handleExit(ProcessSignal signal) async {
-    logger?.info('Received ${signal.toString()} signal. Exiting...');
+    String infoMsg = 'Received ${signal.toString()} signal. Exiting...';
+    outputManager.writeOutput(infoMsg);
+    logger?.info(infoMsg);
 
     await handleCloseResources(sinkManager.logSink, sinkManager.outputSink);
     exit(0);
