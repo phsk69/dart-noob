@@ -14,7 +14,9 @@ import 'package:dart_noob/util/string_stuff.dart';
 import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
 Future<void> main(List<String> args) async {
+  // Research where in the stack we are when we do the following:
   final cliArgsManager = CliArgsManager(args);
+  // Because it gives unhandled exception when arguments are not supported
   final inputFile = cliArgsManager.inputFile;
   final outputFile = cliArgsManager.outputFile;
   final logFile = cliArgsManager.logFile;

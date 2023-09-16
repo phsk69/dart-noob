@@ -19,6 +19,7 @@ Future<String> getFileAsString(String inputPath) async {
   return await FileReader(inputPath).readStringFromFile();
 }
 
+/// Streams the lines from a file to a string buffer
 Future<StringBuffer> getStringBuffer(String inputPath) async {
   return await FileReader(inputPath).readFileToStringBuffer();
 }

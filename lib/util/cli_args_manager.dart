@@ -3,14 +3,27 @@ import 'dart:io';
 
 class CliArgsManager {
   final List<String> args;
-  late ArgResults _parsedArgs;
+  ArgResults? _parsedArgs;
+  final ArgParser _parser = ArgParser();
 
   CliArgsManager(this.args) {
-    _initializeParser();
+    try {
+      _initializeParser();
+      // Check if the help flag is set. If true, print usage and exit.
+      if (_parsedArgs!['help'] as bool) {
+        printUsage();
+        exit(0);
+      }
+    } catch (e) {
+      stderr.writeln('Error initializing parser: ${e.toString()}');
+      exit(1);
+    }
   }
 
   void _initializeParser() {
-    final parser = ArgParser()
+    _parser
+      ..addFlag('help',
+          abbr: 'h', negatable: false, help: 'Displays this help information.')
       ..addOption('inputFile',
           abbr: 'i', help: 'Specify the path of the input file')
       ..addOption('outputFile',
@@ -23,17 +36,17 @@ class CliArgsManager {
           allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT'])
       ..addOption('mode', abbr: 'm', help: 'Mode of operation');
 
-    try {
-      _parsedArgs = parser.parse(args);
-    } catch (e) {
-      // We do this here, as the arg parsing is the first thing that happens
-      stderr.writeln('Error parsing arguments: ${e.toString()}');
-    }
+    _parsedArgs = _parser.parse(args); // ArgResults? is nullable now
   }
 
-  String? get inputFile => _parsedArgs['inputFile'] as String?;
-  String? get outputFile => _parsedArgs['outputFile'] as String?;
-  String? get logFile => _parsedArgs['logFile'] as String?;
-  String? get logLevel => _parsedArgs['logLevel'] as String?;
-  String? get mode => _parsedArgs['mode'] as String?;
+  void printUsage() {
+    print('Usage: aoc2015 [options]');
+    print(_parser.usage); // This will print the detailed help information.
+  }
+
+  String? get inputFile => _parsedArgs?['inputFile'] as String?;
+  String? get outputFile => _parsedArgs?['outputFile'] as String?;
+  String? get logFile => _parsedArgs?['logFile'] as String?;
+  String? get logLevel => _parsedArgs?['logLevel'] as String?;
+  String? get mode => _parsedArgs?['mode'] as String?;
 }
