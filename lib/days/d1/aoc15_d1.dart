@@ -2,10 +2,36 @@ import 'package:dartz/dartz.dart';
 import 'package:dart_noob/util/string_stuff.dart'; // Assuming this is where getInputContent is defined
 
 // Function for the first problem
-Future<Either<String, int>> solveAoc15D1P1(String? input,
-    Stream<List<int>>? inputStream, StringBuffer? inputBuffer) async {
+//Future<Either<String, int>> solveAoc15D1P1(String? input,
+//    Stream<List<int>>? inputStream, StringBuffer? inputBuffer) async {
+//  try {
+//    final result = await getInputContent(input, inputStream, inputBuffer);
+//
+//    return result.fold((l) => Left(l), (content) {
+//      var i = 0;
+//      for (var element in content.split('')) {
+//        switch (element) {
+//          case '(':
+//            i++;
+//            break;
+//          case ')':
+//            i--;
+//            break;
+//        }
+//      }
+//      return Right(i);
+//    });
+//  } catch (e) {
+//    return Left(e.toString());
+//  }
+//}
+
+// Function for the first problem
+Future<Either<String, int>> solveAoc15D1P1(
+    String? input, StringBuffer? inputBuffer) async {
   try {
-    final result = await getInputContent(input, inputStream, inputBuffer);
+    
+    final result = await getInputContent(input, inputBuffer);
 
     return result.fold((l) => Left(l), (content) {
       var i = 0;

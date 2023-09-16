@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 typedef SolveFunction = Future<Either<String, int>> Function(
-    String? input, Stream<List<int>>? inputStream, StringBuffer? inputBuffer);
+    String? input, StringBuffer? inputBuffer);
 
 class SolverTask {
   final String inputKey;
@@ -11,7 +11,7 @@ class SolverTask {
   SolverTask(this.inputKey, this.solveFunction, this.functionName);
 
   Future<Either<String, int>> execute(
-      String? input, Stream<List<int>>? inputStream, StringBuffer inputBuffer) {
-    return solveFunction(inputKey, null, null);
+      String? input, StringBuffer? inputBuffer) {
+    return solveFunction(inputKey, null);
   }
 }

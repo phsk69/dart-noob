@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:dart_noob/config/default_tasks.dart';
@@ -10,9 +9,7 @@ import 'package:dart_noob/days/d1/aoc15_d1.dart';
 
 enum InputState {
   fileInput,
-  stdinInput,
   noInput,
-  invalid,
 }
 
 final log = Logger('CLI');
@@ -23,7 +20,6 @@ IOSink? logSink;
 
 void main(List<String> args) async {
   try {
-    StringBuffer stdinBuffer = StringBuffer();
     if (args.isEmpty) {
       await runAllSolverTasks(defaultTaskList);
       await closeResources();
@@ -65,28 +61,10 @@ void main(List<String> args) async {
         return;
       }
     }
-    //TODO: THIS IS NOW A FUCKING XOR STDIN WORKS IF AWAIT, BUT -i BREAKS
-    //TODO: AND THE OPPOSITE IS TRUE AS WELL.
-    await readStdinIfAvailable(stdinBuffer);
 
-    var inputState = determineInputState(cliArgsManager.inputFile, stdinBuffer);
+    var inputState = determineInputState(cliArgsManager.inputFile);
 
-    if (inputState == InputState.invalid) {
-      await sigTermSubscription.cancel();
-      await sigIntSubscription.cancel();
-      await closeResources();
-      exit(1);
-    }
-    if (cliArgsManager.mode == null && inputState != InputState.invalid) {
-      if (inputState == InputState.fileInput) {
-        String errorMsg = 'Mode not specified with an input file provided.';
-        outputManager.writeError(errorMsg);
-        log.severe(errorMsg);
-        await sigTermSubscription.cancel();
-        await sigIntSubscription.cancel();
-        return;
-      }
-
+    if (cliArgsManager.mode == null && inputState != InputState.fileInput) {
       String infoMsg = 'No mode specified, running all default tasks';
       outputManager.writeOutput(infoMsg);
       log.info(infoMsg);
@@ -99,35 +77,33 @@ void main(List<String> args) async {
 
     var solvers = <Future<Either<String, int>> Function(
         String?, Stream<List<int>>?, StringBuffer?)>[];
+
     var funcNames = <String>[];
 
-    if (inputState != InputState.invalid) {
-      switch (cliArgsManager.mode) {
-        case 'd1':
-          outputManager.writeOutput('Mode: Day 1');
-          solvers.add(solveAoc15D1P1);
-          funcNames.add('solveAoc15D1P1');
-          solvers.add(solveAoc15D1P2);
-          funcNames.add('solveAoc15D1P2');
-          break;
-        default:
-          String errorMsg = 'Invalid mode';
-          outputManager.writeOutput(errorMsg);
-          log.severe(errorMsg);
-          break;
-      }
-
-      String? fileInput =
-          inputState == InputState.fileInput ? cliArgsManager.inputFile : null;
-      StringBuffer? stdinInputBuffer =
-          inputState == InputState.stdinInput ? stdinBuffer : null;
-
-      for (var i = 0; i < solvers.length; i++) {
-        log.info('${funcNames[i]} starting');
-        await runSolver(solvers[i], funcNames[i], fileInput, stdinInputBuffer);
-        log.fine('${funcNames[i]} completed');
-      }
+    switch (cliArgsManager.mode) {
+      case 'd1':
+        outputManager.writeOutput('Mode: Day 1');
+        solvers.add(solveAoc15D1P1);
+        funcNames.add('solveAoc15D1P1');
+        solvers.add(solveAoc15D1P2);
+        funcNames.add('solveAoc15D1P2');
+        break;
+      default:
+        String errorMsg = 'Invalid mode';
+        outputManager.writeOutput(errorMsg);
+        log.severe(errorMsg);
+        break;
     }
+
+    String? fileInput =
+        inputState == InputState.fileInput ? cliArgsManager.inputFile : null;
+
+    for (var i = 0; i < solvers.length; i++) {
+      log.info('${funcNames[i]} starting');
+      await runSolver(solvers[i], funcNames[i], fileInput, StringBuffer());
+      log.fine('${funcNames[i]} completed');
+    }
+
     // Explicitly cancel the signal subscriptions
     await sigTermSubscription.cancel();
     await sigIntSubscription.cancel();
@@ -138,40 +114,18 @@ void main(List<String> args) async {
   }
 }
 
-InputState determineInputState(String? fileInput, StringBuffer stdinBuffer) {
-  if (fileInput != null && stdinBuffer.isEmpty) {
+InputState determineInputState(String? fileInput) {
+  if (fileInput != null) {
     String infoMsg = 'Input: $fileInput';
     outputManager.writeOutput(infoMsg);
     log.info(infoMsg);
     return InputState.fileInput;
   }
 
-  if (stdinBuffer.isNotEmpty && fileInput == null) {
-    String infoMsg = 'Input: stdin';
-    outputManager.writeOutput(infoMsg);
-    log.info(infoMsg);
-    return InputState.stdinInput;
-  }
-
-  if (fileInput == null && stdinBuffer.isEmpty) {
-    String infoMsg = 'Input: default';
-    outputManager.writeOutput(infoMsg);
-    log.info(infoMsg);
-    return InputState.noInput;
-  }
-
-  if (fileInput != null && stdinBuffer.isNotEmpty) {
-    String errorMsg =
-        'Both stdin and input file provided. Please provide only one form of input.';
-    outputManager.writeError(errorMsg);
-    log.severe(errorMsg);
-    return InputState.invalid;
-  }
-
-  String errorMsg = 'Input: Invalid input state';
-  outputManager.writeError(errorMsg);
-  log.severe(errorMsg);
-  return InputState.invalid;
+  String infoMsg = 'Input: default';
+  outputManager.writeOutput(infoMsg);
+  log.info(infoMsg);
+  return InputState.noInput;
 }
 
 Future<void> handleExit(ProcessSignal signal) async {
@@ -202,18 +156,12 @@ Future<Either<String, void>> runSolver(
       solver,
   String funcName,
   String? fileInput,
-  StringBuffer? stdinBuffer,
+  StringBuffer? inputBuffer,
 ) async {
-  if (stdinBuffer == null && fileInput == null) {
-    return Left('Both fileInput and stdinBuffer cannot be null.');
-  }
-
   late Either<String, int> eitherResult;
 
-  if (stdinBuffer != null) {
-    eitherResult = await solver(null, null, stdinBuffer);
-  } else if (fileInput != null) {
-    eitherResult = await solver(fileInput, null, null);
+  if (fileInput != null) {
+    eitherResult = await solver(fileInput, null, inputBuffer);
   }
 
   handleEitherResult(eitherResult, funcName);
@@ -231,14 +179,6 @@ Future<void> runAllSolverTasks(List<SolverTask> tasks) async {
     }
   }
 }
-
-Future<void> readStdinIfAvailable(StringBuffer buffer) async {
-  await for (var data in stdin) {
-    buffer.write(utf8.decode(data));
-  }
-}
-
-final Completer<void> stdinCompleter = Completer<void>();
 
 Future<void> closeResources() async {
   if (logSink != null) {
