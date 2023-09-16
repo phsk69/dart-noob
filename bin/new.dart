@@ -36,15 +36,7 @@ Future<void> main(List<String> args) async {
     outputManager: outputManager,
   );
 
-//TODO: Do we really need this, the arg parsing might just have to use stdout/stderr
-  Logger? logger;
-
-  if (logFile != null) {
-    logger = loggerManager.log;
-    if (logger != null) {
-      cliArgsManager.setLogger(logger);
-    }
-  }
+  final Logger? logger = loggerManager.log;
 
   SignalHandler(sinkManager: sinkManager, logger: logger);
 
@@ -52,12 +44,15 @@ Future<void> main(List<String> args) async {
     switch (mode) {
       case 'd1':
         outputManager.writeOutput(inputFile);
+        logger?.info(inputFile);
         break;
       default:
         outputManager.writeError('Unknown mode: $mode');
     }
   } else {
-    outputManager.writeError('Mode or input file path not supported');
+    String invalidModeOrInputMsg = 'Mode or input file path not supported';
+    outputManager.writeError(invalidModeOrInputMsg);
+    logger?.info(invalidModeOrInputMsg);
   }
 
   await handleCloseResources(sinkManager.logSink, sinkManager.outputSink);

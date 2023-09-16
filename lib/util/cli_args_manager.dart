@@ -1,5 +1,4 @@
 import 'package:args/args.dart';
-import 'package:logging/logging.dart';
 import 'package:dart_noob/util/handlers.dart';
 import 'package:dart_noob/util/sink_manager.dart';
 import 'package:dart_noob/util/output_manager.dart';
@@ -7,16 +6,11 @@ import 'package:dart_noob/util/output_manager.dart';
 class CliArgsManager {
   final List<String> args;
   final SinkManager sinkManager;
-  late Logger logger;
   late OutputManager outputManager;
   late ArgResults _parsedArgs;
 
   CliArgsManager(this.args, this.sinkManager) {
     _initializeParser();
-  }
-
-  void setLogger(Logger newLogger) {
-    logger = newLogger;
   }
 
   void setOutputManager(OutputManager newOutputManager) {
@@ -41,7 +35,7 @@ class CliArgsManager {
       _parsedArgs = parser.parse(args);
     } catch (e) {
       handleExitWithError(
-          'Argument parsing failed: $e', sinkManager, logger, outputManager);
+          'Argument parsing failed: $e', sinkManager, null, outputManager);
     }
   }
 

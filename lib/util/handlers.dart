@@ -6,12 +6,12 @@ import 'package:dart_noob/util/output_manager.dart';
 import 'package:dart_noob/util/sink_manager.dart';
 
 Future<void> handleExitWithError(String errorMsg, SinkManager sinkManager,
-    Logger logger, OutputManager outputManager) async {
+    Logger? logger, OutputManager outputManager) async {
   outputManager.writeError(errorMsg);
 
   await handleCloseResources(sinkManager.logSink, sinkManager.outputSink);
 
-  logger.severe(errorMsg);
+  logger?.severe(errorMsg);
   exit(1);
 }
 
