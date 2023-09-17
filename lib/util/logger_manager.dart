@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:logging/logging.dart';
 import 'package:dart_noob/util/output_manager.dart';
 import 'package:dart_noob/util/sink_manager.dart';
@@ -41,7 +43,16 @@ class LoggerManager {
   }
 
   void _setupLogFile() {
+    // Create the directory for the log file if it doesn't exist
+    File log = File(logFile!);
+    Directory dir = log.parent;
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+
+    // Initialize log sink
     sinkManager.initializeLogSink(logFile!);
+
     String infoMsg = 'Log: $logFile';
     outputManager.writeOutput(infoMsg);
     _internalLogger?.info(infoMsg); // Use optional chaining

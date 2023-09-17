@@ -7,7 +7,16 @@ class OutputManager {
 
   OutputManager(this.sinkManager, this.outputFile) {
     if (outputFile != null) {
+      _ensureOutputPathExists();
       sinkManager.initializeOutputSink(outputFile!);
+    }
+  }
+
+  void _ensureOutputPathExists() {
+    File file = File(outputFile!);
+    Directory dir = file.parent;
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
     }
   }
 

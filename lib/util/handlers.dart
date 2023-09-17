@@ -43,9 +43,13 @@ class SignalHandler {
   }) {
     this.handleExitFunction = handleExitFunction ?? handleExit;
 
-    sigTermSubscription = watchSignal(ProcessSignal.sigterm)
-        .listen((signal) => this.handleExitFunction!(signal));
+    if (!Platform.isWindows) {
+      // SIGTERM is not supported on Windows
+      sigTermSubscription = watchSignal(ProcessSignal.sigterm)
+          .listen((signal) => this.handleExitFunction!(signal));
+    }
 
+    // SIGINT should be supported on both Unix and Windows
     sigIntSubscription = watchSignal(ProcessSignal.sigint)
         .listen((signal) => this.handleExitFunction!(signal));
   }

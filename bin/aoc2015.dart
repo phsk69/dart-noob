@@ -46,6 +46,12 @@ Future<void> main(List<String> args) async {
     inputBuffer = await getStringBuffer(inputFile);
   }
 
+  if (outputFile != null) {
+    String infoMsg = 'Output: $outputFile';
+    outputManager.writeOutput(infoMsg);
+    logger?.info(infoMsg);
+  }
+
   if (mode != null && inputFile != null && inputBuffer != null) {
     final solversResult = SolverFactory.create(mode, inputBuffer);
 
