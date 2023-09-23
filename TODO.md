@@ -2,4 +2,5 @@
 
 ## Doing
 
-- [ ] Unit test for the output_manager lib
+- [ ] Migrate the factory test to seperate test
+- [ ] GOGO Gadge

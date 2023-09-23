@@ -11,8 +11,51 @@ Future<List<List<int>>> getParsedList(String inputPath) async {
   return await FileReader(inputPath).parseFileListInt();
 }
 
+/// Helper to either parse input from buffer or file path to a dimension list
+List<List<int>> parseInputToDimList(StringBuffer? input, String? filePath) {
+  if (input != null) {
+    return input
+        .toString()
+        .split('\n')
+        .where((e) => e.isNotEmpty)
+        .map((line) => line.split('x').map((e) => int.parse(e)).toList())
+        .toList();
+  } else if (filePath != null) {
+    return getParsedListSync(filePath);
+  } else {
+    throw Exception("No input provided.");
+  }
+}
+
+List<List<int>> getParsedListSync(String inputPath) {
+  List<List<int>> dimensionsList = [];
+
+  try {
+    List<String> lines =
+        File(inputPath).readAsLinesSync(); // Synchronous operation
+
+    for (var line in lines) {
+      List<int> dimensions = line.split('x').map((e) => int.parse(e)).toList();
+      dimensionsList.add(dimensions);
+    }
+
+    return dimensionsList;
+  } catch (e) {
+    throw 'parseFileListInt: $e';
+  }
+}
+
 Future<List<String>> getInputString(String inputPath) async {
   return await FileReader(inputPath).splitFileStringToList();
+}
+
+String getStringSync(String inputPath) {
+  try {
+    String contents = File(inputPath).readAsStringSync();
+    return contents;
+  } catch (e) {
+    throw 'getSplitStringListSync: $e';
+  }
 }
 
 Future<String> getFileAsString(String inputPath) async {

@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
-import 'package:dart_noob/solvers/day1_solvers.dart';
+import 'package:dart_noob/solvers/day1.dart';
 
 void main() {
   group('Day1P1Solver', () {
