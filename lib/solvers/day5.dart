@@ -4,12 +4,6 @@ import 'package:dart_noob/factories/solver_factory.dart';
 
 // https://adventofcode.com/2015/day/5
 
-import 'package:dartz/dartz.dart';
-import 'package:dart_noob/util/string_stuff.dart';
-import 'package:dart_noob/factories/solver_factory.dart';
-
-// https://adventofcode.com/2015/day/5
-
 class Day5P1Solver extends AoCSolver {
   final String? filePath;
 
