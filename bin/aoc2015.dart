@@ -38,7 +38,16 @@ Future<void> main(List<String> args) async {
     String infoMsg = 'Input: $inputFile';
     outputManager.writeOutput(infoMsg);
     logger?.info(infoMsg);
-    inputBuffer = await getStringBuffer(inputFile);
+
+    try {
+      inputBuffer = await getStringBuffer(inputFile);
+    } catch (e) {
+      String errorMsg = 'Failed to get input buffer: ${e.toString()}';
+      outputManager.writeError(errorMsg);
+      logger?.severe(errorMsg);
+      await handleCloseResources(sinkManager.logSink, sinkManager.outputSink);
+      exit(1);
+    }
   }
 
   if (outputFile != null) {
