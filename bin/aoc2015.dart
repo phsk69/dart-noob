@@ -2,12 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-import 'package:dart_noob/util/output_manager.dart';
-import 'package:dart_noob/util/logger_manager.dart';
-import 'package:dart_noob/util/cli_args_manager.dart';
-import 'package:dart_noob/util/handlers.dart';
-import 'package:dart_noob/util/sink_manager.dart';
-import 'package:dart_noob/util/string_stuff.dart';
+import 'package:dart_noob/util/util.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
 
 Future<void> main(List<String> args) async {
@@ -53,6 +48,7 @@ Future<void> main(List<String> args) async {
   }
 
   if (mode != null && inputFile != null && inputBuffer != null) {
+    outputManager.writeOutput('Mode: $mode');
     final solversResult = SolverFactory.create(mode, inputBuffer);
 
     solversResult.fold((error) {

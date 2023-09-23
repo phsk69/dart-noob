@@ -1,10 +1,8 @@
 import 'package:test/test.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
-import 'package:dart_noob/solvers/day1.dart';
-import 'package:dart_noob/solvers/day2.dart';
+import 'package:dart_noob/solvers/solvers.dart';
 
 void main() {
-  // Existing tests for SolverFactory
   group('SolverFactory', () {
     test('returns error for unknown mode', () {
       StringBuffer buffer = StringBuffer('Any test string');
@@ -34,6 +32,28 @@ void main() {
       expect(solvers.length, 2);
       expect(solvers[0] is Day2P1Solver, true);
       expect(solvers[1] is Day2P2Solver, true);
+    });
+
+    test('creates solvers for mode d3', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d3', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day3P1Solver, true);
+      expect(solvers[1] is Day3P2Solver, true);
+    });
+
+    test('creates solvers for mode d4', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d4', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day4P1Solver, true);
+      expect(solvers[1] is Day4P2Solver, true);
     });
   });
 }

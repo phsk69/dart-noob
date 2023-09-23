@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dart_noob/solvers/solvers.dart';
 
-
 abstract class AoCSolver {
   final StringBuffer? input;
 
@@ -24,6 +23,9 @@ class SolverFactory {
       case 'd3':
         return Right(
             [Day3P1Solver(input, filePath), Day3P2Solver(input, filePath)]);
+      case 'd4':
+        return Right(
+            [Day4P1Solver(input, filePath), Day4P2Solver(input, filePath)]);
       default:
         return Left("Unknown mode: $mode");
     }

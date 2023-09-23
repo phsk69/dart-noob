@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# requries dart and lcov
+dart run test --coverage=coverage/ && \
+dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib && \
+genhtml coverage/lcov.info -o coverage/ && \
+open coverage/index.html
