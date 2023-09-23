@@ -23,7 +23,7 @@ void main() {
 
     // New test for file fallback
     test('computes correct paper from file input', () {
-      var solver = Day2P1Solver(null, 'data/aoc2015_day2_input');
+      var solver = Day2P1Solver(null, 'data/aoc2015_day2_input.txt');
 
       var result = solver.solve();
 
@@ -53,7 +53,7 @@ void main() {
 
     // New test for file fallback
     test('computes correct ribbon from file input', () {
-      var solver = Day2P2Solver(null, 'data/aoc2015_day2_input');
+      var solver = Day2P2Solver(null, 'data/aoc2015_day2_input.txt');
 
       var result = solver.solve();
 

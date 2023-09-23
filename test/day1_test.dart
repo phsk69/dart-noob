@@ -15,7 +15,7 @@ void main() {
 
     // New test for file fallback
     test('computes correct floor from file input', () {
-      var solver = Day1P1Solver(null, 'data/aoc2015_day1_input');
+      var solver = Day1P1Solver(null, 'data/aoc2015_day1_input.txt');
 
       var result = solver.solve();
 
@@ -48,7 +48,7 @@ void main() {
     test(
         'computes position where Santa first enters the basement from file input',
         () {
-      var solver = Day1P2Solver(null, 'data/aoc2015_day1_input');
+      var solver = Day1P2Solver(null, 'data/aoc2015_day1_input.txt');
 
       var result = solver.solve();
 

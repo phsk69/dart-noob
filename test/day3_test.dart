@@ -24,7 +24,7 @@ void main() {
     });
 
     test('computes correct houses visited from file input', () {
-      var solver = Day3P1Solver(null, 'data/aoc2015_day3_input');
+      var solver = Day3P1Solver(null, 'data/aoc2015_day3_input.txt');
 
       var result = solver.solve();
 
@@ -59,7 +59,7 @@ void main() {
     test(
         'computes correct houses visited by Santa and Robo-Santa from file input',
         () {
-      var solver = Day3P2Solver(null, 'data/aoc2015_day3_input');
+      var solver = Day3P2Solver(null, 'data/aoc2015_day3_input.txt');
 
       var result = solver.solve();
 

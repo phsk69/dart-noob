@@ -23,7 +23,7 @@ void main() {
     });
 
     test('computes correct MD5 hash index from file input', () {
-      var solver = Day4P1Solver(null, 'data/aoc2015_day4_input');
+      var solver = Day4P1Solver(null, 'data/aoc2015_day4_input.txt');
 
       var result = solver.solve();
 
@@ -54,7 +54,7 @@ void main() {
 
     test('computes true MD5 hash index with additional zeroes from file input',
         () {
-      var solver = Day4P2Solver(null, 'data/aoc2015_day4_input');
+      var solver = Day4P2Solver(null, 'data/aoc2015_day4_input.txt');
 
       var result = solver.solve();
 
