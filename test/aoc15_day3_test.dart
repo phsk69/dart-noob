@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/solvers/day3.dart'; // Make sure to adjust the import path
+import 'package:dart_noob/solvers/aoc15_day3.dart'; // Make sure to adjust the import path
 
 void main() {
   group('Day3P1Solver', () {
@@ -9,8 +9,8 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''),
-          'solveAoc15D3P1: 4'); // Expecting 4 unique houses visited
+      expect(result.isRight(), true);
+      expect(result.getOrElse(() => ''), 'solveAoc15D3P1: 4');
     });
 
     test('returns error when input is malformed', () {
@@ -28,7 +28,7 @@ void main() {
 
       var result = solver.solve();
 
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D3P1: 2572');
     });
   });
@@ -42,8 +42,8 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''),
-          'solveAoc15D3P2: 11'); // Expecting 11 unique houses visited
+      expect(result.isRight(), true);
+      expect(result.getOrElse(() => ''), 'solveAoc15D3P2: 11');
     });
 
     test('returns error when input is malformed', () {
@@ -63,7 +63,7 @@ void main() {
 
       var result = solver.solve();
 
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D3P2: 2631');
     });
   });

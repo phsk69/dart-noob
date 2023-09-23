@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/solvers/day5.dart'; // Adjust this import path
+import 'package:dart_noob/solvers/aoc15_day5.dart'; // Adjust this import path
 
 void main() {
   group('Day5P1Solver', () {

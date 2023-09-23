@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/solvers/day2.dart';
+import 'package:dart_noob/solvers/aoc15_day2.dart';
 
 void main() {
   group('Day2P1Solver', () {
@@ -9,6 +9,7 @@ void main() {
 
       var result = solver.solve();
 
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D2P1: 101');
     });
 
@@ -27,7 +28,7 @@ void main() {
 
       var result = solver.solve();
 
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D2P1: 1606483');
     });
   });
@@ -51,13 +52,12 @@ void main() {
       expect(result.isLeft(), true);
     });
 
-    // New test for file fallback
     test('computes correct ribbon from file input', () {
       var solver = Day2P2Solver(null, 'data/aoc2015_day2_input.txt');
 
       var result = solver.solve();
 
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D2P2: 3842356');
     });
   });

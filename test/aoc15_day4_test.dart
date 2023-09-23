@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dart_noob/solvers/day4.dart'; // Adjust this import path
+import 'package:dart_noob/solvers/aoc15_day4.dart'; // Adjust this import path
 
 void main() {
   group('Day4P1Solver', () {
@@ -9,7 +9,7 @@ void main() {
       var solver = Day4P1Solver(buffer);
 
       var result = solver.solve();
-
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D4P1: 79446');
     });
 
@@ -26,8 +26,7 @@ void main() {
       var solver = Day4P1Solver(null, 'data/aoc2015_day4_input.txt');
 
       var result = solver.solve();
-
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D4P1: 254575');
     });
   });
@@ -58,7 +57,7 @@ void main() {
 
       var result = solver.solve();
 
-      // Replace this with the expected result from your input file
+      expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'solveAoc15D4P2: 1038736');
     });
   });
