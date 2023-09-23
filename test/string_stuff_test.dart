@@ -141,5 +141,43 @@ void main() {
       expect(content.isLeft(), true);
       expect(content.fold((l) => l, (r) => r), 'InputBuffer cannot be null.');
     });
+    test('parseInputToDimList returns parsed list from StringBuffer', () {
+      StringBuffer buffer = StringBuffer('2x3x4\n1x1x10\n');
+      List<List<int>> result = parseInputToDimList(buffer, null);
+      expect(result, [
+        [2, 3, 4],
+        [1, 1, 10]
+      ]);
+    });
+
+    test('parseInputToDimList returns parsed list from file path', () async {
+      var tempFile = await File('temp_test_dimensions_sync.txt')
+          .writeAsString('3x4x5\n2x2x2');
+      List<List<int>> result = parseInputToDimList(null, tempFile.path);
+      expect(result, [
+        [3, 4, 5],
+        [2, 2, 2]
+      ]);
+      await tempFile.delete();
+    });
+
+    test('getStringSync returns file content as a string', () async {
+      var tempFile =
+          await File('temp_test_string_sync.txt').writeAsString('Hello Sync!');
+      String content = getStringSync(tempFile.path);
+      expect(content, 'Hello Sync!');
+      await tempFile.delete();
+    });
+
+    test('getParsedListSync returns parsed list of integers', () async {
+      var tempFile = await File('temp_test_dimensions_sync.txt')
+          .writeAsString('3x4x5\n2x2x2');
+      List<List<int>> result = getParsedListSync(tempFile.path);
+      expect(result, [
+        [3, 4, 5],
+        [2, 2, 2]
+      ]);
+      await tempFile.delete();
+    });
   });
 }
