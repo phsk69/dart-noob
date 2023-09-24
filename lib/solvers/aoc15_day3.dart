@@ -23,7 +23,7 @@ class Day3P1Solver extends AoCSolver {
       }
 
       int result = SantaRouter(content.split('')).computeVisitedPositions();
-      return Right('solveAoc15D3P1: $result');
+      return Right('Day3P1Solver: $result');
     } catch (e) {
       return Left(e.toString());
     }
@@ -50,7 +50,7 @@ class Day3P2Solver extends AoCSolver {
       const int actors = 2;
       int result =
           SantaRouter(content.split('')).computeVisitedPositionsSplit(actors);
-      return Right('solveAoc15D3P2: $result');
+      return Right('Day3P2Solver: $result');
     } catch (e) {
       return Left(e.toString());
     }

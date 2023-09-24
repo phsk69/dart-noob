@@ -34,7 +34,7 @@ class Day5P1Solver extends AoCSolver {
         }
       }
 
-      return Right('solveAoc15D5P1: $goodLines');
+      return Right('Day5P1Solver: $goodLines');
     } catch (e) {
       return Left(e.toString());
     }
@@ -94,7 +94,7 @@ class Day5P2Solver extends AoCSolver {
         }
       }
 
-      return Right('solveAoc15D5P2: $goodLines');
+      return Right('Day5P2Solver: $goodLines');
     } catch (e) {
       return Left(e.toString());
     }

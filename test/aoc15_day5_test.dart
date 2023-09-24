@@ -10,7 +10,7 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''), 'solveAoc15D5P1: 2');
+      expect(result.getOrElse(() => ''), 'Day5P1Solver: 2');
     });
 
     test('returns error when input is empty', () {
@@ -28,7 +28,7 @@ void main() {
       var result = solver.solve();
 
       // Replace this with the expected result from your input file
-      expect(result.getOrElse(() => ''), 'solveAoc15D5P1: 238');
+      expect(result.getOrElse(() => ''), 'Day5P1Solver: 238');
     });
   });
 
@@ -40,7 +40,7 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''), 'solveAoc15D5P2: 2');
+      expect(result.getOrElse(() => ''), 'Day5P2Solver: 2');
     });
 
     test('returns error when input is empty', () {
@@ -60,7 +60,7 @@ void main() {
       var result = solver.solve();
 
       // Replace this with the expected result from your input file
-      expect(result.getOrElse(() => ''), 'solveAoc15D5P2: 69');
+      expect(result.getOrElse(() => ''), 'Day5P2Solver: 69');
     });
   });
 }

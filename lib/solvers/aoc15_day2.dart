@@ -40,7 +40,7 @@ class Day2P1Solver extends AoCSolver {
         totalPaper += paper;
       }
 
-      return Right('solveAoc15D2P1: $totalPaper');
+      return Right('Day2P1Solver: $totalPaper');
     } catch (e) {
       return Left(e.toString());
     }
@@ -77,7 +77,7 @@ class Day2P2Solver extends AoCSolver {
         totalRibbon += ribbonSum + bowSum;
       }
 
-      return Right('solveAoc15D2P2: $totalRibbon');
+      return Right('Day2P2Solver: $totalRibbon');
     } catch (e) {
       return Left(e.toString());
     }

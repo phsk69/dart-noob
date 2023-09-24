@@ -10,7 +10,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D2P1: 101');
+      expect(result.getOrElse(() => ''), 'Day2P1Solver: 101');
     });
 
     test('returns error when input is malformed', () {
@@ -29,7 +29,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D2P1: 1606483');
+      expect(result.getOrElse(() => ''), 'Day2P1Solver: 1606483');
     });
   });
 
@@ -40,7 +40,7 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''), 'solveAoc15D2P2: 48');
+      expect(result.getOrElse(() => ''), 'Day2P2Solver: 48');
     });
 
     test('returns error when input is malformed', () {
@@ -58,7 +58,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D2P2: 3842356');
+      expect(result.getOrElse(() => ''), 'Day2P2Solver: 3842356');
     });
   });
 }

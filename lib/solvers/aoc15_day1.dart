@@ -24,7 +24,7 @@ class Day1P1Solver extends AoCSolver {
             break;
         }
       }
-      return Right('solveAoc15D1P1: $i');
+      return Right('Day1P1Solver: $i');
     } catch (e) {
       return Left(e.toString());
     }
@@ -56,7 +56,7 @@ class Day1P2Solver extends AoCSolver {
             floor--;
             if (floor == basement) {
               firstBasementPos = idx + 1;
-              return Right('solveAoc15D1P2: $firstBasementPos');
+              return Right('Day1P2Solver: $firstBasementPos');
             }
             break;
         }

@@ -10,7 +10,7 @@ void main() {
 
       var result = solver.solve();
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D4P1: 79446');
+      expect(result.getOrElse(() => ''), 'Day4P1Solver: 79446');
     });
 
     test('returns error when input is empty', () {
@@ -27,7 +27,7 @@ void main() {
 
       var result = solver.solve();
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D4P1: 254575');
+      expect(result.getOrElse(() => ''), 'Day4P1Solver: 254575');
     });
   });
 
@@ -39,7 +39,7 @@ void main() {
 
       var result = solver.solve();
 
-      expect(result.getOrElse(() => ''), 'solveAoc15D4P2: 451787');
+      expect(result.getOrElse(() => ''), 'Day4P2Solver: 451787');
     });
 
     test('returns error when input is empty', () {
@@ -58,7 +58,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D4P2: 1038736');
+      expect(result.getOrElse(() => ''), 'Day4P2Solver: 1038736');
     });
   });
 }

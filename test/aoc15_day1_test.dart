@@ -10,7 +10,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D1P1: 1');
+      expect(result.getOrElse(() => ''), 'Day1P1Solver: 1');
     });
 
     test('computes correct floor from file input', () {
@@ -19,7 +19,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D1P1: 280');
+      expect(result.getOrElse(() => ''), 'Day1P1Solver: 280');
     });
   });
 
@@ -31,7 +31,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D1P2: 3');
+      expect(result.getOrElse(() => ''), 'Day1P2Solver: 3');
     });
 
     test('returns error when Santa never reaches the basement', () {
@@ -53,7 +53,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''), 'solveAoc15D1P2: 1797');
+      expect(result.getOrElse(() => ''), 'Day1P2Solver: 1797');
     });
   });
 }

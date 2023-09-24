@@ -36,7 +36,7 @@ class Day4P1Solver extends AoCSolver {
         String currentHex = md5ToHex(currentInput);
 
         if (currentHex.startsWith(targetPrefix)) {
-          return Right('solveAoc15D4P1: $index');
+          return Right('Day4P1Solver: $index');
         }
 
         index = index + BigInt.one;
@@ -77,7 +77,7 @@ class Day4P2Solver extends AoCSolver {
         String currentHex = md5ToHex(currentInput);
 
         if (currentHex.startsWith(targetPrefix)) {
-          return Right('solveAoc15D4P2: $index');
+          return Right('Day4P2Solver: $index');
         }
 
         index = index + BigInt.one;
