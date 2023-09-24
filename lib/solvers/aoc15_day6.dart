@@ -72,3 +72,76 @@ class Day6P1Solver extends AoCSolver {
     }
   }
 }
+
+class Day6P2Solver extends AoCSolver {
+  final String? filePath;
+
+  Day6P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+
+  @override
+  Either<String, String> solve() {
+    try {
+      var inputData = input?.toString() ?? getStringSync(filePath!);
+      if (inputData.trim().isEmpty) {
+        return Left('Input is empty.');
+      }
+
+      final int width = 1000;
+      final int height = 1000;
+
+      List<List<int>> grid = List.generate(height, (y) {
+        return List.generate(width, (x) {
+          return 0;
+        });
+      });
+
+      int totalBrightness = 0;
+
+      for (var line in inputData.split('\n').where((line) => line.isNotEmpty)) {
+        var instruction = line.split(' ');
+        String action;
+        List<String> start;
+        List<String> end;
+
+        if (instruction[0] == "toggle") {
+          action = "toggle";
+          start = instruction[1].split(',');
+          end = instruction[3].split(',');
+        } else {
+          action = instruction[1]; // "on" or "off"
+          start = instruction[2].split(',');
+          end = instruction[4].split(',');
+        }
+
+        var startX = int.parse(start[0]);
+        var startY = int.parse(start[1]);
+        var endX = int.parse(end[0]);
+        var endY = int.parse(end[1]);
+
+        for (var y = startY; y <= endY; y++) {
+          for (var x = startX; x <= endX; x++) {
+            switch (action) {
+              case 'on':
+                grid[y][x] += 1;
+                totalBrightness += 1;
+                break;
+              case 'off':
+                if (grid[y][x] > 0) {
+                  grid[y][x] -= 1;
+                  totalBrightness -= 1;
+                }
+                break;
+              case 'toggle':
+                grid[y][x] += 2;
+                totalBrightness += 2;
+                break;
+            }
+          }
+        }
+      }
+      return Right('Day6P2Solver: $totalBrightness');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+}
