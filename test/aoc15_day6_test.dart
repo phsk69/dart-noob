@@ -66,7 +66,6 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      // Replace 'PLACEHOLDER' with the expected result from your input file
       expect(result.getOrElse(() => ''), 'Day6P2Solver: 14687245');
     });
   });

@@ -139,6 +139,7 @@ class Day6P2Solver extends AoCSolver {
           }
         }
       }
+
       return Right('Day6P2Solver: $totalBrightness');
     } catch (e) {
       return Left(e.toString());
