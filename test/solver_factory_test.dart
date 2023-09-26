@@ -66,5 +66,26 @@ void main() {
       expect(solvers[0] is Day5P1Solver, true);
       expect(solvers[1] is Day5P2Solver, true);
     });
+    test('creates solvers for mode d6', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d6', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day6P1Solver, true);
+      expect(solvers[1] is Day6P2Solver, true);
+    });
+
+    test('creates solvers for mode d7', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d7', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 1); // TODO: Add Day7P2Solver and increase to 2
+      expect(solvers[0] is Day7P1Solver, true);
+      //expect(solvers[1] is Day7P2Solver, true); // TODO: Add Day7P2Solver
+    });
   });
 }
