@@ -3,7 +3,10 @@
         "aeiou",
         "bgvyzdsv",
         "dartz",
-        "moveset"
+        "LSHIFT",
+        "moveset",
+        "Robo",
+        "RSHIFT"
     ],
     "cSpell.ignorePaths": [
         "package-lock.json",
