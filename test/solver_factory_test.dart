@@ -87,5 +87,17 @@ void main() {
       expect(solvers[0] is Day7P1Solver, true);
       expect(solvers[1] is Day7P2Solver, true);
     });
+
+    test('creates solvers for mode d8', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d8', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(
+          solvers.length, 1); //TODO: Increase to 2 when Day8P2Solver is added
+      expect(solvers[0] is Day8P1Solver, true);
+      //expect(solvers[1] is Day8P2Solver, true); TODO: Add Day8P2Solver
+    });
   });
 }

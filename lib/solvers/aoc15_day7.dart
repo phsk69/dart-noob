@@ -138,8 +138,6 @@ class Day7P1Solver extends AoCSolver {
   }
 }
 
-// Solve Day7 part two here
-
 class Day7P2Solver extends AoCSolver {
   final String? filePath;
 
