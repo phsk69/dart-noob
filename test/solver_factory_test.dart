@@ -94,10 +94,9 @@ void main() {
 
       expect(result.isRight(), true);
       List<AoCSolver> solvers = result.getOrElse(() => []);
-      expect(
-          solvers.length, 1); //TODO: Increase to 2 when Day8P2Solver is added
+      expect(solvers.length, 2);
       expect(solvers[0] is Day8P1Solver, true);
-      //expect(solvers[1] is Day8P2Solver, true); TODO: Add Day8P2Solver
+      expect(solvers[1] is Day8P2Solver, true);
     });
   });
 }
