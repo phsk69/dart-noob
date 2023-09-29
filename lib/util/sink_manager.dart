@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show File, IOSink, stdout;
 
 class SinkManager {
   IOSink? _logSink;

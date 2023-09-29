@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show Directory, File, stderr, stdout;
 import 'package:dart_noob/util/sink_manager.dart';
 
 class OutputManager {

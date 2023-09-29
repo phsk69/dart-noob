@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show File;
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
 

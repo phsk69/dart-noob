@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show Directory, File;
 
 import 'package:logging/logging.dart';
 import 'package:dart_noob/util/output_manager.dart';

@@ -1,4 +1,4 @@
-import 'package:args/args.dart';
+import 'package:args/args.dart' show ArgParser, ArgResults;
 import 'dart:io';
 
 class CliArgsManager {
