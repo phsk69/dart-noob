@@ -109,5 +109,15 @@ void main() {
       expect(solvers[0] is Day9P1Solver, true);
       expect(solvers[1] is Day9P2Solver, true);
     });
+    test('creates solvers for mode d10', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d10', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day10P1Solver, true);
+      expect(solvers[1] is Day10P2Solver, true);
+    });
   });
 }
