@@ -58,8 +58,7 @@ void main() {
       var result = solver.solve();
 
       expect(result.isRight(), true);
-      expect(result.getOrElse(() => ''),
-          'Day7P2Solver: 507');
+      expect(result.getOrElse(() => ''), 'Day7P2Solver: 507');
     });
 
     test('returns error when input is empty for Part 2', () {

@@ -6,3 +6,4 @@ export 'aoc15_day5.dart';
 export 'aoc15_day6.dart';
 export 'aoc15_day7.dart';
 export 'aoc15_day8.dart';
+export 'aoc15_day9.dart';
