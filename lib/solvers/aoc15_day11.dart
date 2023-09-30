@@ -2,32 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dart_noob/util/string_stuff.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
 
-// https://adventofcode.com/2015/day/10
-
-/// Increments a string, treating it like a number with characters instead of digits.
-String _incrementString(String input) {
-  var charList = input.split('');
-  for (int i = charList.length - 1; i >= 0; i--) {
-    if (charList[i] == 'z') {
-      charList[i] = 'a';
-    } else {
-      charList[i] = String.fromCharCode(charList[i].codeUnitAt(0) + 1);
-      break;
-    }
-  }
-  return charList.join('');
-}
-
-/// Checks if a string contains at least one increasing straight of three characters.
-bool _hasStraight(String input) {
-  for (int i = 0; i < input.length - 2; i++) {
-    if (input.codeUnitAt(i) == input.codeUnitAt(i + 1) - 1 &&
-        input.codeUnitAt(i + 1) == input.codeUnitAt(i + 2) - 1) {
-      return true;
-    }
-  }
-  return false;
-}
+// https://adventofcode.com/2015/day/11
 
 class Day11P1Solver extends AoCSolver {
   final String? filePath;
@@ -86,6 +61,31 @@ class Day11P1Solver extends AoCSolver {
     } catch (e) {
       return Left(e.toString());
     }
+  }
+
+  /// Increments a string, treating it like a number with characters instead of digits.
+  String _incrementString(String input) {
+    var charList = input.split('');
+    for (int i = charList.length - 1; i >= 0; i--) {
+      if (charList[i] == 'z') {
+        charList[i] = 'a';
+      } else {
+        charList[i] = String.fromCharCode(charList[i].codeUnitAt(0) + 1);
+        break;
+      }
+    }
+    return charList.join('');
+  }
+
+  /// Checks if a string contains at least one increasing straight of three characters.
+  bool _hasStraight(String input) {
+    for (int i = 0; i < input.length - 2; i++) {
+      if (input.codeUnitAt(i) == input.codeUnitAt(i + 1) - 1 &&
+          input.codeUnitAt(i + 1) == input.codeUnitAt(i + 2) - 1) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
