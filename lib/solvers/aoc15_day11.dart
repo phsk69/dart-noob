@@ -31,14 +31,17 @@ bool _hasStraight(String input) {
 
 class Day11P1Solver extends AoCSolver {
   final String? filePath;
+  final String? currentPassword; // Added this optional parameter
 
-  Day11P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day11P1Solver(StringBuffer? input, [this.filePath, this.currentPassword])
+      : super(input);
 
   @override
   Either<String, String> solve() {
     try {
-      var inputData =
-          input?.toString().trim() ?? getStringSync(filePath!).trim();
+      var inputData = currentPassword ??
+          (input?.toString().trim() ?? getStringSync(filePath!).trim());
+
       if (inputData.trim().isEmpty) {
         return Left('Input is empty.');
       }
@@ -80,6 +83,52 @@ class Day11P1Solver extends AoCSolver {
       }
 
       return Right('Day11P1Solver: $inputData');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+}
+
+class Day11P2Solver extends AoCSolver {
+  final String? filePath;
+
+  Day11P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+
+  @override
+  Either<String, String> solve() {
+    try {
+      var inputData =
+          input?.toString().trim() ?? getStringSync(filePath!).trim();
+
+      if (inputData.trim().isEmpty) {
+        return Left('Input is empty.');
+      }
+
+      // Use Day11P1Solver to get the first next valid password
+      var firstSolver = Day11P1Solver(StringBuffer(inputData), filePath);
+      var firstPasswordResult = firstSolver.solve();
+
+      String firstPassword;
+      if (firstPasswordResult.isRight()) {
+        firstPassword = firstPasswordResult.getOrElse(() => '');
+        // Extracting the right value and cleaning up the prefix
+        firstPassword = firstPassword.replaceAll('Day11P1Solver: ', '');
+      } else {
+        return Left('Failed to get the first password.');
+      }
+
+      // Use Day11P1Solver again to get the next valid password
+      var secondSolver = Day11P1Solver(null, null, firstPassword);
+      var secondPasswordResult = secondSolver.solve();
+
+      if (secondPasswordResult.isRight()) {
+        var secondPassword = secondPasswordResult
+            .getOrElse(() => '')
+            .replaceAll('Day11P1Solver: ', '');
+        return Right('Day11P2Solver: $secondPassword');
+      } else {
+        return Left('Failed to get the second password.');
+      }
     } catch (e) {
       return Left(e.toString());
     }
