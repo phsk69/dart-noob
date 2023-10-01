@@ -10,3 +10,4 @@ export 'aoc15_day9.dart';
 export 'aoc15_day10.dart';
 export 'aoc15_day11.dart';
 export 'aoc15_day12.dart';
+export 'aoc15_day13.dart';
