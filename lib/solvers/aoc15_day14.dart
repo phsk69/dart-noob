@@ -5,7 +5,7 @@ import 'package:dart_noob/factories/solver_factory.dart';
 
 // https://adventofcode.com/2015/day/14
 
-//// Class to represent a reindeer
+/// Class to represent a reindeer
 class Reindeer {
   final String name;
   final int speed;
