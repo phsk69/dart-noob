@@ -76,7 +76,8 @@ Future<void> main(List<String> args) async {
       }
     });
   } else {
-    String invalidModeOrInputMsg = 'Mode or input file path not supported';
+    const String invalidModeOrInputMsg =
+        'Mode or input file path not supported';
     outputManager.writeError(invalidModeOrInputMsg);
     logger?.severe(invalidModeOrInputMsg);
   }

@@ -152,5 +152,16 @@ void main() {
       expect(solvers[0] is Day13P1Solver, true);
       expect(solvers[1] is Day13P2Solver, true);
     });
+
+    test('creates solvers for mode d14', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d14', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day14P1Solver, true);
+      expect(solvers[1] is Day14P2Solver, true);
+    });
   });
 }
