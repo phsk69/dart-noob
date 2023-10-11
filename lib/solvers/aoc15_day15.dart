@@ -23,6 +23,29 @@ class Ingredient {
   });
 }
 
+void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
+    int teaspoonLimit, List<int> currentMixture) {
+  if (currentMixture.length == ingredientsCount - 1) {
+    // If we are filling the last ingredient, ensure that we meet the teaspoon limit.
+    currentMixture.add(teaspoonLimit);
+    // Add a copy of the current mixture.
+    mixtures.add(List.from(currentMixture));
+    // Backtrack to explore other mixtures.
+    currentMixture.removeLast();
+    return;
+  }
+
+  for (int i = 0; i <= teaspoonLimit; i++) {
+    // Add the current teaspoon amount.
+    currentMixture.add(i);
+    // Recursive call with reduced teaspoon limit.
+    generateMixtures(
+        mixtures, ingredientsCount, teaspoonLimit - i, currentMixture);
+    // Backtrack to explore other possibilities.
+    currentMixture.removeLast();
+  }
+}
+
 class Day15P1Solver extends AoCSolver {
   final String? filePath;
 
@@ -89,29 +112,6 @@ class Day15P1Solver extends AoCSolver {
     } catch (e) {
       var errorMsg = 'Day15P1Solver: ${e.toString()}';
       return Left(errorMsg);
-    }
-  }
-
-  void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
-      int teaspoonLimit, List<int> currentMixture) {
-    if (currentMixture.length == ingredientsCount - 1) {
-      // If we are filling the last ingredient, ensure that we meet the teaspoon limit.
-      currentMixture.add(teaspoonLimit);
-      // Add a copy of the current mixture.
-      mixtures.add(List.from(currentMixture));
-      // Backtrack to explore other mixtures.
-      currentMixture.removeLast();
-      return;
-    }
-
-    for (int i = 0; i <= teaspoonLimit; i++) {
-      // Add the current teaspoon amount.
-      currentMixture.add(i);
-      // Recursive call with reduced teaspoon limit.
-      generateMixtures(
-          mixtures, ingredientsCount, teaspoonLimit - i, currentMixture);
-      // Backtrack to explore other possibilities.
-      currentMixture.removeLast();
     }
   }
 }
@@ -191,29 +191,6 @@ class Day15P2Solver extends AoCSolver {
     } catch (e) {
       var errorMsg = 'Day15P2Solver: ${e.toString()}';
       return Left(errorMsg);
-    }
-  }
-
-  void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
-      int teaspoonLimit, List<int> currentMixture) {
-    if (currentMixture.length == ingredientsCount - 1) {
-      // If we are filling the last ingredient, ensure that we meet the teaspoon limit.
-      currentMixture.add(teaspoonLimit);
-      // Add a copy of the current mixture.
-      mixtures.add(List.from(currentMixture));
-      // Backtrack to explore other mixtures.
-      currentMixture.removeLast();
-      return;
-    }
-
-    for (int i = 0; i <= teaspoonLimit; i++) {
-      // Add the current teaspoon amount.
-      currentMixture.add(i);
-      // Recursive call with reduced teaspoon limit.
-      generateMixtures(
-          mixtures, ingredientsCount, teaspoonLimit - i, currentMixture);
-      // Backtrack to explore other possibilities.
-      currentMixture.removeLast();
     }
   }
 }
