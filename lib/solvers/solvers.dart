@@ -13,3 +13,4 @@ export 'aoc15_day12.dart';
 export 'aoc15_day13.dart';
 export 'aoc15_day14.dart';
 export 'aoc15_day15.dart';
+export 'aoc15_day16.dart';

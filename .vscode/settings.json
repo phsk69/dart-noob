@@ -17,5 +17,6 @@
         ".vscode-insiders",
         "data/",
         "coverage/"
-    ]
+    ],
+    "editor.lineNumbers": "on"
 }
