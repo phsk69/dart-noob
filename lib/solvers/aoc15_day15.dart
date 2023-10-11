@@ -51,20 +51,10 @@ class Day15P1Solver extends AoCSolver {
           calories: int.parse(tokens[10]),
         ));
       }
-  
+
       var totalTeaspoons = 100;
       var mixtures = <List<int>>[];
-      for (var i = 0; i <= totalTeaspoons; i++) {
-        for (var j = 0; j <= totalTeaspoons - i; j++) {
-          for (var k = 0; k <= totalTeaspoons - i - j; k++) {
-            for (var l = 0; l <= totalTeaspoons - i - j - k; l++) {
-              if (i + j + k + l == totalTeaspoons) {
-                mixtures.add([i, j, k, l]);
-              }
-            }
-          }
-        }
-      }
+      generateMixtures(mixtures, ingredients.length, totalTeaspoons, []);
 
       var scores = <int>[];
       for (var mixture in mixtures) {
@@ -101,6 +91,29 @@ class Day15P1Solver extends AoCSolver {
       return Left(errorMsg);
     }
   }
+
+  void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
+      int teaspoonLimit, List<int> currentMixture) {
+    if (currentMixture.length == ingredientsCount - 1) {
+      // If we are filling the last ingredient, ensure that we meet the teaspoon limit.
+      currentMixture.add(teaspoonLimit);
+      // Add a copy of the current mixture.
+      mixtures.add(List.from(currentMixture));
+      // Backtrack to explore other mixtures.
+      currentMixture.removeLast();
+      return;
+    }
+
+    for (int i = 0; i <= teaspoonLimit; i++) {
+      // Add the current teaspoon amount.
+      currentMixture.add(i);
+      // Recursive call with reduced teaspoon limit.
+      generateMixtures(
+          mixtures, ingredientsCount, teaspoonLimit - i, currentMixture);
+      // Backtrack to explore other possibilities.
+      currentMixture.removeLast();
+    }
+  }
 }
 
 class Day15P2Solver extends AoCSolver {
@@ -117,10 +130,90 @@ class Day15P2Solver extends AoCSolver {
         return Left('Input is empty.');
       }
 
-      return Right('Day15P2Solver: placeholder');
+      var ingredients = <Ingredient>[];
+
+      for (var line in inputData.split('\n').where((line) => line.isNotEmpty)) {
+        var tokens = line.split(' ');
+
+        ingredients.add(Ingredient(
+          name: tokens[0].substring(0, tokens[0].length - 1),
+          capacity: int.parse(tokens[2].substring(0, tokens[2].length - 1)),
+          durability: int.parse(tokens[4].substring(0, tokens[4].length - 1)),
+          flavor: int.parse(tokens[6].substring(0, tokens[6].length - 1)),
+          texture: int.parse(tokens[8].substring(0, tokens[8].length - 1)),
+          calories: int.parse(tokens[10]),
+        ));
+      }
+
+      var totalTeaspoons = 100;
+      var mixtures = <List<int>>[];
+      generateMixtures(mixtures, ingredients.length, totalTeaspoons, []);
+
+      var validMixtures = mixtures.where((mixture) {
+        var calories = 0;
+        for (var i = 0; i < mixture.length; i++) {
+          calories += mixture[i] * ingredients[i].calories;
+        }
+        return calories == 500;
+      }).toList();
+
+      var scores = <int>[];
+
+      for (var mix in validMixtures) {
+        var capacity = 0;
+        var durability = 0;
+        var flavor = 0;
+        var texture = 0;
+
+        for (var i = 0; i < mix.length; i++) {
+          capacity += mix[i] * ingredients[i].capacity;
+          durability += mix[i] * ingredients[i].durability;
+          flavor += mix[i] * ingredients[i].flavor;
+          texture += mix[i] * ingredients[i].texture;
+        }
+
+        capacity = capacity < 0 ? 0 : capacity;
+        durability = durability < 0 ? 0 : durability;
+        flavor = flavor < 0 ? 0 : flavor;
+        texture = texture < 0 ? 0 : texture;
+
+        scores.add(capacity * durability * flavor * texture);
+      }
+
+      var maxScore = 0;
+      for (var score in scores) {
+        if (score > maxScore) {
+          maxScore = score;
+        }
+      }
+
+      return Right('Day15P2Solver: $maxScore');
     } catch (e) {
       var errorMsg = 'Day15P2Solver: ${e.toString()}';
       return Left(errorMsg);
+    }
+  }
+
+  void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
+      int teaspoonLimit, List<int> currentMixture) {
+    if (currentMixture.length == ingredientsCount - 1) {
+      // If we are filling the last ingredient, ensure that we meet the teaspoon limit.
+      currentMixture.add(teaspoonLimit);
+      // Add a copy of the current mixture.
+      mixtures.add(List.from(currentMixture));
+      // Backtrack to explore other mixtures.
+      currentMixture.removeLast();
+      return;
+    }
+
+    for (int i = 0; i <= teaspoonLimit; i++) {
+      // Add the current teaspoon amount.
+      currentMixture.add(i);
+      // Recursive call with reduced teaspoon limit.
+      generateMixtures(
+          mixtures, ingredientsCount, teaspoonLimit - i, currentMixture);
+      // Backtrack to explore other possibilities.
+      currentMixture.removeLast();
     }
   }
 }
