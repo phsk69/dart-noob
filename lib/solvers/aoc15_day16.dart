@@ -68,7 +68,7 @@ p2ExactAuntMatch(Sue sue) {
   return match;
 }
 
-parseInput(String inputData) {
+List<Sue> parseD16Input(String inputData) {
   var aunts = <Sue>[];
 
   for (var line in inputData.split('\n').where((line) => line.isNotEmpty)) {
@@ -76,7 +76,7 @@ parseInput(String inputData) {
 
     // Ensure the line is correctly formatted.
     if (tokens.length < 2) {
-      return Left('Invalid line format: $line');
+      throw 'parseInput: Invalid input format.';
     }
 
     var id = int.parse(tokens[0].split(' ')[1]);
@@ -109,7 +109,7 @@ class Day16P1Solver extends AoCSolver {
         return Left('Input is empty.');
       }
 
-      var aunts = parseInput(inputData);
+      var aunts = parseD16Input(inputData);
 
       var matchingAunt = 0;
 
@@ -147,7 +147,7 @@ class Day16P2Solver extends AoCSolver {
         return Left('Input is empty.');
       }
 
-      var aunts = parseInput(inputData);
+      var aunts = parseD16Input(inputData);
 
       var matchingAunt = 0;
 

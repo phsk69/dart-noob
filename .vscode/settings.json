@@ -6,7 +6,8 @@
         "LSHIFT",
         "moveset",
         "Robo",
-        "RSHIFT"
+        "RSHIFT",
+        "Wombo"
     ],
     "cSpell.ignorePaths": [
         "package-lock.json",
