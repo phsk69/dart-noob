@@ -86,6 +86,11 @@ class SolverFactory {
           Day18P1Solver(input, filePath),
           Day18P2Solver(input, filePath),
         ]);
+      case 'd19':
+        return Right([
+          Day19P1Solver(input, filePath),
+          Day19P2Solver(input, filePath),
+        ]);
       // TODO: Actually do some verification here
       default:
         return Left("Unknown mode: $mode");
