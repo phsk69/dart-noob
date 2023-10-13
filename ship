@@ -2,4 +2,4 @@
 dart format . && \
 dart test && \
 dart compile exe bin/aoc2015.dart -o aoc2015 --target-os macos && \
-./aoc2015
+for i in {1..25}; do ./aoc2015 -m d${i} -i data/aoc2015_day${i}_input.txt; done
