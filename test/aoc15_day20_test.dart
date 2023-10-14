@@ -29,8 +29,6 @@ void main() {
 
       var result = solver.solve();
 
-      print(result);
-
       expect(result.isRight(), true);
       expect(result.getOrElse(() => ''), 'Day20P1Solver: 786240');
     });
