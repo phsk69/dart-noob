@@ -17,3 +17,4 @@ export 'aoc15_day16.dart';
 export 'aoc15_day17.dart';
 export 'aoc15_day18.dart';
 export 'aoc15_day19.dart';
+export 'aoc15_day20.dart';
