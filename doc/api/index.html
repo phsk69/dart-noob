@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 7.0.0-dev">
+  <meta name="description" content="dart_noob API docs, for the Dart programming language.">
+  <title>dart_noob - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">dart_noob package</li>
+  </ol>
+  <div class="self-name">dart_noob</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="dart_noob">dart_noob</h1>
+<h2 id="vscode-stuff">vscode stuff</h2>
+<ul>
+<li>Dart vscode launch config: <a href="https://dartcode.org/docs/launch-configuration/">dartcode.org/docs/launch-configuration/</a></li>
+</ul>
+<h2 id="useful-examples">Useful examples</h2>
+<h3 id="cli-app-with-the-works">CLI app with the works</h3>
+<pre class="language-dart"><code class="language-dart">import 'dart:io';
+import 'package:args/args.dart';
+import 'package:dartz/dartz.dart';
+import 'dart:convert';
+import 'package:logging/logging.dart';
+
+void main(List&lt;String&gt; args) async {
+  final parser = ArgParser()
+    ..addOption('inputfile',
+        abbr: 'i', help: 'Specify the path of the input file')
+    ..addOption('errorlog', abbr: 'e', help: 'Specify the file to write errors')
+    ..addOption('output', abbr: 'o', help: 'Specify the file to write output')
+    ..addOption('mode', abbr: 'm', help: 'Define the mode')
+    ..addOption('logfile', abbr: 'l', help: 'Specify the file to log messages')
+    ..addOption('loglevel',
+        abbr: 'v',
+        help: 'Specify the logging level (default is WARNING)',
+        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT']);
+
+  final parsedArgs = parser.parse(args);
+
+  // Set log level from command line arguments or default to WARNING
+  var logLevel = Level.WARNING;
+  if (parsedArgs['loglevel'] != null) {
+    logLevel = Level.LEVELS.firstWhere(
+        (l) =&gt; l.name == parsedArgs['loglevel'].toUpperCase(),
+        orElse: () =&gt; Level.WARNING);
+  }
+  Logger.root.level = logLevel;
+
+  // Log to stdout by default
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  // Log to file if option is specified
+  if (parsedArgs['logfile'] != null) {
+    final logFile = File(parsedArgs['logfile'] as String);
+    Logger.root.onRecord.listen((record) async {
+      final logLine = '${record.level.name}: ${record.time}: ${record.message}';
+      await logFile.writeAsString('$logLine\n', mode: FileMode.append);
+    });
+  }
+
+  final log = Logger('CLI'); // Create a logger for this class
+  log.fine('Parsing command line arguments');
+
+  StringBuffer inputDataBuffer = StringBuffer();
+
+  if (!stdin.hasTerminal) {
+    await for (var line
+        in stdin.transform(Utf8Decoder()).transform(LineSplitter())) {
+      inputDataBuffer.writeln(line);
+    }
+  } else {
+    inputDataBuffer
+        .write(await _fetchDataFromFile(parsedArgs['inputfile'] as String?));
+  }
+  // TODO: Make default_data a new and more dynamic type of list as default
+  // See task_list and the builder stunts we were doing with charlie
+  var inputData = inputDataBuffer.toString().isEmpty
+      ? 'default_data'
+      : inputDataBuffer.toString();
+
+  var result = demoFunction(inputData, parsedArgs['mode']);
+
+  if (result.isLeft()) {
+    if (parsedArgs['errorlog'] != null) {
+      await File(parsedArgs['errorlog'] as String).writeAsString(
+          result.fold((leftValue) =&gt; leftValue, (rightValue) =&gt; rightValue));
+    } else {
+      stderr.writeln(
+          result.fold((leftValue) =&gt; leftValue, (rightValue) =&gt; rightValue));
+    }
+  } else {
+    if (parsedArgs['output'] != null) {
+      await File(parsedArgs['output'] as String)
+          .writeAsString(result.getOrElse(() =&gt; ''));
+    } else {
+      print(result.getOrElse(() =&gt; ''));
+    }
+  }
+}
+
+Future&lt;String&gt; _fetchDataFromFile(String? path) async {
+  if (path == null) return 'default_data';
+  return await File(path)
+      .openRead()
+      .transform(Utf8Decoder())
+      .transform(LineSplitter())
+      .first;
+}
+
+Either&lt;String, String&gt; demoFunction(String input, String? mode) {
+  // Here you can handle different modes with different logic.
+  if (mode == 'mode1') {
+    return Right('Mode 1: $input');
+  }
+
+  // If no mode matches, return an error
+  return Left('Invalid mode: $mode');
+}
+</code></pre>
+<h3 id="return-errors-by-value">Return errors by value</h3>
+<pre class="language-dart"><code class="language-dart">// Simple demo setup
+import 'package:dartz/dartz.dart';
+
+Either&lt;String, int&gt; divide(int dividend, int divisor) {
+  if (divisor == 0) {
+    return Left("Cannot divide by zero");
+  } else {
+    return Right(dividend ~/ divisor);
+  }
+}
+
+final result = divide(10, 2);
+result.fold(
+  (l) =&gt; print('Error: $l'), 
+  (r) =&gt; print('Result: $r')
+);
+</code></pre>
+<h3 id="return-errors-by-value-with-futures">Return errors by value with Futures</h3>
+<pre class="language-dart"><code class="language-dart">// For async shit
+class Result&lt;T&gt; {
+  final T? value;
+  final Object? error;
+
+  bool get isSuccess =&gt; error == null;
+  bool get isError =&gt; !isSuccess;
+
+  Result.success(this.value) : error = null;
+  Result.error(this.error) : value = null;
+}
+
+Future&lt;Result&lt;String&gt;&gt; fetchSomething() async {
+  try {
+    String result = await someAsyncOperation();
+    return Result.success(result);
+  } catch (e) {
+    return Result.error(e);
+  }
+}
+var result = await fetchSomething();
+if (result.isSuccess) {
+  print(result.value);
+} else {
+  // TODO: Change all this to logging
+  print('Error occurred: ${result.error}');
+}
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="aoc15_day1">
+  <span class="name"><a href="solvers_aoc15_day1/solvers_aoc15_day1-library.html">aoc15_day1</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day2">
+  <span class="name"><a href="solvers_aoc15_day2/solvers_aoc15_day2-library.html">aoc15_day2</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day3">
+  <span class="name"><a href="solvers_aoc15_day3/solvers_aoc15_day3-library.html">aoc15_day3</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day4">
+  <span class="name"><a href="solvers_aoc15_day4/solvers_aoc15_day4-library.html">aoc15_day4</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day5">
+  <span class="name"><a href="solvers_aoc15_day5/solvers_aoc15_day5-library.html">aoc15_day5</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day6">
+  <span class="name"><a href="solvers_aoc15_day6/solvers_aoc15_day6-library.html">aoc15_day6</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day7">
+  <span class="name"><a href="solvers_aoc15_day7/solvers_aoc15_day7-library.html">aoc15_day7</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day8">
+  <span class="name"><a href="solvers_aoc15_day8/solvers_aoc15_day8-library.html">aoc15_day8</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day9">
+  <span class="name"><a href="solvers_aoc15_day9/solvers_aoc15_day9-library.html">aoc15_day9</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day10">
+  <span class="name"><a href="solvers_aoc15_day10/solvers_aoc15_day10-library.html">aoc15_day10</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day11">
+  <span class="name"><a href="solvers_aoc15_day11/solvers_aoc15_day11-library.html">aoc15_day11</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day12">
+  <span class="name"><a href="solvers_aoc15_day12/solvers_aoc15_day12-library.html">aoc15_day12</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day13">
+  <span class="name"><a href="solvers_aoc15_day13/solvers_aoc15_day13-library.html">aoc15_day13</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day14">
+  <span class="name"><a href="solvers_aoc15_day14/solvers_aoc15_day14-library.html">aoc15_day14</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day15">
+  <span class="name"><a href="solvers_aoc15_day15/solvers_aoc15_day15-library.html">aoc15_day15</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day16">
+  <span class="name"><a href="solvers_aoc15_day16/solvers_aoc15_day16-library.html">aoc15_day16</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day17">
+  <span class="name"><a href="solvers_aoc15_day17/solvers_aoc15_day17-library.html">aoc15_day17</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day18">
+  <span class="name"><a href="solvers_aoc15_day18/solvers_aoc15_day18-library.html">aoc15_day18</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day19">
+  <span class="name"><a href="solvers_aoc15_day19/solvers_aoc15_day19-library.html">aoc15_day19</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day20">
+  <span class="name"><a href="solvers_aoc15_day20/solvers_aoc15_day20-library.html">aoc15_day20</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="aoc15_day21">
+  <span class="name"><a href="solvers_aoc15_day21/solvers_aoc15_day21-library.html">aoc15_day21</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cli_args_manager">
+  <span class="name"><a href="util_cli_args_manager/util_cli_args_manager-library.html">cli_args_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="handlers">
+  <span class="name"><a href="util_handlers/util_handlers-library.html">handlers</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logger_manager">
+  <span class="name"><a href="util_logger_manager/util_logger_manager-library.html">logger_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="output_manager">
+  <span class="name"><a href="util_output_manager/util_output_manager-library.html">output_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sink_manager">
+  <span class="name"><a href="util_sink_manager/util_sink_manager-library.html">sink_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="solver_factory">
+  <span class="name"><a href="factories_solver_factory/factories_solver_factory-library.html">solver_factory</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="solvers">
+  <span class="name"><a href="solvers_solvers/solvers_solvers-library.html">solvers</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="string_stuff">
+  <span class="name"><a href="util_string_stuff/util_string_stuff-library.html">string_stuff</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="util">
+  <span class="name"><a href="util_util/util_util-library.html">util</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">dart_noob package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">dart_noob</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="solvers_aoc15_day1/solvers_aoc15_day1-library.html">aoc15_day1</a></li>
+      <li><a href="solvers_aoc15_day2/solvers_aoc15_day2-library.html">aoc15_day2</a></li>
+      <li><a href="solvers_aoc15_day3/solvers_aoc15_day3-library.html">aoc15_day3</a></li>
+      <li><a href="solvers_aoc15_day4/solvers_aoc15_day4-library.html">aoc15_day4</a></li>
+      <li><a href="solvers_aoc15_day5/solvers_aoc15_day5-library.html">aoc15_day5</a></li>
+      <li><a href="solvers_aoc15_day6/solvers_aoc15_day6-library.html">aoc15_day6</a></li>
+      <li><a href="solvers_aoc15_day7/solvers_aoc15_day7-library.html">aoc15_day7</a></li>
+      <li><a href="solvers_aoc15_day8/solvers_aoc15_day8-library.html">aoc15_day8</a></li>
+      <li><a href="solvers_aoc15_day9/solvers_aoc15_day9-library.html">aoc15_day9</a></li>
+      <li><a href="solvers_aoc15_day10/solvers_aoc15_day10-library.html">aoc15_day10</a></li>
+      <li><a href="solvers_aoc15_day11/solvers_aoc15_day11-library.html">aoc15_day11</a></li>
+      <li><a href="solvers_aoc15_day12/solvers_aoc15_day12-library.html">aoc15_day12</a></li>
+      <li><a href="solvers_aoc15_day13/solvers_aoc15_day13-library.html">aoc15_day13</a></li>
+      <li><a href="solvers_aoc15_day14/solvers_aoc15_day14-library.html">aoc15_day14</a></li>
+      <li><a href="solvers_aoc15_day15/solvers_aoc15_day15-library.html">aoc15_day15</a></li>
+      <li><a href="solvers_aoc15_day16/solvers_aoc15_day16-library.html">aoc15_day16</a></li>
+      <li><a href="solvers_aoc15_day17/solvers_aoc15_day17-library.html">aoc15_day17</a></li>
+      <li><a href="solvers_aoc15_day18/solvers_aoc15_day18-library.html">aoc15_day18</a></li>
+      <li><a href="solvers_aoc15_day19/solvers_aoc15_day19-library.html">aoc15_day19</a></li>
+      <li><a href="solvers_aoc15_day20/solvers_aoc15_day20-library.html">aoc15_day20</a></li>
+      <li><a href="solvers_aoc15_day21/solvers_aoc15_day21-library.html">aoc15_day21</a></li>
+      <li><a href="util_cli_args_manager/util_cli_args_manager-library.html">cli_args_manager</a></li>
+      <li><a href="util_handlers/util_handlers-library.html">handlers</a></li>
+      <li><a href="util_logger_manager/util_logger_manager-library.html">logger_manager</a></li>
+      <li><a href="util_output_manager/util_output_manager-library.html">output_manager</a></li>
+      <li><a href="util_sink_manager/util_sink_manager-library.html">sink_manager</a></li>
+      <li><a href="factories_solver_factory/factories_solver_factory-library.html">solver_factory</a></li>
+      <li><a href="solvers_solvers/solvers_solvers-library.html">solvers</a></li>
+      <li><a href="util_string_stuff/util_string_stuff-library.html">string_stuff</a></li>
+      <li><a href="util_util/util_util-library.html">util</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dart_noob
+      0.0.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

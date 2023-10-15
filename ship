@@ -1,9 +1,11 @@
 #!/usr/bin/env sh
+set -xe
 dart format . && \
 dart test || exit 1 \
 dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib && \
 dart compile exe bin/aoc2015.dart -o aoc2015 --target-os macos && \
 dart doc && \
-for i in {1..25}; do ./aoc2015 -m d${i} -i data/aoc2015_day${i}_input.txt; done
+for i in {1..21}; do ./aoc2015 -m d${i} -i data/aoc2015_day${i}_input.txt; done
+git add --all && \
 git commit -am "auto commit" && \
 git push

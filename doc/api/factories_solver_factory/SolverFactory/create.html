@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the create method from the SolverFactory class, for the Dart programming language.">
+  <title>create method - SolverFactory class - solver_factory library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../factories_solver_factory/factories_solver_factory-library.html">solver_factory</a></li>
+    <li><a href="../../factories_solver_factory/SolverFactory-class.html">SolverFactory</a></li>
+    <li class="self-crumb">create static method</li>
+  </ol>
+  <div class="self-name">create</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="factories_solver_factory&#47;SolverFactory-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">create</span> static method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://pub.dev/documentation/dartz/0.10.1/dartz/Either-class.html">Either</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../factories_solver_factory/AoCSolver-class.html">AoCSolver</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">create</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="create-param-mode"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span> <span class="parameter-name">mode</span>, </span></li>
+<li><span class="parameter" id="create-param-input"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/StringBuffer-class.html">StringBuffer</a>?</span> <span class="parameter-name">input</span>, </span></li>
+<li><span class="parameter" id="create-param-filePath">[<span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">filePath</span>]</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Either&lt;String, List&lt;AoCSolver&gt;&gt; create(
+    String mode, StringBuffer? input,
+    [String? filePath]) {
+  switch (mode) {
+    case &#39;d1&#39;:
+      return Right(
+          [Day1P1Solver(input, filePath), Day1P2Solver(input, filePath)]);
+    case &#39;d2&#39;:
+      return Right(
+          [Day2P1Solver(input, filePath), Day2P2Solver(input, filePath)]);
+    case &#39;d3&#39;:
+      return Right(
+          [Day3P1Solver(input, filePath), Day3P2Solver(input, filePath)]);
+    case &#39;d4&#39;:
+      return Right(
+          [Day4P1Solver(input, filePath), Day4P2Solver(input, filePath)]);
+    case &#39;d5&#39;:
+      return Right(
+          [Day5P1Solver(input, filePath), Day5P2Solver(input, filePath)]);
+    case &#39;d6&#39;:
+      return Right(
+          [Day6P1Solver(input, filePath), Day6P2Solver(input, filePath)]);
+    case &#39;d7&#39;:
+      return Right(
+          [Day7P1Solver(input, filePath), Day7P2Solver(input, filePath)]);
+    case &#39;d8&#39;:
+      return Right(
+          [Day8P1Solver(input, filePath), Day8P2Solver(input, filePath)]);
+    case &#39;d9&#39;:
+      return Right(
+          [Day9P1Solver(input, filePath), Day9P2Solver(input, filePath)]);
+    case &#39;d10&#39;:
+      return Right([
+        Day10P1Solver(input, filePath),
+        Day10P2Solver(input, filePath),
+      ]);
+    case &#39;d11&#39;:
+      return Right([
+        Day11P1Solver(input, filePath),
+        Day11P2Solver(input, filePath),
+      ]);
+    case &#39;d12&#39;:
+      return Right([
+        Day12P1Solver(input, filePath),
+        Day12P2Solver(input, filePath),
+      ]);
+    case &#39;d13&#39;:
+      return Right([
+        Day13P1Solver(input, filePath),
+        Day13P2Solver(input, filePath),
+      ]);
+    case &#39;d14&#39;:
+      return Right([
+        Day14P1Solver(input, filePath),
+        Day14P2Solver(input, filePath),
+      ]);
+    case &#39;d15&#39;:
+      return Right([
+        Day15P1Solver(input, filePath),
+        Day15P2Solver(input, filePath),
+      ]);
+    case &#39;d16&#39;:
+      return Right([
+        Day16P1Solver(input, filePath),
+        Day16P2Solver(input, filePath),
+      ]);
+    case &#39;d17&#39;:
+      return Right([
+        Day17P1Solver(input, filePath),
+        Day17P2Solver(input, filePath),
+      ]);
+    case &#39;d18&#39;:
+      return Right([
+        Day18P1Solver(input, filePath),
+        Day18P2Solver(input, filePath),
+      ]);
+    case &#39;d19&#39;:
+      return Right([
+        Day19P1Solver(input, filePath),
+        Day19P2Solver(input, filePath),
+      ]);
+    case &#39;d20&#39;:
+      return Right([
+        Day20P1Solver(input, filePath),
+        Day20P2Solver(input, filePath),
+      ]);
+    case &#39;d21&#39;:
+      return Right([
+        Day21P1Solver(input, filePath),
+        Day21P2Solver(input, filePath),
+      ]);
+    &#47;&#47; TODO: Actually do some verification here
+    default:
+      return Left(&quot;Unknown mode: $mode&quot;);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../factories_solver_factory/factories_solver_factory-library.html">solver_factory</a></li>
+    <li><a href="../../factories_solver_factory/SolverFactory-class.html">SolverFactory</a></li>
+    <li class="self-crumb">create static method</li>
+</ol>
+
+
+    <h5>SolverFactory class</h5>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dart_noob
+      0.0.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

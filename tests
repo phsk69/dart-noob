@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # requries dart and lcov
+set -xe
 rm -rf coverage/ && \
 mkdir coverage/ && \
 dart run test --coverage=coverage/ && \
