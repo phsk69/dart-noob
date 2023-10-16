@@ -89,7 +89,34 @@ Either&lt;String, String&gt; solve() {
       return Left(&#39;Input is empty.&#39;);
     }
 
-    return Right(&#39;Day21P2Solver: placeholder&#39;);
+    final bossStats = parseD21Input(inputData);
+
+    int maxCostToLose = 0;
+
+    for (var weapon in weapons) {
+      for (var armor in armors) {
+        for (var ring1 in rings) {
+          for (var ring2 in rings) {
+            if (ring1.name == ring2.name &amp;&amp; ring1.name != &#39;NoRing&#39;) {
+              continue;
+            }
+
+            int totalCost =
+                weapon.cost + armor.cost + ring1.cost + ring2.cost;
+            int playerDamage = weapon.damage + ring1.damage + ring2.damage;
+            int playerArmor = armor.armor + ring1.armor + ring2.armor;
+
+            if (!doesPlayerWin(
+                [playerStats[0], playerDamage, playerArmor], bossStats)) {
+              if (totalCost &gt; maxCostToLose) {
+                maxCostToLose = totalCost;
+              }
+            }
+          }
+        }
+      }
+    }
+    return Right(&#39;Day21P2Solver: $maxCostToLose&#39;);
   } catch (e) {
     var errorMsg = &#39;Day21P2Solver: ${e.toString()}&#39;;
     return Left(errorMsg);

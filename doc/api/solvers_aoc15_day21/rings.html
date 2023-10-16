@@ -64,7 +64,7 @@
           
           <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day21/Item-class.html">Item</a></span>&gt;</span>
           <span class="name ">rings</span>
-          <div class="features"><span class="feature">read / write</span></div>
+          <div class="features"><span class="feature">final</span></div>
 
         </section>
         
@@ -72,14 +72,14 @@
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">List&lt;Item&gt; rings = [
+  <pre class="language-dart"><code class="language-dart">final rings = [
   Item(&#39;Damage +1&#39;, 25, 1, 0),
   Item(&#39;Damage +2&#39;, 50, 2, 0),
   Item(&#39;Damage +3&#39;, 100, 3, 0),
   Item(&#39;Defense +1&#39;, 20, 0, 1),
   Item(&#39;Defense +2&#39;, 40, 0, 2),
   Item(&#39;Defense +3&#39;, 80, 0, 3),
-  Item(&#39;NoRing&#39;, 0, 0, 0),
+  Item(&#39;NoRing&#39;, 0, 0, 0), &#47;&#47; No ring option
 ];</code></pre>
 </section>
 

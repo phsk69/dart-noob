@@ -1,6 +1,8 @@
 import 'package:test/test.dart';
 import 'package:dart_noob/solvers/aoc15_day20.dart';
 
+// TODO: Convert the static buffers to files by buffering the input files via string_stuff
+
 void main() {
   group('Day20P1Solver', () {
     test('computes the correct house number with provided input', () {
