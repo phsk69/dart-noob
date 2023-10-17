@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the solve method from the Day6P1Solver class, for the Dart programming language.">
+  <title>solve method - Day6P1Solver class - aoc15_day6 library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../solvers_aoc15_day6/solvers_aoc15_day6-library.html">aoc15_day6</a></li>
+    <li><a href="../../solvers_aoc15_day6/Day6P1Solver-class.html">Day6P1Solver</a></li>
+    <li class="self-crumb">solve method</li>
+  </ol>
+  <div class="self-name">solve</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="solvers_aoc15_day6&#47;Day6P1Solver-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">solve</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.dart.dev/stable/3.1.0/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+
+<span class="returntype"><a href="https://pub.dev/documentation/dartz/0.10.1/dartz/Either-class.html">Either</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span>&gt;</span></span>
+<span class="name ">solve</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Either&lt;String, String&gt; solve() {
+  try {
+    var inputData = input?.toString() ?? getStringSync(filePath!);
+    if (inputData.trim().isEmpty) {
+      return Left(&#39;Input is empty.&#39;);
+    }
+
+    final int width = 1000;
+    final int height = 1000;
+
+    List&lt;List&lt;int&gt;&gt; grid = List.generate(height, (y) {
+      return List.generate(width, (x) {
+        return 0;
+      });
+    });
+
+    for (var line in inputData.split(&#39;\n&#39;).where((line) =&gt; line.isNotEmpty)) {
+      var instruction = line.split(&#39; &#39;);
+      String action;
+      List&lt;String&gt; start;
+      List&lt;String&gt; end;
+
+      if (instruction[0] == &quot;toggle&quot;) {
+        action = &quot;toggle&quot;;
+        start = instruction[1].split(&#39;,&#39;);
+        end = instruction[3].split(&#39;,&#39;);
+      } else {
+        action = instruction[1]; &#47;&#47; &quot;on&quot; or &quot;off&quot;
+        start = instruction[2].split(&#39;,&#39;);
+        end = instruction[4].split(&#39;,&#39;);
+      }
+
+      var startX = int.parse(start[0]);
+      var startY = int.parse(start[1]);
+      var endX = int.parse(end[0]);
+      var endY = int.parse(end[1]);
+
+      for (var y = startY; y &lt;= endY; y++) {
+        for (var x = startX; x &lt;= endX; x++) {
+          switch (action) {
+            case &#39;on&#39;:
+              grid[y][x] = 1;
+              break;
+            case &#39;off&#39;:
+              grid[y][x] = 0;
+              break;
+            case &#39;toggle&#39;:
+              grid[y][x] = grid[y][x] == 0 ? 1 : 0;
+              break;
+          }
+        }
+      }
+    }
+    int turnedOnLights =
+        grid.expand((i) =&gt; i).where((cell) =&gt; cell == 1).length;
+
+    return Right(&#39;Day6P1Solver: $turnedOnLights&#39;);
+  } catch (e) {
+    return Left(e.toString());
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../solvers_aoc15_day6/solvers_aoc15_day6-library.html">aoc15_day6</a></li>
+    <li><a href="../../solvers_aoc15_day6/Day6P1Solver-class.html">Day6P1Solver</a></li>
+    <li class="self-crumb">solve method</li>
+</ol>
+
+
+    <h5>Day6P1Solver class</h5>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dart_noob
+      0.0.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

@@ -1,16 +1,22 @@
 name: dart_noob
 description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+version: 0.0.1
+repository: 
 
 environment:
   sdk: ^3.1.0
 
 # Add regular dependencies here.
 dependencies:
-  pocketbase: ^0.14.1
-  # path: ^1.8.0
+  args: ^2.4.2
+  benchmark_harness: ^2.2.2
+  dartz: ^0.10.1
+  crypto: ^3.0.3
+  logging: ^1.2.0
+  trotter: ^2.2.0
 
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.21.0
+  mockito: ^5.4.2
+  coverage: any
