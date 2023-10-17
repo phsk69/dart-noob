@@ -8,7 +8,10 @@
             "name": "Dart",
             "type": "dart",
             "request": "launch",
-            "program": "bin/dart_noob.dart"
+            "program": "bin/aoc2015.dart",
+            //"args": [
+            //    "-o output/output.txt", "-l output/log.log", "-e output/err.log"
+            //],
         },
     ]
 }
