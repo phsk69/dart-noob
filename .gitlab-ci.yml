@@ -1,3 +1,5 @@
+image: cirrusci/flutter:stable
+
 stages:
   - test_coverage
 
@@ -8,16 +10,17 @@ before_script:
 
 test_coverage:
   stage: test_coverage
-  
+
   script:
-    - dart run test --coverage=coverage/
-    - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
-    - genhtml coverage/lcov.info -o coverage/
+    - dart test --coverage ./lib 
+    - lcov -r coverage/lcov.info '*/__test*__/*' -o coverage/lcov_cleaned.info
+    - genhtml coverage/lcov_cleaned.info --output=coverage
+  
   artifacts:
     paths:
       - coverage
   tags:
-    - dart
+    - docker
 
   only:
     - /^feature/.*$/
