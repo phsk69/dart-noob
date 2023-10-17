@@ -1,0 +1,25 @@
+stages:
+  - test_coverage
+
+before_script:
+  - dart pub get
+  - dart clean
+  - dart --version
+
+test_coverage:
+  stage: test_coverage
+  
+  script:
+    - dart run test --coverage=coverage/
+    - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
+    - genhtml coverage/lcov.info -o coverage/
+  artifacts:
+    paths:
+      - coverage
+  tags:
+    - shared
+
+  only:
+    - /^feature/.*$/
+    - merge_requests
+    #- main

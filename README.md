@@ -6,8 +6,8 @@ A project for solving AOC2015 and learning dart along the way
 
 ### Requirements
 
-- Dart 3.1.X+ SDK
-- lcov 2.X+ (For `tests.sh`)
+- Dart SDK: 3.1.X+
+- lcov: 2.X+ (For `tests.sh`)
 - A default HTML viewer (For `tests.sh`)
 
 ### Prepare dart project
