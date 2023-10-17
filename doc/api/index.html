@@ -53,162 +53,78 @@
       
 <section class="desc markdown">
   <h1 id="dart_noob">dart_noob</h1>
-<h2 id="vscode-stuff">vscode stuff</h2>
+<p>A project for solving AOC2015 and learning dart along the way</p>
+<h2 id="setup">Setup</h2>
+<h3 id="requirements">Requirements</h3>
 <ul>
-<li>Dart vscode launch config: <a href="https://dartcode.org/docs/launch-configuration/">dartcode.org/docs/launch-configuration/</a></li>
+<li>Dart 3.1.X+ SDK</li>
+<li>lcov 2.X+ (For <code>tests.sh</code>)</li>
+<li>A default HTML viewer (For <code>tests.sh</code>)</li>
 </ul>
-<h2 id="useful-examples">Useful examples</h2>
-<h3 id="cli-app-with-the-works">CLI app with the works</h3>
-<pre class="language-dart"><code class="language-dart">import 'dart:io';
-import 'package:args/args.dart';
-import 'package:dartz/dartz.dart';
-import 'dart:convert';
-import 'package:logging/logging.dart';
-
-void main(List&lt;String&gt; args) async {
-  final parser = ArgParser()
-    ..addOption('inputfile',
-        abbr: 'i', help: 'Specify the path of the input file')
-    ..addOption('errorlog', abbr: 'e', help: 'Specify the file to write errors')
-    ..addOption('output', abbr: 'o', help: 'Specify the file to write output')
-    ..addOption('mode', abbr: 'm', help: 'Define the mode')
-    ..addOption('logfile', abbr: 'l', help: 'Specify the file to log messages')
-    ..addOption('loglevel',
-        abbr: 'v',
-        help: 'Specify the logging level (default is WARNING)',
-        allowed: ['ALL', 'OFF', 'FINE', 'INFO', 'WARNING', 'SEVERE', 'SHOUT']);
-
-  final parsedArgs = parser.parse(args);
-
-  // Set log level from command line arguments or default to WARNING
-  var logLevel = Level.WARNING;
-  if (parsedArgs['loglevel'] != null) {
-    logLevel = Level.LEVELS.firstWhere(
-        (l) =&gt; l.name == parsedArgs['loglevel'].toUpperCase(),
-        orElse: () =&gt; Level.WARNING);
-  }
-  Logger.root.level = logLevel;
-
-  // Log to stdout by default
-  Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
-
-  // Log to file if option is specified
-  if (parsedArgs['logfile'] != null) {
-    final logFile = File(parsedArgs['logfile'] as String);
-    Logger.root.onRecord.listen((record) async {
-      final logLine = '${record.level.name}: ${record.time}: ${record.message}';
-      await logFile.writeAsString('$logLine\n', mode: FileMode.append);
-    });
-  }
-
-  final log = Logger('CLI'); // Create a logger for this class
-  log.fine('Parsing command line arguments');
-
-  StringBuffer inputDataBuffer = StringBuffer();
-
-  if (!stdin.hasTerminal) {
-    await for (var line
-        in stdin.transform(Utf8Decoder()).transform(LineSplitter())) {
-      inputDataBuffer.writeln(line);
-    }
-  } else {
-    inputDataBuffer
-        .write(await _fetchDataFromFile(parsedArgs['inputfile'] as String?));
-  }
-  // TODO: Make default_data a new and more dynamic type of list as default
-  // See task_list and the builder stunts we were doing with charlie
-  var inputData = inputDataBuffer.toString().isEmpty
-      ? 'default_data'
-      : inputDataBuffer.toString();
-
-  var result = demoFunction(inputData, parsedArgs['mode']);
-
-  if (result.isLeft()) {
-    if (parsedArgs['errorlog'] != null) {
-      await File(parsedArgs['errorlog'] as String).writeAsString(
-          result.fold((leftValue) =&gt; leftValue, (rightValue) =&gt; rightValue));
-    } else {
-      stderr.writeln(
-          result.fold((leftValue) =&gt; leftValue, (rightValue) =&gt; rightValue));
-    }
-  } else {
-    if (parsedArgs['output'] != null) {
-      await File(parsedArgs['output'] as String)
-          .writeAsString(result.getOrElse(() =&gt; ''));
-    } else {
-      print(result.getOrElse(() =&gt; ''));
-    }
-  }
-}
-
-Future&lt;String&gt; _fetchDataFromFile(String? path) async {
-  if (path == null) return 'default_data';
-  return await File(path)
-      .openRead()
-      .transform(Utf8Decoder())
-      .transform(LineSplitter())
-      .first;
-}
-
-Either&lt;String, String&gt; demoFunction(String input, String? mode) {
-  // Here you can handle different modes with different logic.
-  if (mode == 'mode1') {
-    return Right('Mode 1: $input');
-  }
-
-  // If no mode matches, return an error
-  return Left('Invalid mode: $mode');
-}
+<h3 id="prepare-dart-project">Prepare dart project</h3>
+<pre class="language-bash"><code class="language-bash">dart pub get
 </code></pre>
-<h3 id="return-errors-by-value">Return errors by value</h3>
-<pre class="language-dart"><code class="language-dart">// Simple demo setup
-import 'package:dartz/dartz.dart';
-
-Either&lt;String, int&gt; divide(int dividend, int divisor) {
-  if (divisor == 0) {
-    return Left("Cannot divide by zero");
-  } else {
-    return Right(dividend ~/ divisor);
-  }
-}
-
-final result = divide(10, 2);
-result.fold(
-  (l) =&gt; print('Error: $l'), 
-  (r) =&gt; print('Result: $r')
-);
+<h2 id="usage-examples">Usage examples</h2>
+<h3 id="print-help">Print help</h3>
+<pre class="language-bash"><code class="language-bash">./aoc2015 -h
 </code></pre>
-<h3 id="return-errors-by-value-with-futures">Return errors by value with Futures</h3>
-<pre class="language-dart"><code class="language-dart">// For async shit
-class Result&lt;T&gt; {
-  final T? value;
-  final Object? error;
-
-  bool get isSuccess =&gt; error == null;
-  bool get isError =&gt; !isSuccess;
-
-  Result.success(this.value) : error = null;
-  Result.error(this.error) : value = null;
-}
-
-Future&lt;Result&lt;String&gt;&gt; fetchSomething() async {
-  try {
-    String result = await someAsyncOperation();
-    return Result.success(result);
-  } catch (e) {
-    return Result.error(e);
-  }
-}
-var result = await fetchSomething();
-if (result.isSuccess) {
-  print(result.value);
-} else {
-  // TODO: Change all this to logging
-  print('Error occurred: ${result.error}');
-}
+<h4 id="example-output">Example output</h4>
+<pre class="language-text"><code class="language-text">➜  dart_noob git:(feature/aoc2015) ✗ ./aoc2015 -h
+Usage: aoc2015 [options]
+-h, --help          Displays this help information.
+-i, --inputFile     Specify the path of the input file
+-o, --outputFile    Specify the file to write output
+-l, --logFile       Specify the file to log messages
+-v, --logLevel      Specify the logging level (default is INFO)
+                    [ALL, OFF, FINE, INFO, WARNING, SEVERE, SHOUT]
+-m, --mode          Mode of operation
 </code></pre>
+<h3 id="run-a-specific-day-output-to-stdout-only">Run a specific day, output to stdout only</h3>
+<pre class="language-bash"><code class="language-bash">./aoc2015 -m d21 -i data/aoc2015_day21_input.txt 
+</code></pre>
+<h4 id="example-output-for-a-specific-day">Example output for a specific day</h4>
+<pre class="language-text"><code class="language-text">➜  dart_noob git:(feature/aoc2015) ✗ ./aoc2015 -m d21 -i data/aoc2015_day21_input.txt 
+Input: data/aoc2015_day21_input.txt
+Mode: d21
+Day21P1Solver: 111
+Day21P2Solver: 188
+</code></pre>
+<h3 id="log-to-file">Log to file</h3>
+<h4 id="with-default-log-level-info">With default log level (INFO)</h4>
+<pre class="language-bash"><code class="language-bash">./aoc2015 -m d21 -i data/aoc2015_day21_input.txt -l output/log.log
+</code></pre>
+<h4 id="example-log-structure">Example log structure</h4>
+<pre class="language-text"><code class="language-text">➜  dart_noob git:(feature/aoc2015) ✗ cat output/log.log
+2023-10-17T17:09:57.820346Z - INFO - Log: output/log.log
+2023-10-17T17:09:57.820550Z - INFO - Input: data/aoc2015_day21_input.txt
+2023-10-17T17:09:57.821081Z - INFO - Day21P1Solver: 111
+2023-10-17T17:09:57.821155Z - INFO - Day21P2Solver: 188
+</code></pre>
+<h4 id="with-all-log-level">With ALL log level</h4>
+<pre class="language-bash"><code class="language-bash">./aoc2015 -m d21 -i data/aoc2015_day21_input.txt -l output/log.log -v ALL
+</code></pre>
+<h3 id="output-to-file">Output to file</h3>
+<pre class="language-bash"><code class="language-bash">./aoc2015 -m d21 -i data/aoc2015_day21_input.txt -o output/output.txt
+</code></pre>
+<h4 id="example-output-structure">Example output structure</h4>
+<pre class="language-text"><code class="language-text">➜  dart_noob git:(feature/aoc2015) ✗ cat output/output.txt
+Input: data/aoc2015_day21_input.txt
+Output: output/output.txt
+Mode: d21
+Day21P1Solver: 111
+</code></pre>
+<h2 id="dev-tools">Dev tools</h2>
+<ul>
+<li><code>build.sh</code>: Builds the aoc2015 executable and runs all the days with only the required arguments</li>
+<li><code>docs.sh</code>: Generates API documentation through <code>dart doc</code> and opens the resulting html via syscall</li>
+<li><code>ship.sh</code>
+<ul>
+<li>Builds the project</li>
+<li>Generates a fresh set of doc files with <code>dart doc</code></li>
+<li>Stages the entire project in git and pushes it with 'auto commit' as commit msg</li>
+</ul>
+</li>
+</ul>
 </section>
 
 
