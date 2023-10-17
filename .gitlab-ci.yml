@@ -17,7 +17,7 @@ test_coverage:
     paths:
       - coverage
   tags:
-    - shared
+    - dart
 
   only:
     - /^feature/.*$/
