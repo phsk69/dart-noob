@@ -55,7 +55,8 @@ build-windows:
     - main
 
 collect-artifacts:
-  stage: build
+  image: dart:stable-sdks
+  tag: build
   script:
     - echo "Artifacts collected"
   artifacts:
@@ -68,7 +69,7 @@ collect-artifacts:
     - build-macos
     - build-windows
   tags:
-    - windows
+    - docker
   only:
     - /^feature/.*$/
     - main
