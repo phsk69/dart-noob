@@ -1,28 +1,55 @@
-image: cirrusci/flutter:stable
 
 stages:
-  - test_coverage
+  - test
+  - build
 
 before_script:
   - dart pub get
-  - dart clean
-  - dart --version
 
-test_coverage:
-  stage: test_coverage
-
+test:
+  image: dart:stable-sdk
+  stage: test
   script:
-    - dart test --coverage ./lib 
-    - lcov -r coverage/lcov.info '*/__test*__/*' -o coverage/lcov_cleaned.info
-    - genhtml coverage/lcov_cleaned.info --output=coverage
-  
-  artifacts:
-    paths:
-      - coverage
+    - dart test
   tags:
     - docker
-
+  
+build-linux:
+  image: dart:stable-sdk
+  stage: build
+  script:
+    - dart compile exe bin/aoc2015.dart -o aoc2015-linux-x64 --target-os linux
+  artifacts:
+    paths:
+      - aoc2015-linux-x64
+  tags:
+    - docker
   only:
     - /^feature/.*$/
-    - merge_requests
-    #- main
+    - main
+
+build-macos:
+  stage: build
+  script:
+    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
+  artifacts:
+    paths:
+      - aoc2015-darwin-x64
+  tags:
+    - macos
+  only:
+    - /^feature/.*$/
+    - main
+
+build-windows:
+  stage: build
+  script:
+    - dart compile exe bin/aoc2015.dart -o aoc2015-windows-x64.exe --target-os windows
+  artifacts:
+    paths:
+      - aoc2015-windows-x64.exe
+  tags:
+    - windows
+  only:
+    - /^feature/.*$/
+    - main
