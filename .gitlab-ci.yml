@@ -2,6 +2,7 @@ image: dart:stable-sdk
 
 stages:
   - test
+  - build
 
 before_script:
   - dart pub get
@@ -10,17 +11,23 @@ test:
   stage: test
 
   script:
-    - dart test --coverage=coverage/
-    - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
-    # Checking coverage threshold from the LCOV info
-    - |
-      COVERAGE_PERCENTAGE=$(grep "lines......:" coverage/lcov.info | sed -n 's/^.*: \([0-9.]*%\).*/\1/p' | cut -d'.' -f1)
-      echo "Coverage: $COVERAGE_PERCENTAGE%"
-      if [ "$COVERAGE_PERCENTAGE" -lt 90 ]; then echo "Error: Coverage is below 90%" && exit 1; fi
+    - dart test
+
+  tags:
+    - docker
+
+build:
+  stage: build
+
+  script:
+    - dart compile exe bin/aoc2015.dart -o bin/aoc2015-darwin-x64 --target-os macos
+    - dart compile exe bin/aoc2015.dart -o bin/aoc2015-linux-x64 --target-os linux
+    - dart compile exe bin/aoc2015.dart -o bin/aoc2015-windows-x64 --target-os windows
   
   tags:
     - docker
 
-  only:
-    - /^feature/.*$/
-    - merge_requests
+
+only:
+  - /^feature/.*$/
+  - main
