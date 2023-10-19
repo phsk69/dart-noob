@@ -22,7 +22,13 @@ build:
   script:
     - dart compile exe bin/aoc2015.dart -o bin/aoc2015-darwin-x64 --target-os macos
     - dart compile exe bin/aoc2015.dart -o bin/aoc2015-linux-x64 --target-os linux
-    - dart compile exe bin/aoc2015.dart -o bin/aoc2015-windows-x64 --target-os windows
+    - dart compile exe bin/aoc2015.dart -o bin/aoc2015-windows-x64.exe --target-os windows
+
+  artifacts:
+    paths:
+      - bin/aoc2015-darwin-x64
+      - bin/aoc2015-linux-x64
+      - bin/aoc2015-windows-x64.exe
   
   tags:
     - docker
