@@ -17,6 +17,7 @@ test:
     - docker
   
 build-linux:
+  image: dart:stable-sdk
   stage: build
 
   script:
@@ -37,7 +38,7 @@ build-macos:
   stage: build
 
   script:
-    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64.exe --target-os macos
+    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
 
   artifacts:
     paths:
