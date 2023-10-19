@@ -12,9 +12,9 @@ test:
   script:
     - dart test --coverage=coverage/
     - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
+    # Checking coverage threshold from the LCOV info
     - |
-      LCOV_SUMMARY=$(lcov --summary coverage/lcov.info 2>&1)
-      COVERAGE_PERCENTAGE=$(echo $LCOV_SUMMARY | sed -n 's/.*lines......: \([0-9.]*%\).*/\1/p' | cut -d'.' -f1)
+      COVERAGE_PERCENTAGE=$(grep "lines......:" coverage/lcov.info | sed -n 's/^.*: \([0-9.]*%\).*/\1/p' | cut -d'.' -f1)
       echo "Coverage: $COVERAGE_PERCENTAGE%"
       if [ "$COVERAGE_PERCENTAGE" -lt 90 ]; then echo "Error: Coverage is below 90%" && exit 1; fi
   
