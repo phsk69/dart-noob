@@ -6,14 +6,12 @@ stages:
 before_script:
   - dart pub get
 
-test_coverage:
+test:
   stage: test
 
   script:
-    - apt-get update -qq && apt-get install -y -qq lcov
     - dart test --coverage=coverage/
     - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
-    # Checking coverage threshold without generating detailed report
     - |
       LCOV_SUMMARY=$(lcov --summary coverage/lcov.info 2>&1)
       COVERAGE_PERCENTAGE=$(echo $LCOV_SUMMARY | sed -n 's/.*lines......: \([0-9.]*%\).*/\1/p' | cut -d'.' -f1)
