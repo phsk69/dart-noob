@@ -55,8 +55,8 @@ build-windows:
     - main
 
 collect-artifacts:
-  image: dart:stable-sdks
-  tag: build
+  image: dart:stable-sdk
+  stage: build
   script:
     - echo "Artifacts collected"
   artifacts:
