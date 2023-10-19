@@ -15,7 +15,7 @@ test:
 
   tags:
     - docker
-
+  
 build:
   stage: build
 
@@ -26,8 +26,7 @@ build:
   
   tags:
     - docker
-
-
-only:
-  - /^feature/.*$/
-  - main
+  
+  only:
+    - /^feature/.*$/
+    - main
