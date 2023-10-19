@@ -5,8 +5,6 @@ stages:
 
 before_script:
   - dart pub get
-  - dart clean
-  - dart --version
 
 test_coverage:
   stage: test_coverage
