@@ -1,4 +1,4 @@
-image: cirrusci/flutter:stable
+image: dart:stable-sdk
 
 stages:
   - test_coverage
@@ -12,6 +12,7 @@ test_coverage:
   stage: test_coverage
 
   script:
+    - apt-get update -qq && apt-get install -y -qq lcov
     - dart test --coverage ./lib 
     - lcov -r coverage/lcov.info '*/__test*__/*' -o coverage/lcov_cleaned.info
     - genhtml coverage/lcov_cleaned.info --output=coverage
