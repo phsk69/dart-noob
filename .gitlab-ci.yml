@@ -1,4 +1,3 @@
-image: dart:stable-sdk
 
 stages:
   - test
@@ -8,6 +7,7 @@ before_script:
   - dart pub get
 
 test:
+  image: dart:stable-sdk
   stage: test
 
   script:
@@ -16,22 +16,52 @@ test:
   tags:
     - docker
   
-build:
+build-linux:
   stage: build
 
   script:
-    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
     - dart compile exe bin/aoc2015.dart -o aoc2015-linux-x64 --target-os linux
-    - dart compile exe bin/aoc2015.dart -o aoc2015-windows-x64.exe --target-os windows
+
+  artifacts:
+    paths:
+      - aoc2015-linux-x64
+  
+  tags:
+    - docker
+  
+  only:
+    - /^feature/.*$/
+    - main
+
+build-macos:
+  stage: build
+
+  script:
+    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64.exe --target-os macos
 
   artifacts:
     paths:
       - aoc2015-darwin-x64
-      - aoc2015-linux-x64
+  
+  tags:
+    - macos
+  
+  only:
+    - /^feature/.*$/
+    - main
+
+build-windows:
+  stage: build
+
+  script:
+    - dart compile exe bin/aoc2015.dart -o aoc2015-windows-x64.exe --target-os windows
+
+  artifacts:
+    paths:
       - aoc2015-windows-x64.exe
   
   tags:
-    - docker
+    - windows
   
   only:
     - /^feature/.*$/
