@@ -12,8 +12,13 @@ test_coverage:
   script:
     - apt-get update -qq && apt-get install -y -qq lcov
     - dart test --coverage=coverage/
-    - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib && \
+    - dart run coverage:format_coverage --lcov --in=coverage/ --out=coverage/lcov.info --package=. --report-on=lib
     - genhtml coverage/lcov.info -o coverage/
+    # Checking coverage threshold
+    - LCOV_SUMMARY=$(lcov --summary coverage/lcov.info 2>&1)
+    - COVERAGE_PERCENTAGE=$(echo $LCOV_SUMMARY | sed -n 's/.*lines......: \([0-9.]*%\).*/\1/p' | sed 's/%//')
+    - echo "Coverage: $COVERAGE_PERCENTAGE%"
+    - if [ $(echo "$COVERAGE_PERCENTAGE < 90" | bc -l) -eq 1 ]; then echo "Error: Coverage is below 90%" && exit 1; fi
   
   artifacts:
     paths:
@@ -24,4 +29,3 @@ test_coverage:
   only:
     - /^feature/.*$/
     - merge_requests
-    #- main
