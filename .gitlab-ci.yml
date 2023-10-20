@@ -21,6 +21,7 @@ build-linux:
   artifacts:
     paths:
       - aoc2015-linux-x64
+      - data/*.txt
   tags:
     - docker
   only:
@@ -34,7 +35,6 @@ build-macos:
   artifacts:
     paths:
       - aoc2015-darwin-x64
-      - data/*.txt
   tags:
     - macos
   only:
@@ -48,7 +48,7 @@ build-windows:
   artifacts:
     paths:
       - aoc2015-windows-x64.exe
-      - data/*.txt
+
   tags:
     - windows
   only:
