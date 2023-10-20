@@ -75,11 +75,39 @@ Future<void> main(List<String> args) async {
         });
       }
     });
-  } else {
-    const String invalidModeOrInputMsg =
-        'Mode or input file path not supported';
-    outputManager.writeError(invalidModeOrInputMsg);
-    logger?.severe(invalidModeOrInputMsg);
+  } else if (mode == null && inputFile == null && inputBuffer == null) {
+    outputManager.writeOutput('Mode: default');
+    final solversResult = SolverFactory.create('default', null);
+
+    solversResult.fold((error) {
+      outputManager.writeError(error);
+      logger?.severe(error);
+    }, (solvers) {
+      for (var solver in solvers) {
+        final result = solver.solve();
+        result.fold((l) {
+          // Handle the left side (error)
+          outputManager.writeError(l);
+          logger?.severe(l);
+        }, (r) {
+          // Handle the right side (success)
+          outputManager.writeOutput(r);
+          logger?.info(r);
+        });
+      }
+    });
+  } else if (mode == null) {
+    const String invalidModeMsg = 'Mode not supported';
+    outputManager.writeError(invalidModeMsg);
+    logger?.severe(invalidModeMsg);
+  } else if (inputFile == null) {
+    const String invalidInputMsg = 'Input file path not supported';
+    outputManager.writeError(invalidInputMsg);
+    logger?.severe(invalidInputMsg);
+  } else if (inputBuffer == null) {
+    const String invalidInputBufferMsg = 'Input buffer is null';
+    outputManager.writeError(invalidInputBufferMsg);
+    logger?.severe(invalidInputBufferMsg);
   }
 
   await handleCloseResources(sinkManager.logSink, sinkManager.outputSink);
