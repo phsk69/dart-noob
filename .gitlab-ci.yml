@@ -32,9 +32,6 @@ build-macos:
   stage: build
   script:
     - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
-  artifacts:
-    paths:
-      - aoc2015-darwin-x64
   tags:
     - macos
   only:
@@ -48,6 +45,7 @@ build-windows:
   artifacts:
     paths:
       - aoc2015-windows-x64.exe
+      - data/*.txt
 
   tags:
     - windows
