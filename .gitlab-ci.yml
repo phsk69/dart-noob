@@ -31,7 +31,7 @@ build-linux:
 build-macos:
   stage: build
   script:
-    - dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
+    - /opt/homebrew/Caskroom/flutter/3.13.0/flutter/bin/cache/dart-sdk/bin//dart compile exe bin/aoc2015.dart -o aoc2015-darwin-x64 --target-os macos
   artifacts:
     paths:
       - aoc2015-darwin-x64
