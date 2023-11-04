@@ -18,10 +18,6 @@ build-linux:
   stage: build
   script:
     - dart compile exe bin/aoc2015.dart -o aoc2015-linux-x64 --target-os linux
-  artifacts:
-    paths:
-      - aoc2015-linux-x64
-      - data/*.txt
   tags:
     - docker
   only:
@@ -42,10 +38,6 @@ build-windows:
   stage: build
   script:
     - dart compile exe bin/aoc2015.dart -o aoc2015-windows-x64.exe --target-os windows
-  artifacts:
-    paths:
-      - aoc2015-windows-x64.exe
-      - data/*.txt
   tags:
     - windows
   only:
