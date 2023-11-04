@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the simulateBattle function from the aoc15_day22 library, for the Dart programming language.">
-  <title>simulateBattle function - aoc15_day22 library - Dart API</title>
+  <meta name="description" content="API docs for the spells property from the aoc15_day22 library, for the Dart programming language.">
+  <title>spells property - aoc15_day22 library - Dart API</title>
 
 
   
@@ -30,9 +30,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">dart_noob</a></li>
     <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
-    <li class="self-crumb">simulateBattle function</li>
+    <li class="self-crumb">spells property</li>
   </ol>
-  <div class="self-name">simulateBattle</div>
+  <div class="self-name">spells</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -56,60 +56,31 @@
       data-above-sidebar="solvers_aoc15_day22&#47;solvers_aoc15_day22-library-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-function">simulateBattle</span> function 
+<h1><span class="kind-top-level-property">spells</span> top-level property 
  
 </h1></div>
 
-    <section class="multi-line-signature">
+        <section class="multi-line-signature">
+          
+          <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span>&gt;</span>
+          <span class="name ">spells</span>
+          <div class="features"><span class="feature">final</span></div>
+
+        </section>
         
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>
-<span class="name ">simulateBattle</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="simulateBattle-param-player"><span class="type-annotation"><a href="../solvers_aoc15_day22/Entity-class.html">Entity</a></span> <span class="parameter-name">player</span>, </span></li>
-<li><span class="parameter" id="simulateBattle-param-bossStats"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">bossStats</span>, </span></li>
-<li><span class="parameter" id="simulateBattle-param-spellSequence"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span>&gt;</span></span> <span class="parameter-name">spellSequence</span></span></li>
-</ol>)
-
         
-
-    </section>
-    
-
-
-    
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">int simulateBattle(
-    Entity player, List&lt;int&gt; bossStats, List&lt;Spell&gt; spellSequence) {
-  Entity boss = Entity(hitPoints: bossStats[0], armor: bossStats[1]);
-  int totalManaSpent = 0;
-
-  &#47;&#47; This is a simple simulation for now, you might need to expand upon this
-  for (var spell in spellSequence) {
-    totalManaSpent += spell.cost;
-    player.mana -= spell.cost;
-
-    &#47;&#47; Player casts spell
-    player.hitPoints += spell.healing;
-    boss.hitPoints -= spell.damage;
-    player.mana += spell.manaEffect;
-
-    &#47;&#47; TODO: Implement duration effects like Shield, Poison, Recharge
-
-    if (player.hitPoints &lt;= 0) return -1; &#47;&#47; Player lost
-    if (boss.hitPoints &lt;= 0) return totalManaSpent; &#47;&#47; Player won
-
-    &#47;&#47; Boss attacks
-    int damage = bossStats[2] - player.armor;
-    if (damage &lt; 1) damage = 1;
-    player.hitPoints -= damage;
-
-    if (player.hitPoints &lt;= 0) return -1; &#47;&#47; Player lost
-    if (boss.hitPoints &lt;= 0) return totalManaSpent; &#47;&#47; Player won
-  }
-
-  return -1; &#47;&#47; Default: Player lost
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">final spells = [
+  Spell(&#39;Magic Missile&#39;, 53, 4, 0, 0, 0, 0),
+  Spell(&#39;Drain&#39;, 73, 2, 2, 0, 0, 0),
+  Spell(&#39;Shield&#39;, 113, 0, 0, 7, 0, 6),
+  Spell(&#39;Poison&#39;, 173, 0, 0, 0, 0, 6),
+  Spell(&#39;Recharge&#39;, 229, 0, 0, 0, 101, 5),
+];</code></pre>
 </section>
+
 
 
   </div> <!-- /.main-content -->
@@ -125,7 +96,7 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">dart_noob</a></li>
     <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
-    <li class="self-crumb">simulateBattle function</li>
+    <li class="self-crumb">spells property</li>
 </ol>
 
 

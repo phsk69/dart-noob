@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the playTurn function from the aoc15_day22 library, for the Dart programming language.">
+  <title>playTurn function - aoc15_day22 library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">dart_noob</a></li>
+    <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
+    <li class="self-crumb">playTurn function</li>
+  </ol>
+  <div class="self-name">playTurn</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="solvers_aoc15_day22&#47;solvers_aoc15_day22-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">playTurn</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+
+<span class="returntype">void</span>
+<span class="name ">playTurn</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="playTurn-param-game"><span class="type-annotation"><a href="../solvers_aoc15_day22/Game-class.html">Game</a></span> <span class="parameter-name">game</span>, </span></li>
+<li><span class="parameter" id="playTurn-param-playerTurn"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">playerTurn</span>, </span></li>
+<li><span class="parameter" id="playTurn-param-logger"><span class="type-annotation"><a href="https://pub.dev/documentation/logging/1.2.0/logging/Logger-class.html">Logger</a>?</span> <span class="parameter-name">logger</span></span></li>
+</ol>)
+
+        
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">void playTurn(Game game, bool playerTurn, Logger? logger) {
+  Game clonedGame = Game.clone(game);
+
+  &#47;&#47; If we&#39;ve already spent too much mana in this game, just return.
+  if (clonedGame.manaSpent &gt; minManaSpentToWin) return;
+
+  &#47;&#47; 1. Apply effects at the start of each turn.
+  clonedGame.applyEffects();
+
+  logger?.info(
+      &#39;After effects: Player HP: ${clonedGame.playerHp}, Player Mana: ${clonedGame.playerMana}, Boss HP: ${clonedGame.bossHp}&#39;);
+
+  &#47;&#47; 2. Check if the boss has been defeated by effects before any other action.
+  if (clonedGame.bossHp &lt;= 0) {
+    if (clonedGame.manaSpent &lt; minManaSpentToWin) {
+      minManaSpentToWin = clonedGame.manaSpent;
+      logger?.info(
+          &#39;Boss defeated by effects. Total mana spent: $minManaSpentToWin&#39;);
+    }
+    return;
+  }
+
+  if (playerTurn) {
+    logger?.info(&#39;--- Player\&#39;s Turn ---&#39;);
+    bool canCastAnySpell = false;
+
+    for (final spell in spells) {
+      if (!clonedGame.canCastSpell(spell)) {
+        logger?.info(
+            &#39;Cannot cast ${spell.name} due to insufficient mana or an existing effect.&#39;);
+        continue;
+      }
+
+      canCastAnySpell = true;
+      logger?.info(&#39;Casting ${spell.name}.&#39;);
+
+      Game next = Game.clone(clonedGame);
+      next.manaSpent += spell.cost;
+      next.playerMana -= spell.cost;
+
+      switch (spell.name) {
+        case &#39;Magic Missile&#39;:
+          next.bossHp -= spell.damage;
+          break;
+        case &#39;Drain&#39;:
+          next.bossHp -= spell.damage;
+          next.playerHp += spell.heal;
+          break;
+        case &#39;Shield&#39;:
+          next.shieldTimer = spell.duration;
+          break;
+        case &#39;Poison&#39;:
+          next.poisonTimer = spell.duration;
+          break;
+        case &#39;Recharge&#39;:
+          next.rechargeTimer = spell.duration;
+          break;
+      }
+
+      logger?.info(
+          &#39;After ${spell.name}: Player HP: ${next.playerHp}, Player Mana: ${next.playerMana}, Boss HP: ${next.bossHp}&#39;);
+
+      if (next.bossHp &lt;= 0 &amp;&amp; next.manaSpent &lt; minManaSpentToWin) {
+        minManaSpentToWin = next.manaSpent;
+        logger?.info(
+            &#39;Boss defeated by ${spell.name}. Total mana spent: $minManaSpentToWin&#39;);
+        return;
+      }
+
+      playTurn(next, false, logger);
+    }
+
+    if (!canCastAnySpell) {
+      logger?.info(&#39;Player unable to cast any spells this turn.&#39;);
+      return; &#47;&#47; Player loses if no spells can be cast
+    }
+  } else {
+    logger?.info(&#39;--- Boss\&#39;s Turn ---&#39;);
+    int damage = clonedGame.bossDamage - clonedGame.armor();
+    clonedGame.playerHp -= damage &gt; 0 ? damage : 1;
+
+    logger?.info(
+        &#39;Boss deals $damage damage. Player HP after damage: ${clonedGame.playerHp}. Boss HP remains: ${clonedGame.bossHp}&#39;);
+
+    if (clonedGame.playerHp &lt;= 0) {
+      logger?.info(&#39;Player defeated by boss attack.&#39;);
+      return;
+    }
+
+    playTurn(clonedGame, true, logger);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">dart_noob</a></li>
+    <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
+    <li class="self-crumb">playTurn function</li>
+</ol>
+
+
+    <h5>aoc15_day22 library</h5>
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dart_noob
+      0.0.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

@@ -419,8 +419,8 @@
   
 </dd>
 
-        <dt id="Entity">
-  <span class="name "><a href="../solvers_aoc15_day22/Entity-class.html">Entity</a></span> 
+        <dt id="Game">
+  <span class="name "><a href="../solvers_aoc15_day22/Game-class.html">Game</a></span> 
 
 </dt>
 <dd>
@@ -536,17 +536,6 @@
       <h2>Properties</h2>
 
       <dl class="properties">
-        <dt id="allSpells" class="property">
-  <span class="name"><a href="../solvers_aoc15_day22/allSpells.html">allSpells</a></span>
-  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span>&gt;</span></span> 
-
-</dt>
-<dd>
-  
-  <div class="features"><span class="feature">read / write</span></div>
-
-</dd>
-
         <dt id="armors" class="property">
   <span class="name"><a href="../solvers_aoc15_day21/armors.html">armors</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day21/Item-class.html">Item</a></span>&gt;</span></span> 
@@ -558,9 +547,31 @@
 
 </dd>
 
+        <dt id="minManaSpentToWin" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/minManaSpentToWin.html">minManaSpentToWin</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
         <dt id="rings" class="property">
   <span class="name"><a href="../solvers_aoc15_day21/rings.html">rings</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day21/Item-class.html">Item</a></span>&gt;</span></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="spells" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/spells.html">spells</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span>&gt;</span></span> 
 
 </dt>
 <dd>
@@ -888,7 +899,7 @@
 
         <dt id="parseD22Input" class="callable">
   <span class="name"><a href="../solvers_aoc15_day22/parseD22Input.html">parseD22Input</a></span><span class="signature">(<wbr><span class="parameter" id="parseD22Input-param-d22Input"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span> <span class="parameter-name">d22Input</span></span>)
-    <span class="returntype parameter">&#8594; dynamic</span>
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>&gt;</span></span>
   </span>
   
 
@@ -912,9 +923,9 @@
 
 </dd>
 
-        <dt id="simulateBattle" class="callable">
-  <span class="name"><a href="../solvers_aoc15_day22/simulateBattle.html">simulateBattle</a></span><span class="signature">(<wbr><span class="parameter" id="simulateBattle-param-player"><span class="type-annotation"><a href="../solvers_aoc15_day22/Entity-class.html">Entity</a></span> <span class="parameter-name">player</span>, </span><span class="parameter" id="simulateBattle-param-bossStats"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">bossStats</span>, </span><span class="parameter" id="simulateBattle-param-spellSequence"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span>&gt;</span></span> <span class="parameter-name">spellSequence</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>
+        <dt id="playTurn" class="callable">
+  <span class="name"><a href="../solvers_aoc15_day22/playTurn.html">playTurn</a></span><span class="signature">(<wbr><span class="parameter" id="playTurn-param-game"><span class="type-annotation"><a href="../solvers_aoc15_day22/Game-class.html">Game</a></span> <span class="parameter-name">game</span>, </span><span class="parameter" id="playTurn-param-playerTurn"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">playerTurn</span>, </span><span class="parameter" id="playTurn-param-logger"><span class="type-annotation"><a href="https://pub.dev/documentation/logging/1.2.0/logging/Logger-class.html">Logger</a>?</span> <span class="parameter-name">logger</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
   </span>
   
 
@@ -999,6 +1010,8 @@
       <li><a href="../solvers_aoc15_day21/solvers_aoc15_day21-library.html">aoc15_day21</a></li>
       <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
       <li><a href="../data_aoc15_input_day01/data_aoc15_input_day01-library.html">aoc15_input_day01</a></li>
+      <li><a href="../data_aoc15_input_day02/data_aoc15_input_day02-library.html">aoc15_input_day02</a></li>
+      <li><a href="../data_aoc15_input_day03/data_aoc15_input_day03-library.html">aoc15_input_day03</a></li>
       <li><a href="../util_cli_args_manager/util_cli_args_manager-library.html">cli_args_manager</a></li>
       <li><a href="../util_handlers/util_handlers-library.html">handlers</a></li>
       <li><a href="../data_input_bucket/data_input_bucket-library.html">input_bucket</a></li>

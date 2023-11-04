@@ -63,7 +63,7 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype">dynamic</span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.1.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>&gt;</span></span>
 <span class="name ">parseD22Input</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="parseD22Input-param-d22Input"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/String-class.html">String</a></span> <span class="parameter-name">d22Input</span></span></li>
 </ol>)
 
@@ -76,7 +76,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">parseD22Input(String d22Input) {
+  <pre class="language-dart"><code class="language-dart">List&lt;int&gt; parseD22Input(String d22Input) {
   var lines = d22Input.split(&#39;\n&#39;);
   var bossStats = lines.map((e) =&gt; int.parse(e.split(&#39;: &#39;)[1])).toList();
 

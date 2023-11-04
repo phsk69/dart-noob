@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the Entity class from the aoc15_day22 library, for the Dart programming language.">
-  <title>Entity class - aoc15_day22 library - Dart API</title>
+  <meta name="description" content="API docs for the Game class from the aoc15_day22 library, for the Dart programming language.">
+  <title>Game class - aoc15_day22 library - Dart API</title>
 
 
   
@@ -30,9 +30,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">dart_noob</a></li>
     <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
-    <li class="self-crumb">Entity class</li>
+    <li class="self-crumb">Game class</li>
   </ol>
-  <div class="self-name">Entity</div>
+  <div class="self-name">Game</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,9 +54,9 @@
       id="dartdoc-main-content"
       class="main-content"
       data-above-sidebar="solvers_aoc15_day22&#47;solvers_aoc15_day22-library-sidebar.html"
-      data-below-sidebar="solvers_aoc15_day22&#47;Entity-class-sidebar.html">
+      data-below-sidebar="solvers_aoc15_day22&#47;Game-class-sidebar.html">
       <div>
-<h1><span class="kind-class">Entity</span> class 
+<h1><span class="kind-class">Game</span> class 
  
 </h1></div>
 
@@ -69,8 +69,14 @@
     <h2>Constructors</h2>
 
     <dl class="constructor-summary-list">
-        <dt id="Entity" class="callable">
-          <span class="name"><a href="../solvers_aoc15_day22/Entity/Entity.html">Entity</a></span><span class="signature">(<span class="parameter" id="-param-hitPoints">{<span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">hitPoints</span>, </span><span class="parameter" id="-param-armor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">armor</span> = <span class="default-value">0</span>, </span><span class="parameter" id="-param-mana"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">mana</span> = <span class="default-value">0</span>}</span>)</span>
+        <dt id="Game" class="callable">
+          <span class="name"><a href="../solvers_aoc15_day22/Game/Game.html">Game</a></span><span class="signature">(<span class="parameter" id="-param-playerHp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">playerHp</span>, </span><span class="parameter" id="-param-playerMana"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">playerMana</span>, </span><span class="parameter" id="-param-bossHp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">bossHp</span>, </span><span class="parameter" id="-param-bossDamage"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">bossDamage</span></span>)</span>
+        </dt>
+        <dd>
+          
+        </dd>
+        <dt id="Game.clone" class="callable">
+          <span class="name"><a href="../solvers_aoc15_day22/Game/Game.clone.html">Game.clone</a></span><span class="signature">(<span class="parameter" id="clone-param-other"><span class="type-annotation"><a href="../solvers_aoc15_day22/Game-class.html">Game</a></span> <span class="parameter-name">other</span></span>)</span>
         </dt>
         <dd>
           
@@ -82,8 +88,19 @@
       <h2>Properties</h2>
 
       <dl class="properties">
-        <dt id="armor" class="property">
-  <span class="name"><a href="../solvers_aoc15_day22/Entity/armor.html">armor</a></span>
+        <dt id="bossDamage" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/bossDamage.html">bossDamage</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="bossHp" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/bossHp.html">bossHp</a></span>
   <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
 
 </dt>
@@ -104,8 +121,8 @@
 
 </dd>
 
-        <dt id="hitPoints" class="property">
-  <span class="name"><a href="../solvers_aoc15_day22/Entity/hitPoints.html">hitPoints</a></span>
+        <dt id="manaSpent" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/manaSpent.html">manaSpent</a></span>
   <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
 
 </dt>
@@ -115,8 +132,41 @@
 
 </dd>
 
-        <dt id="mana" class="property">
-  <span class="name"><a href="../solvers_aoc15_day22/Entity/mana.html">mana</a></span>
+        <dt id="playerHp" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/playerHp.html">playerHp</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="playerMana" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/playerMana.html">playerMana</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="poisonTimer" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/poisonTimer.html">poisonTimer</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="rechargeTimer" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/rechargeTimer.html">rechargeTimer</a></span>
   <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
 
 </dt>
@@ -137,15 +187,65 @@
 
 </dd>
 
+        <dt id="shieldTimer" class="property">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/shieldTimer.html">shieldTimer</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
       </dl>
     </section>
 
     
   <section
-      class="summary offset-anchor inherited"
+      class="summary offset-anchor"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
+        <dt id="applyEffects" class="callable">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/applyEffects.html">applyEffects</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="armor" class="callable">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/armor.html">armor</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="canCastSpell" class="callable">
+  <span class="name"><a href="../solvers_aoc15_day22/Game/canCastSpell.html">canCastSpell</a></span><span class="signature">(<wbr><span class="parameter" id="canCastSpell-param-spell"><span class="type-annotation"><a href="../solvers_aoc15_day22/Spell-class.html">Spell</a></span> <span class="parameter-name">spell</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.1.0/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.dart.dev/stable/3.1.0/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.1.0/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
@@ -213,7 +313,7 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">dart_noob</a></li>
     <li><a href="../solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
-    <li class="self-crumb">Entity class</li>
+    <li class="self-crumb">Game class</li>
 </ol>
 
 
