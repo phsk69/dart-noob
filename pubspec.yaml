@@ -1,7 +1,7 @@
 name: dart_noob
 description: A sample command-line application.
-version: 0.0.1
-repository: 
+version: 0.0.2
+repository: https://github.com/phsk69/dart-noob
 
 environment:
   sdk: ^3.1.0
