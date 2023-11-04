@@ -87,13 +87,12 @@ Either&lt;String, String&gt; solve() {
     if (inputData.isEmpty) {
       return Left(&#39;Input is empty.&#39;);
     }
-    const playerHp = 50;
-    const playerMana = 500;
 
     final bossStats = parseD22Input(inputData);
     final game = Game(playerHp, playerMana, bossStats[0], bossStats[1]);
-    playTurn(game, true, logger);
-    return Right(&#39;Day22P1Solver: $minManaSpentToWin&#39;);
+    final simulator = GameSimulator(logger);
+    simulator.playTurn(game, true, logger);
+    return Right(&#39;Day22P1Solver: ${simulator.minManaSpentToWin}&#39;);
   } catch (e) {
     var errorMsg = &#39;Day22P1Solver: ${e.toString()}&#39;;
     return Left(errorMsg);
