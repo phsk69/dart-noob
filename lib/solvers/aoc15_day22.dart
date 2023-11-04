@@ -1,88 +1,178 @@
-import 'dart:math';
 import 'package:dartz/dartz.dart';
-import 'package:dart_noob/util/string_stuff.dart';
+import 'package:logging/logging.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
 
 // https://adventofcode.com/2015/day/22
 
-parseD22Input(String d22Input) {
+List<int> parseD22Input(String d22Input) {
   var lines = d22Input.split('\n');
   var bossStats = lines.map((e) => int.parse(e.split(': ')[1])).toList();
 
   return bossStats;
 }
 
-class Entity {
-  int hitPoints;
-  int armor;
-  int mana;
-
-  Entity({required this.hitPoints, this.armor = 0, this.mana = 0});
-}
-
 class Spell {
   final String name;
-  final int cost;
-  final int damage;
-  final int healing;
-  final int armorEffect;
-  final int manaEffect;
-  final int duration;
+  final int cost, damage, heal, armor, mana, duration;
 
-  Spell(
-      {required this.name,
-      required this.cost,
-      this.damage = 0,
-      this.healing = 0,
-      this.armorEffect = 0,
-      this.manaEffect = 0,
-      this.duration = 0});
+  Spell(this.name, this.cost, this.damage, this.heal, this.armor, this.mana,
+      this.duration);
 }
 
-List<Spell> allSpells = [
-  Spell(name: 'Magic Missile', cost: 53, damage: 4),
-  Spell(name: 'Drain', cost: 73, damage: 2, healing: 2),
-  Spell(name: 'Shield', cost: 113, armorEffect: 7, duration: 6),
-  Spell(name: 'Poison', cost: 173, damage: 3, duration: 6),
-  Spell(name: 'Recharge', cost: 229, manaEffect: 101, duration: 5)
-];
+class Game {
+  int playerHp, playerMana, bossHp, bossDamage;
+  int shieldTimer = 0, poisonTimer = 0, rechargeTimer = 0;
+  int manaSpent = 0;
 
-int simulateBattle(
-    Entity player, List<int> bossStats, List<Spell> spellSequence) {
-  Entity boss = Entity(hitPoints: bossStats[0], armor: bossStats[1]);
-  int totalManaSpent = 0;
+  Game(this.playerHp, this.playerMana, this.bossHp, this.bossDamage);
 
-  // This is a simple simulation for now, you might need to expand upon this
-  for (var spell in spellSequence) {
-    totalManaSpent += spell.cost;
-    player.mana -= spell.cost;
+  Game.clone(Game other)
+      : playerHp = other.playerHp,
+        playerMana = other.playerMana,
+        bossHp = other.bossHp,
+        bossDamage = other.bossDamage,
+        shieldTimer = other.shieldTimer,
+        poisonTimer = other.poisonTimer,
+        rechargeTimer = other.rechargeTimer,
+        manaSpent = other.manaSpent;
 
-    // Player casts spell
-    player.hitPoints += spell.healing;
-    boss.hitPoints -= spell.damage;
-    player.mana += spell.manaEffect;
+  int armor() => shieldTimer > 0 ? 7 : 0;
 
-    // TODO: Implement duration effects like Shield, Poison, Recharge
-
-    if (player.hitPoints <= 0) return -1; // Player lost
-    if (boss.hitPoints <= 0) return totalManaSpent; // Player won
-
-    // Boss attacks
-    int damage = bossStats[2] - player.armor;
-    if (damage < 1) damage = 1;
-    player.hitPoints -= damage;
-
-    if (player.hitPoints <= 0) return -1; // Player lost
-    if (boss.hitPoints <= 0) return totalManaSpent; // Player won
+  void applyEffects() {
+    if (shieldTimer > 0) shieldTimer--;
+    if (poisonTimer > 0) {
+      bossHp -= 3;
+      poisonTimer--;
+    }
+    if (rechargeTimer > 0) {
+      playerMana += 101;
+      rechargeTimer--;
+    }
   }
 
-  return -1; // Default: Player lost
+  bool canCastSpell(Spell spell) {
+    if (playerMana < spell.cost) return false;
+    switch (spell.name) {
+      case 'Shield':
+        return shieldTimer == 0;
+      case 'Poison':
+        return poisonTimer == 0;
+      case 'Recharge':
+        return rechargeTimer == 0;
+      default:
+        return true;
+    }
+  }
+}
+
+final spells = [
+  Spell('Magic Missile', 53, 4, 0, 0, 0, 0),
+  Spell('Drain', 73, 2, 2, 0, 0, 0),
+  Spell('Shield', 113, 0, 0, 7, 0, 6),
+  Spell('Poison', 173, 0, 0, 0, 0, 6),
+  Spell('Recharge', 229, 0, 0, 0, 101, 5),
+];
+
+int minManaSpentToWin = 1 << 30;
+
+void playTurn(Game game, bool playerTurn, Logger? logger) {
+  Game clonedGame = Game.clone(game);
+
+  // If we've already spent too much mana in this game, just return.
+  if (clonedGame.manaSpent > minManaSpentToWin) return;
+
+  // 1. Apply effects at the start of each turn.
+  clonedGame.applyEffects();
+
+  logger?.info(
+      'After effects: Player HP: ${clonedGame.playerHp}, Player Mana: ${clonedGame.playerMana}, Boss HP: ${clonedGame.bossHp}');
+
+  // 2. Check if the boss has been defeated by effects before any other action.
+  if (clonedGame.bossHp <= 0) {
+    if (clonedGame.manaSpent < minManaSpentToWin) {
+      minManaSpentToWin = clonedGame.manaSpent;
+      logger?.info(
+          'Boss defeated by effects. Total mana spent: $minManaSpentToWin');
+    }
+    return;
+  }
+
+  if (playerTurn) {
+    logger?.info('--- Player\'s Turn ---');
+    bool canCastAnySpell = false;
+
+    for (final spell in spells) {
+      if (!clonedGame.canCastSpell(spell)) {
+        logger?.info(
+            'Cannot cast ${spell.name} due to insufficient mana or an existing effect.');
+        continue;
+      }
+
+      canCastAnySpell = true;
+      logger?.info('Casting ${spell.name}.');
+
+      Game next = Game.clone(clonedGame);
+      next.manaSpent += spell.cost;
+      next.playerMana -= spell.cost;
+
+      switch (spell.name) {
+        case 'Magic Missile':
+          next.bossHp -= spell.damage;
+          break;
+        case 'Drain':
+          next.bossHp -= spell.damage;
+          next.playerHp += spell.heal;
+          break;
+        case 'Shield':
+          next.shieldTimer = spell.duration;
+          break;
+        case 'Poison':
+          next.poisonTimer = spell.duration;
+          break;
+        case 'Recharge':
+          next.rechargeTimer = spell.duration;
+          break;
+      }
+
+      logger?.info(
+          'After ${spell.name}: Player HP: ${next.playerHp}, Player Mana: ${next.playerMana}, Boss HP: ${next.bossHp}');
+
+      if (next.bossHp <= 0 && next.manaSpent < minManaSpentToWin) {
+        minManaSpentToWin = next.manaSpent;
+        logger?.info(
+            'Boss defeated by ${spell.name}. Total mana spent: $minManaSpentToWin');
+        return;
+      }
+
+      playTurn(next, false, logger);
+    }
+
+    if (!canCastAnySpell) {
+      logger?.info('Player unable to cast any spells this turn.');
+      return; // Player loses if no spells can be cast
+    }
+  } else {
+    logger?.info('--- Boss\'s Turn ---');
+    int damage = clonedGame.bossDamage - clonedGame.armor();
+    clonedGame.playerHp -= damage > 0 ? damage : 1;
+
+    logger?.info(
+        'Boss deals $damage damage. Player HP after damage: ${clonedGame.playerHp}. Boss HP remains: ${clonedGame.bossHp}');
+
+    if (clonedGame.playerHp <= 0) {
+      logger?.info('Player defeated by boss attack.');
+      return;
+    }
+
+    playTurn(clonedGame, true, logger);
+  }
 }
 
 class Day22P1Solver extends AoCSolver {
   final String? filePath;
+  final Logger? logger;
 
-  Day22P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day22P1Solver(StringBuffer? input, this.filePath, this.logger) : super(input);
 
   @override
   Either<String, String> solve() {
@@ -91,9 +181,13 @@ class Day22P1Solver extends AoCSolver {
       if (inputData.isEmpty) {
         return Left('Input is empty.');
       }
-      final bossStats = parseD22Input(inputData);
+      const playerHp = 50;
+      const playerMana = 500;
 
-      return Right('Day22P1Solver: $bossStats');
+      final bossStats = parseD22Input(inputData);
+      final game = Game(playerHp, playerMana, bossStats[0], bossStats[1]);
+      playTurn(game, true, logger);
+      return Right('Day22P1Solver: $minManaSpentToWin');
     } catch (e) {
       var errorMsg = 'Day22P1Solver: ${e.toString()}';
       return Left(errorMsg);

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:logging/logging.dart';
 import 'package:dart_noob/solvers/solvers.dart';
 import 'package:dart_noob/data/input_bucket.dart';
 
@@ -12,8 +13,11 @@ abstract class AoCSolver {
 
 class SolverFactory {
   static Either<String, List<AoCSolver>> create(
-      String mode, StringBuffer? input,
-      [String? filePath]) {
+    String mode,
+    StringBuffer? input, [
+    String? filePath,
+    Logger? logger,
+  ]) {
     switch (mode) {
       case 'd1':
         return Right(
@@ -104,13 +108,17 @@ class SolverFactory {
         ]);
       case 'd22':
         return Right([
-          Day22P1Solver(input, filePath),
+          Day22P1Solver(input, filePath, logger),
           Day22P2Solver(input, filePath),
         ]);
       case 'default':
         return Right([
           Day1P1Solver(day1Input),
           Day1P2Solver(day1Input),
+          Day2P1Solver(day2Input),
+          Day2P2Solver(day2Input),
+          Day3P1Solver(day3Input),
+          Day3P2Solver(day3Input),
         ]);
       default:
         return Left("Unknown mode: $mode");

@@ -4,8 +4,7 @@ class SinkManager {
   IOSink? _logSink;
   IOSink? _outputSink;
 
-  IOSink? get logSink =>
-      _logSink; // Made logSink optional as per your requirements
+  IOSink? get logSink => _logSink;
 
   IOSink get outputSink => _outputSink ?? stdout;
 

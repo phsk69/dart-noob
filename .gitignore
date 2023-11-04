@@ -7,3 +7,4 @@ old/
 output/
 coverage/
 sample.txt
+.DS_Store
