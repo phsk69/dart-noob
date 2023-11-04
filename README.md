@@ -24,7 +24,7 @@ dart pub get
 ./aoc2015 -h
 ```
 
-#### Example output
+#### Example help output
 
 ```text
 ➜  dart_noob git:(feature/aoc2015) ✗ ./aoc2015 -h
@@ -38,13 +38,34 @@ Usage: aoc2015 [options]
 -m, --mode          Mode of operation
 ```
 
-### Run a specific day, output to stdout only
+### Run the default mode
+
+- Uses data from `lib/data/input_bucket.dart`
+
+```bash
+./aoc2015
+```
+
+#### Example default with stdout output
+
+```text
+➜  dart_noob git:(feature/more) ./aoc2015
+Mode: default
+Day1P1Solver: 280
+Day1P2Solver: 1797
+Day2P1Solver: 1606483
+Day2P2Solver: 3842356
+Day3P1Solver: 2572
+Day3P2Solver: 2631
+```
+
+### Run a specific day with stdout output
 
 ```bash
 ./aoc2015 -m d21 -i data/aoc2015_day21_input.txt 
 ```
 
-#### Example output for a specific day
+#### Example output for a specific day with stdout output
 
 ```text
 ➜  dart_noob git:(feature/aoc2015) ✗ ./aoc2015 -m d21 -i data/aoc2015_day21_input.txt 

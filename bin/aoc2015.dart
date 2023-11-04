@@ -56,7 +56,7 @@ Future<void> main(List<String> args) async {
 
   if (mode != null && inputFile != null && inputBuffer != null) {
     outputManager.writeOutput('Mode: $mode');
-    final solversResult = SolverFactory.create(mode, inputBuffer);
+    final solversResult = SolverFactory.create(mode, inputBuffer, null, logger);
 
     solversResult.fold((error) {
       outputManager.writeError(error);
@@ -77,7 +77,7 @@ Future<void> main(List<String> args) async {
     });
   } else if (mode == null && inputFile == null && inputBuffer == null) {
     outputManager.writeOutput('Mode: default');
-    final solversResult = SolverFactory.create('default', null);
+    final solversResult = SolverFactory.create('default', null, null, logger);
 
     solversResult.fold((error) {
       outputManager.writeError(error);

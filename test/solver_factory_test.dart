@@ -12,6 +12,23 @@ void main() {
       expect(result.fold((l) => l, (r) => r), 'Unknown mode: unknown_mode');
     });
 
+    test('creates solvers for mode default', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('default', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 8);
+      expect(solvers[0] is Day1P1Solver, true);
+      expect(solvers[1] is Day1P2Solver, true);
+      expect(solvers[2] is Day2P1Solver, true);
+      expect(solvers[3] is Day2P2Solver, true);
+      expect(solvers[4] is Day3P1Solver, true);
+      expect(solvers[5] is Day3P2Solver, true);
+      expect(solvers[6] is Day4P1Solver, true);
+      expect(solvers[7] is Day4P2Solver, true);
+    });
+
     test('creates solvers for mode d1', () {
       StringBuffer buffer = StringBuffer('Any test string');
       var result = SolverFactory.create('d1', buffer);
@@ -239,6 +256,17 @@ void main() {
       expect(solvers.length, 2);
       expect(solvers[0] is Day21P1Solver, true);
       expect(solvers[1] is Day21P2Solver, true);
+    });
+
+    test('creates solvers for mode d22', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d22', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day22P1Solver, true);
+      expect(solvers[1] is Day22P2Solver, true);
     });
   });
 }

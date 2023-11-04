@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:logging/logging.dart';
 import 'package:dart_noob/solvers/solvers.dart';
 import 'package:dart_noob/data/input_bucket.dart';
 
@@ -12,8 +13,11 @@ abstract class AoCSolver {
 
 class SolverFactory {
   static Either<String, List<AoCSolver>> create(
-      String mode, StringBuffer? input,
-      [String? filePath]) {
+    String mode,
+    StringBuffer? input, [
+    String? filePath,
+    Logger? logger,
+  ]) {
     switch (mode) {
       case 'd1':
         return Right(
@@ -102,52 +106,21 @@ class SolverFactory {
           Day21P1Solver(input, filePath),
           Day21P2Solver(input, filePath),
         ]);
+      case 'd22':
+        return Right([
+          Day22P1Solver(input, filePath, logger),
+          Day22P2Solver(input, filePath, logger),
+        ]);
       case 'default':
         return Right([
           Day1P1Solver(day1Input),
           Day1P2Solver(day1Input),
-          /*
-          Day2P1Solver(input, filePath),
-          Day2P2Solver(input, filePath),
-          Day3P1Solver(input, filePath),
-          Day3P2Solver(input, filePath),
-          Day4P1Solver(input, filePath),
-          Day4P2Solver(input, filePath),
-          Day5P1Solver(input, filePath),
-          Day5P2Solver(input, filePath),
-          Day6P1Solver(input, filePath),
-          Day6P2Solver(input, filePath),
-          Day7P1Solver(input, filePath),
-          Day7P2Solver(input, filePath),
-          Day8P1Solver(input, filePath),
-          Day8P2Solver(input, filePath),
-          Day9P1Solver(input, filePath),
-          Day9P2Solver(input, filePath),
-          Day10P1Solver(input, filePath),
-          Day10P2Solver(input, filePath),
-          Day11P1Solver(input, filePath),
-          Day11P2Solver(input, filePath),
-          Day12P1Solver(input, filePath),
-          Day12P2Solver(input, filePath),
-          Day13P1Solver(input, filePath),
-          Day13P2Solver(input, filePath),
-          Day14P1Solver(input, filePath),
-          Day14P2Solver(input, filePath),
-          Day15P1Solver(input, filePath),
-          Day15P2Solver(input, filePath),
-          Day16P1Solver(input, filePath),
-          Day16P2Solver(input, filePath),
-          Day17P1Solver(input, filePath),
-          Day17P2Solver(input, filePath),
-          Day18P1Solver(input, filePath),
-          Day18P2Solver(input, filePath),
-          Day19P1Solver(input, filePath),
-          Day19P2Solver(input, filePath),
-          Day20P1Solver(input, filePath),
-          Day20P2Solver(input, filePath),
-          Day21P1Solver(input, filePath),
-          Day21P2Solver(input, filePath),
-          */
+          Day2P1Solver(day2Input),
+          Day2P2Solver(day2Input),
+          Day3P1Solver(day3Input),
+          Day3P2Solver(day3Input),
+          Day4P1Solver(day4Input),
+          Day4P2Solver(day4Input),
         ]);
       default:
         return Left("Unknown mode: $mode");
