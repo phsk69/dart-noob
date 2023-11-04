@@ -18,13 +18,15 @@ void main() {
 
       expect(result.isRight(), true);
       List<AoCSolver> solvers = result.getOrElse(() => []);
-      expect(solvers.length, 6);
+      expect(solvers.length, 8);
       expect(solvers[0] is Day1P1Solver, true);
       expect(solvers[1] is Day1P2Solver, true);
       expect(solvers[2] is Day2P1Solver, true);
       expect(solvers[3] is Day2P2Solver, true);
       expect(solvers[4] is Day3P1Solver, true);
       expect(solvers[5] is Day3P2Solver, true);
+      expect(solvers[6] is Day4P1Solver, true);
+      expect(solvers[7] is Day4P2Solver, true);
     });
 
     test('creates solvers for mode d1', () {

@@ -50,4 +50,15 @@ void main() {
       expect(regex.hasMatch(day3Input.toString()), false);
     });
   });
+  group('Day 04', () {
+    test('Day 04 input is not empty', () {
+      expect(day4Input.toString().isNotEmpty, true);
+    });
+
+    test('Day 04 input has expected length', () {
+      expect(day4Input.length, 8);
+    });
+    // The verification of input format is not relevant for this day
+    // because the input is a 'seed' for a password generator
+  });
 }

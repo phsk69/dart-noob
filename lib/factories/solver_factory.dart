@@ -109,7 +109,7 @@ class SolverFactory {
       case 'd22':
         return Right([
           Day22P1Solver(input, filePath, logger),
-          Day22P2Solver(input, filePath),
+          Day22P2Solver(input, filePath, logger),
         ]);
       case 'default':
         return Right([
@@ -119,6 +119,8 @@ class SolverFactory {
           Day2P2Solver(day2Input),
           Day3P1Solver(day3Input),
           Day3P2Solver(day3Input),
+          Day4P1Solver(day4Input),
+          Day4P2Solver(day4Input),
         ]);
       default:
         return Left("Unknown mode: $mode");
