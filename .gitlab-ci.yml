@@ -21,9 +21,8 @@ build-linux:
   tags:
     - docker
   only:
-    - /^release/.*$/
-    - develop
-    - main
+    - /^feature/.*$/
+    - merge_requests
 
 build-macos:
   stage: build
@@ -32,9 +31,9 @@ build-macos:
   tags:
     - macos
   only:
-    - /^release/.*$/
-    - develop
-    - main
+    - /^feature/.*$/
+    - merge_requests
+
 
 build-windows:
   stage: build
@@ -43,6 +42,6 @@ build-windows:
   tags:
     - windows
   only:
-    - /^release/.*$/
-    - develop
-    - main
+    - /^feature/.*$/
+    - merge_requests
+
