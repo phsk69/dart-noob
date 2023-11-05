@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:dart_noob/util/util.dart';
 import 'package:dart_noob/factories/solver_factory.dart';
 
+//TODO: Implement support for default mode per day, ie. use the data lib for the defined day if no input file is defined
 Future<void> main(List<String> args) async {
   final cliArgsManager = CliArgsManager(args);
   // This is done to make the CliArgsManager testable

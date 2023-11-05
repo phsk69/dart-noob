@@ -17,15 +17,9 @@ void main() {
 
       expect(result.isRight(), true);
       List<AoCSolver> solvers = result.getOrElse(() => []);
-      expect(solvers.length, 8);
-      expect(solvers[0] is Day1P1Solver, true);
-      expect(solvers[1] is Day1P2Solver, true);
-      expect(solvers[2] is Day2P1Solver, true);
-      expect(solvers[3] is Day2P2Solver, true);
-      expect(solvers[4] is Day3P1Solver, true);
-      expect(solvers[5] is Day3P2Solver, true);
-      expect(solvers[6] is Day4P1Solver, true);
-      expect(solvers[7] is Day4P2Solver, true);
+      expect(solvers.length, 50);
+      // The check if indexN is a DayNP1Solver is not relevant here
+      // We check those individually below
     });
     test('creates solvers for mode d1', () {
       StringBuffer buffer = StringBuffer('Any test string');
@@ -269,6 +263,16 @@ void main() {
       expect(solvers.length, 2);
       expect(solvers[0] is Day24P1Solver, true);
       expect(solvers[1] is Day24P2Solver, true);
+    });
+    test('creates solvers for mode d25', () {
+      StringBuffer buffer = StringBuffer('Any test string');
+      var result = SolverFactory.create('d25', buffer);
+
+      expect(result.isRight(), true);
+      List<AoCSolver> solvers = result.getOrElse(() => []);
+      expect(solvers.length, 2);
+      expect(solvers[0] is Day25P1Solver, true);
+      expect(solvers[1] is Day25P2Solver, true);
     });
   });
 }

@@ -2,6 +2,7 @@ import 'package:test/test.dart';
 import 'package:dart_noob/util/string_stuff.dart';
 import 'package:dart_noob/solvers/aoc15_day24.dart';
 
+// TODO: Convert this to use the data library
 void main() {
   group('Day24P1Solver', () {
     test('computes the ideal quantum entanglement for custom input, 3 groups',

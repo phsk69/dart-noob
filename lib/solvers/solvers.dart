@@ -22,3 +22,4 @@ export 'aoc15_day21.dart';
 export 'aoc15_day22.dart';
 export 'aoc15_day23.dart';
 export 'aoc15_day24.dart';
+export 'aoc15_day25.dart';

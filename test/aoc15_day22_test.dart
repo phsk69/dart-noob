@@ -2,6 +2,7 @@ import 'package:test/test.dart';
 import 'package:dart_noob/util/string_stuff.dart';
 import 'package:dart_noob/solvers/aoc15_day22.dart';
 
+// TODO: Convert this to use the data library
 void main() {
   group('Day22P1Solver', () {
     test('computes the lowest cost to beat le boss with custom input', () {
