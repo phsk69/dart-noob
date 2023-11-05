@@ -22,7 +22,8 @@ build-linux:
     - docker
   only:
     - /^feature/.*$/
-    - merge_requests
+    - develop
+    - main
 
 build-macos:
   stage: build
@@ -32,7 +33,8 @@ build-macos:
     - macos
   only:
     - /^feature/.*$/
-    - merge_requests
+    - develop
+    - main
 
 
 build-windows:
@@ -43,5 +45,5 @@ build-windows:
     - windows
   only:
     - /^feature/.*$/
-    - merge_requests
-
+    - develop
+    - main
