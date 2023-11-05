@@ -59,7 +59,7 @@
 <ul>
 <li>Dart SDK: 3.1.X+</li>
 <li>lcov: 2.X+ (For <code>tests.sh</code>)</li>
-<li>A default HTML viewer (For <code>tests.sh</code>)</li>
+<li>A default HTML viewer (For <code>tests.sh</code>, and <code>docs.sh</code>)</li>
 </ul>
 <h3 id="prepare-dart-project">Prepare dart project</h3>
 <pre class="language-bash"><code class="language-bash">dart pub get
@@ -135,9 +135,9 @@ Day21P1Solver: 111
 <li><code>docs.sh</code>: Generates API documentation through <code>dart doc</code> and opens the resulting html via syscall</li>
 <li><code>ship.sh</code>
 <ul>
-<li>Builds the project</li>
+<li>Builds the project (currently only for MacOS)</li>
 <li>Generates a fresh set of doc files with <code>dart doc</code></li>
-<li>Stages the entire project in git and pushes it with 'auto commit' as commit msg</li>
+<li>Stages the entire project in git and pushes it with 'auto commit' as commit msg to the current branch</li>
 </ul>
 </li>
 </ul>
@@ -301,6 +301,13 @@ Day21P1Solver: 111
 <dd>
 </dd>
 
+          <dt id="aoc15_day23">
+  <span class="name"><a href="solvers_aoc15_day23/solvers_aoc15_day23-library.html">aoc15_day23</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="aoc15_input_day01">
   <span class="name"><a href="data_aoc15_input_day01/data_aoc15_input_day01-library.html">aoc15_input_day01</a></span> 
 
@@ -442,6 +449,7 @@ Day21P1Solver: 111
       <li><a href="solvers_aoc15_day20/solvers_aoc15_day20-library.html">aoc15_day20</a></li>
       <li><a href="solvers_aoc15_day21/solvers_aoc15_day21-library.html">aoc15_day21</a></li>
       <li><a href="solvers_aoc15_day22/solvers_aoc15_day22-library.html">aoc15_day22</a></li>
+      <li><a href="solvers_aoc15_day23/solvers_aoc15_day23-library.html">aoc15_day23</a></li>
       <li><a href="data_aoc15_input_day01/data_aoc15_input_day01-library.html">aoc15_input_day01</a></li>
       <li><a href="data_aoc15_input_day02/data_aoc15_input_day02-library.html">aoc15_input_day02</a></li>
       <li><a href="data_aoc15_input_day03/data_aoc15_input_day03-library.html">aoc15_input_day03</a></li>
@@ -468,7 +476,7 @@ Day21P1Solver: 111
 <footer>
   <span class="no-break">
     dart_noob
-      0.0.1
+      0.0.2
   </span>
 
   

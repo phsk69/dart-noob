@@ -30,7 +30,7 @@ void main() {
   });
 
   group('Day22P2Solver', () {
-    test('computes the highest cost to to lose with custom input', () {
+    test('computes the lowest cost to beat le boss with custom input', () {
       StringBuffer buffer = StringBuffer('Hit Points: 50\nDamage: 10\n');
       var solver = Day22P2Solver(buffer, null, null);
 
@@ -49,7 +49,7 @@ void main() {
       expect(result.isLeft(), true);
     });
 
-    test('computes the highest cost to to lose with file input', () {
+    test('computes the lowest cost to beat le boss with actual', () {
       final input = StringBuffer(getStringSync('data/aoc2015_day22_input.txt'));
       var solver = Day22P2Solver(input, null, null);
 

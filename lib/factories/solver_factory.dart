@@ -19,6 +19,17 @@ class SolverFactory {
     Logger? logger,
   ]) {
     switch (mode) {
+      case 'default': // default mode not case
+        return Right([
+          Day1P1Solver(day1Input),
+          Day1P2Solver(day1Input),
+          Day2P1Solver(day2Input),
+          Day2P2Solver(day2Input),
+          Day3P1Solver(day3Input),
+          Day3P2Solver(day3Input),
+          Day4P1Solver(day4Input),
+          Day4P2Solver(day4Input),
+        ]);
       case 'd1':
         return Right(
             [Day1P1Solver(input, filePath), Day1P2Solver(input, filePath)]);
@@ -111,16 +122,10 @@ class SolverFactory {
           Day22P1Solver(input, filePath, logger),
           Day22P2Solver(input, filePath, logger),
         ]);
-      case 'default':
+      case 'd23':
         return Right([
-          Day1P1Solver(day1Input),
-          Day1P2Solver(day1Input),
-          Day2P1Solver(day2Input),
-          Day2P2Solver(day2Input),
-          Day3P1Solver(day3Input),
-          Day3P2Solver(day3Input),
-          Day4P1Solver(day4Input),
-          Day4P2Solver(day4Input),
+          Day23P1Solver(input, filePath, logger),
+          Day23P2Solver(input, filePath, logger),
         ]);
       default:
         return Left("Unknown mode: $mode");

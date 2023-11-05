@@ -8,7 +8,7 @@ A project for solving AOC2015 and learning dart along the way
 
 - Dart SDK: 3.1.X+
 - lcov: 2.X+ (For `tests.sh`)
-- A default HTML viewer (For `tests.sh`)
+- A default HTML viewer (For `tests.sh`, and `docs.sh`)
 
 ### Prepare dart project
 
@@ -120,6 +120,6 @@ Day21P1Solver: 111
 - `build.sh`: Builds the aoc2015 executable and runs all the days with only the required arguments
 - `docs.sh`: Generates API documentation through `dart doc` and opens the resulting html via syscall
 - `ship.sh`
-  - Builds the project
+  - Builds the project (currently only for MacOS)
   - Generates a fresh set of doc files with `dart doc`
-  - Stages the entire project in git and pushes it with 'auto commit' as commit msg
+  - Stages the entire project in git and pushes it with 'auto commit' as commit msg to the current branch

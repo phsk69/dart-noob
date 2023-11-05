@@ -86,6 +86,17 @@
   Logger? logger,
 ]) {
   switch (mode) {
+    case &#39;default&#39;: &#47;&#47; default mode not case
+      return Right([
+        Day1P1Solver(day1Input),
+        Day1P2Solver(day1Input),
+        Day2P1Solver(day2Input),
+        Day2P2Solver(day2Input),
+        Day3P1Solver(day3Input),
+        Day3P2Solver(day3Input),
+        Day4P1Solver(day4Input),
+        Day4P2Solver(day4Input),
+      ]);
     case &#39;d1&#39;:
       return Right(
           [Day1P1Solver(input, filePath), Day1P2Solver(input, filePath)]);
@@ -178,16 +189,10 @@
         Day22P1Solver(input, filePath, logger),
         Day22P2Solver(input, filePath, logger),
       ]);
-    case &#39;default&#39;:
+    case &#39;d23&#39;:
       return Right([
-        Day1P1Solver(day1Input),
-        Day1P2Solver(day1Input),
-        Day2P1Solver(day2Input),
-        Day2P2Solver(day2Input),
-        Day3P1Solver(day3Input),
-        Day3P2Solver(day3Input),
-        Day4P1Solver(day4Input),
-        Day4P2Solver(day4Input),
+        Day23P1Solver(input, filePath, logger),
+        Day23P2Solver(input, filePath, logger),
       ]);
     default:
       return Left(&quot;Unknown mode: $mode&quot;);
@@ -225,7 +230,7 @@
 <footer>
   <span class="no-break">
     dart_noob
-      0.0.1
+      0.0.2
   </span>
 
   
