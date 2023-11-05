@@ -41,5 +41,6 @@ build-windows:
   tags:
     - windows
   only:
-    - /^feature/.*$/
+    - /^release/.*$/
+    - develop
     - main
