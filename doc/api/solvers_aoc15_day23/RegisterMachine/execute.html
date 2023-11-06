@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the execute method from the RegisterMachine class, for the Dart programming language.">
+  <title>execute method - RegisterMachine class - aoc15_day23 library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../solvers_aoc15_day23/solvers_aoc15_day23-library.html">aoc15_day23</a></li>
+    <li><a href="../../solvers_aoc15_day23/RegisterMachine-class.html">RegisterMachine</a></li>
+    <li class="self-crumb">execute method</li>
+  </ol>
+  <div class="self-name">execute</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="solvers_aoc15_day23&#47;RegisterMachine-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">execute</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype">void</span>
+<span class="name ">execute</span>(<wbr>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">void execute() {
+  int instructionPointer = 0;
+
+  while (instructionPointer &lt; instructions.length) {
+    var instruction = instructions[instructionPointer];
+    var parts = instruction.split(&#39; &#39;);
+    var command = parts[0];
+
+    String register;
+    int oldRegisterValue;
+
+    int offset = 1; &#47;&#47; Default to next instruction
+
+    switch (command) {
+      case &#39;hlf&#39;:
+        register = parts[1];
+        oldRegisterValue = registers[register]!;
+        registers[register] = oldRegisterValue ~&#47; 2;
+        logger?.info(
+            &#39;Halving register $register: $oldRegisterValue -&gt; ${registers[register]}&#39;);
+        break;
+      case &#39;tpl&#39;:
+        register = parts[1];
+        oldRegisterValue = registers[register]!;
+        registers[register] = oldRegisterValue * 3;
+        logger?.info(
+            &#39;Tripling register $register: $oldRegisterValue -&gt; ${registers[register]}&#39;);
+        break;
+      case &#39;inc&#39;:
+        register = parts[1];
+        oldRegisterValue = registers[register]!;
+        registers[register] = oldRegisterValue + 1;
+        logger?.info(
+            &#39;Incrementing register $register: $oldRegisterValue -&gt; ${registers[register]}&#39;);
+        break;
+      case &#39;jmp&#39;:
+        offset = int.parse(parts[1]);
+        logger?.info(&#39;Jumping by offset: $offset&#39;);
+        break;
+      case &#39;jie&#39;:
+        register = parts[1].replaceAll(&#39;,&#39;, &#39;&#39;);
+        if (registers[register]! % 2 == 0) {
+          offset = int.parse(parts[2]);
+          logger?.info(
+              &#39;Jump-if-even on register $register: Jumping by offset: $offset&#39;);
+        } else {
+          logger?.info(
+              &#39;Jump-if-even on register $register: Condition not met, moving to next instruction&#39;);
+        }
+        break;
+      case &#39;jio&#39;:
+        register = parts[1].replaceAll(&#39;,&#39;, &#39;&#39;);
+        if (registers[register] == 1) {
+          offset = int.parse(parts[2]);
+          logger?.info(
+              &#39;Jump-if-one on register $register: Jumping by offset: $offset&#39;);
+        } else {
+          logger?.info(
+              &#39;Jump-if-one on register $register: Condition not met, moving to next instruction&#39;);
+        }
+        break;
+    }
+
+    instructionPointer += offset;
+    logger?.info(&#39;New instructionPointer position: $instructionPointer&#39;);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">dart_noob</a></li>
+    <li><a href="../../solvers_aoc15_day23/solvers_aoc15_day23-library.html">aoc15_day23</a></li>
+    <li><a href="../../solvers_aoc15_day23/RegisterMachine-class.html">RegisterMachine</a></li>
+    <li class="self-crumb">execute method</li>
+</ol>
+
+
+    <h5>RegisterMachine class</h5>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dart_noob
+      0.0.2
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

@@ -22,6 +22,7 @@ build-linux:
     - docker
   only:
     - /^feature/.*$/
+    - develop
     - main
 
 build-macos:
@@ -32,7 +33,9 @@ build-macos:
     - macos
   only:
     - /^feature/.*$/
+    - develop
     - main
+
 
 build-windows:
   stage: build
@@ -42,4 +45,5 @@ build-windows:
     - windows
   only:
     - /^feature/.*$/
+    - develop
     - main

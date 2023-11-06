@@ -1,6 +1,7 @@
 import 'package:test/test.dart';
 import 'package:dart_noob/solvers/aoc15_day6.dart'; // Adjust this import path
 
+// TODO: Convert this to use the data library
 void main() {
   group('Day6P1Solver', () {
     test('computes correct number of lights turned on from given input', () {
