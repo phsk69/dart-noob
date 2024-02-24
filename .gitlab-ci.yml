@@ -11,7 +11,7 @@ test:
   script:
     - dart test
   tags:
-    - docker
+    - kubernetes
   
 build-linux:
   image: dart:stable-sdk
@@ -19,7 +19,7 @@ build-linux:
   script:
     - dart compile exe bin/aoc2015.dart -o aoc2015-linux-x64 --target-os linux
   tags:
-    - docker
+    - kubernetes
   only:
     - /^feature/.*$/
     - develop
