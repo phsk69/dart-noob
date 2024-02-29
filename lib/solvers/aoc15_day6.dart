@@ -7,7 +7,7 @@ import 'package:dart_noob/factories/solver_factory.dart';
 class Day6P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day6P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day6P1Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {
@@ -76,7 +76,7 @@ class Day6P1Solver extends AoCSolver {
 class Day6P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day6P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day6P2Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {

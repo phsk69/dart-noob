@@ -30,7 +30,7 @@ String _lookAndSay(String input) {
 class Day10P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day10P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day10P1Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {
@@ -55,7 +55,7 @@ class Day10P1Solver extends AoCSolver {
 class Day10P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day10P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day10P2Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {

@@ -45,7 +45,7 @@ int calculateHappinessForArrangement(
 class Day13P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day13P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day13P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -83,7 +83,7 @@ class Day13P1Solver extends AoCSolver {
 class Day13P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day13P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day13P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

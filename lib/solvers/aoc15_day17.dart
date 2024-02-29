@@ -83,7 +83,7 @@ const sum = 150;
 class Day17P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day17P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day17P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -107,7 +107,7 @@ class Day17P1Solver extends AoCSolver {
 class Day17P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day17P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day17P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
