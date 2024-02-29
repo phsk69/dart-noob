@@ -7,7 +7,7 @@ import 'package:dart_noob/factories/solver_factory.dart';
 class Day5P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day5P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day5P1Solver(super.input, [this.filePath]);
 
   bool _hasThreeVowels(String line) {
     return line.split('').where((char) => 'aeiou'.contains(char)).length >= 3;
@@ -44,7 +44,7 @@ class Day5P1Solver extends AoCSolver {
 class Day5P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day5P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day5P2Solver(super.input, [this.filePath]);
 
   bool _hasTwoLettersRepeatedWithoutOverlap(String line) {
     for (int pairStartIdx = 0; pairStartIdx < line.length - 1; pairStartIdx++) {

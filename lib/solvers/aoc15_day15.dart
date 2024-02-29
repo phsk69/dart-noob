@@ -49,7 +49,7 @@ void generateMixtures(List<List<int>> mixtures, int ingredientsCount,
 class Day15P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day15P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day15P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -119,7 +119,7 @@ class Day15P1Solver extends AoCSolver {
 class Day15P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day15P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day15P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

@@ -125,7 +125,7 @@ List<List<String>> computeP2State(List<List<String>> grid) {
 class Day18P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day18P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day18P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -154,7 +154,7 @@ class Day18P1Solver extends AoCSolver {
 class Day18P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day18P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day18P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

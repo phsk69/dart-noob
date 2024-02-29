@@ -12,7 +12,7 @@ int parseD20Input(String stuff) {
 class Day20P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day20P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day20P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -123,7 +123,7 @@ class Day20P1Solver extends AoCSolver {
 class Day20P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day20P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day20P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

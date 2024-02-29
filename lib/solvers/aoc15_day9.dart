@@ -22,7 +22,7 @@ List<List<String>> _getPermutations(List<String> locations) {
 class Day9P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day9P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day9P1Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {
@@ -74,7 +74,7 @@ class Day9P1Solver extends AoCSolver {
 class Day9P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day9P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day9P2Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {

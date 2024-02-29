@@ -98,7 +98,7 @@ List<Sue> parseD16Input(String inputData) {
 class Day16P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day16P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day16P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -136,7 +136,7 @@ class Day16P1Solver extends AoCSolver {
 class Day16P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day16P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day16P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
