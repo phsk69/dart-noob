@@ -47,7 +47,7 @@ int sumValuesWithoutRed(Object? jsonItem) {
 class Day12P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day12P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day12P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -72,7 +72,7 @@ class Day12P1Solver extends AoCSolver {
 class Day12P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day12P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day12P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

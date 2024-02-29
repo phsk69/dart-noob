@@ -8,8 +8,7 @@ class Day11P1Solver extends AoCSolver {
   final String? filePath;
   final String? currentPassword; // Added this optional parameter
 
-  Day11P1Solver(StringBuffer? input, [this.filePath, this.currentPassword])
-      : super(input);
+  Day11P1Solver(super.input, [this.filePath, this.currentPassword]);
 
   @override
   Either<String, String> solve() {
@@ -92,7 +91,7 @@ class Day11P1Solver extends AoCSolver {
 class Day11P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day11P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day11P2Solver(super.input, [this.filePath]);
 
   @override
   Either<String, String> solve() {

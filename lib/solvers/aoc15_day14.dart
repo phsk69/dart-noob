@@ -51,7 +51,7 @@ class Reindeer {
 class Day14P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day14P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day14P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -113,7 +113,7 @@ class Day14P1Solver extends AoCSolver {
 class Day14P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day14P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day14P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

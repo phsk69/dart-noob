@@ -88,7 +88,7 @@ class Day23P1Solver extends AoCSolver {
   final String? filePath;
   final Logger? logger;
 
-  Day23P1Solver(StringBuffer? input, this.filePath, this.logger) : super(input);
+  Day23P1Solver(super.input, this.filePath, this.logger);
 
   @override
   Either<String, String> solve() {
@@ -116,7 +116,7 @@ class Day23P2Solver extends AoCSolver {
   final String? filePath;
   final Logger? logger;
 
-  Day23P2Solver(StringBuffer? input, this.filePath, this.logger) : super(input);
+  Day23P2Solver(super.input, this.filePath, this.logger);
 
   @override
   Either<String, String> solve() {

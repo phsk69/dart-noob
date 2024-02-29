@@ -9,7 +9,7 @@ import 'package:dart_noob/factories/solver_factory.dart';
 class Day4P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day4P1Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day4P1Solver(super.input, [this.filePath]);
 
   static String md5ToHex(String input) {
     List<int> md5Bytes = md5.convert(utf8.encode(input)).bytes;
@@ -50,7 +50,7 @@ class Day4P1Solver extends AoCSolver {
 class Day4P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day4P2Solver(StringBuffer? input, [this.filePath]) : super(input);
+  Day4P2Solver(super.input, [this.filePath]);
 
   static String md5ToHex(String input) {
     List<int> md5Bytes = md5.convert(utf8.encode(input)).bytes;

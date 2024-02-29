@@ -62,7 +62,7 @@ bool doesPlayerWin(List<int> player, List<int> boss) {
 class Day21P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day21P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day21P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -109,7 +109,7 @@ class Day21P1Solver extends AoCSolver {
 class Day21P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day21P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day21P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {

@@ -31,7 +31,7 @@ parseD19Input(String stuff) {
 class Day19P1Solver extends AoCSolver {
   final String? filePath;
 
-  Day19P1Solver(StringBuffer? input, this.filePath) : super(input);
+  Day19P1Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
@@ -72,7 +72,7 @@ class Day19P1Solver extends AoCSolver {
 class Day19P2Solver extends AoCSolver {
   final String? filePath;
 
-  Day19P2Solver(StringBuffer? input, this.filePath) : super(input);
+  Day19P2Solver(super.input, this.filePath);
 
   @override
   Either<String, String> solve() {
